@@ -1,9 +1,13 @@
-using Microsoft.AspNetCore.ResponseCompression;
+using AdminBaker.DataAccess;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddDbContext<AdminBakerDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("AdminBakerDb"));
+});
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
