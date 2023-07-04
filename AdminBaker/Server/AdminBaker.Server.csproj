@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\AdminBaker.DataAccess\AdminBaker.DataAccess.csproj" />
+    <ProjectReference Include="..\..\AdminBaker.Services\AdminBaker.Services.csproj" />
     <ProjectReference Include="..\Client\AdminBaker.Client.csproj" />
     <ProjectReference Include="..\Shared\AdminBaker.Shared.csproj" />
   </ItemGroup>

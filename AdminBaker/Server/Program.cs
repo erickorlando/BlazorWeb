@@ -1,5 +1,6 @@
 using AdminBaker.DataAccess;
 using AdminBaker.Entities.Configuration;
+using AdminBaker.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,8 +12,12 @@ builder.Services.AddDbContext<AdminBakerDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("AdminBakerDb"));
 });
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+
+builder.Services.AddRepositories()
+    .AddServices();
 
 var app = builder.Build();
 

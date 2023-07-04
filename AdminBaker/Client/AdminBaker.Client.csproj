@@ -15,4 +15,8 @@
     <ProjectReference Include="..\Shared\AdminBaker.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Proxy\Services\" />
+  </ItemGroup>
+
 </Project>

@@ -1,5 +1,7 @@
 ﻿using AdminBaker.Repositories.Implementations;
 using AdminBaker.Repositories.Interfaces;
+using AdminBaker.Services.Implementations;
+using AdminBaker.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AdminBaker.Services;
@@ -16,5 +18,17 @@ public static class DependencyInjection
             .AddTransient<ITipoTortaRepository, TipoTortaRepository>()
             .AddTransient<IUnidadMedidaRepository, UnidadMedidaRepository>()
             .AddTransient<IVendedorRepository, VendedorRepository>();
+    }
+
+    public static IServiceCollection AddServices(this IServiceCollection services)
+    {
+        return services.AddTransient<IClienteService, ClienteService>()
+            .AddTransient<IMateriaPrimaService, MateriaPrimaService>()
+            .AddTransient<IPedidoService, PedidoService>()
+            .AddTransient<IProductoService, ProductoService>()
+            .AddTransient<IRecetaService, RecetaService>()
+            .AddTransient<ITipoTortaService, TipoTortaService>()
+            .AddTransient<IUnidadMedidaService, UnidadMedidaService>()
+            .AddTransient<IVendedorService, VendedorService>();
     }
 }
