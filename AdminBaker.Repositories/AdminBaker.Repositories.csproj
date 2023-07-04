@@ -6,4 +6,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Implementations\" />
+    <Folder Include="Interfaces\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AdminBaker.DataAccess\AdminBaker.DataAccess.csproj" />
+    <ProjectReference Include="..\AdminBaker.Entities\AdminBaker.Entities.csproj" />
+  </ItemGroup>
+
 </Project>

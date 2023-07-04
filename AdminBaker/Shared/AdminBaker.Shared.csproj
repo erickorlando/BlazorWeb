@@ -9,4 +9,9 @@
   <ItemGroup>
     <SupportedPlatform Include="browser" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Response\" />
+    <Folder Include="Request\" />
+  </ItemGroup>
 </Project>

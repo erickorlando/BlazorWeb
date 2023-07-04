@@ -1,7 +1,10 @@
 using AdminBaker.DataAccess;
+using AdminBaker.Entities.Configuration;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<AppConfig>(builder.Configuration);
 
 // Add services to the container.
 builder.Services.AddDbContext<AdminBakerDbContext>(options =>

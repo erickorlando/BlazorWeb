@@ -22,5 +22,9 @@
     <ProjectReference Include="..\Shared\AdminBaker.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
 
 </Project>
