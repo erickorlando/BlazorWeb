@@ -1,6 +1,36 @@
-﻿@page "/ProductosCreate"
-<h3>ProductosCreate</h3>
+﻿@page "/productos/create"
+@inject IProductoProxy Proxy
+@inject ITipoTortaProxy ProxyTipoTorta
+@inject NavigationManager NavigationManager
+@inject SweetAlertService Swal
+
+<h1 class="titulo mb-5">Crear Producto</h1>
+
+<ProductoEdit Request="Model" TipoTortas="TiposTorta" OnSaveClick="Save" />
 
 @code {
-    
+    private ProductoDtoRequest Model { get; set; } = new ProductoDtoRequest();
+    private ICollection<TipoTortaDto> TiposTorta { get; set; } = new List<TipoTortaDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        TiposTorta = await ProxyTipoTorta.ListAsync();
+    }
+
+    private async Task Save()
+    {
+        try
+        {
+            await Proxy.CreateAsync(Model);
+            NavigationManager.NavigateTo("/productos/list");
+        }
+        catch (Exception ex)
+        {
+            await Swal.FireAsync(new SweetAlertOptions
+            {
+                Text = ex.Message,
+                Icon = SweetAlertIcon.Error
+            });
+        }
+    }
 }

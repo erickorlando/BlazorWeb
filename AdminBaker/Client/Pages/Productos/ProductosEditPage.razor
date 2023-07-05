@@ -1,17 +1,19 @@
 ﻿@page "/productos/edit/{Id:int}"
 @inject IProductoProxy Proxy
+@inject ITipoTortaProxy ProxyTipoTorta
 @inject NavigationManager NavigationManager
 @inject SweetAlertService Swal
 
 <h1 class="titulo mb-5">Editar Producto</h1>
 
-<ProductoEdit Request="Model" OnSaveClick="Save" />
+<ProductoEdit Request="Model" TipoTortas="TiposTorta" OnSaveClick="Save" />
 
 @code {
     [Parameter]
     public int Id { get; set; }
 
     private ProductoDtoRequest Model { get; set; } = new ProductoDtoRequest();
+    private ICollection<TipoTortaDto> TiposTorta { get; set; } = new List<TipoTortaDto>();
 
     protected override async Task OnParametersSetAsync()
     {
@@ -22,6 +24,9 @@
         Model.Relleno = response.Relleno;
         Model.Tamanio = response.Tamanio;
         Model.TipoTortaId = response.TipoTortaId;
+        Model.ImagenUrl = response.ImagenUrl;
+
+        TiposTorta = await ProxyTipoTorta.ListAsync();
     }
 
     private async Task Save()

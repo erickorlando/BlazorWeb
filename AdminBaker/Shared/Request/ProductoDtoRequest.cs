@@ -12,10 +12,14 @@ public class ProductoDtoRequest
     public decimal Precio { get; set; }
     public int TipoTortaId { get; set; }
     
-    [Required]
-    public string TipoTorta { get; set; } = default!;
+    //public string TipoTorta { get; set; } = null!;
 
     [Required]
     public string Relleno { get; set; } = default!;
     public double Tamanio { get; set; }
+
+    public string? ImagenUrl { get; set; }
+
+    public string? Base64Imagen { get; set; }
+    public string? FileName { get; set; }
 }

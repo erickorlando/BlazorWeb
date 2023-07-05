@@ -1,0 +1,117 @@
+﻿@inject SweetAlertService Swal
+<EditForm Model="Request" OnValidSubmit="Save">
+
+    <DataAnnotationsValidator />
+
+    <div class="row row-cols-1 row-cols-md-2 g-2">
+        <div class="col">
+            <div class="mb-3 row">
+                <label class="col-sm-2 form-label" for="nombre">Nombre:</label>
+                <div class="col-sm-6 col-md-9">
+                    <InputText @bind-Value="Request.Nombre" id="nombre" class="form-control" />
+                    <ValidationMessage For="() => Request.Nombre" />
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label class="col-sm-2 form-label" for="precio">Precio:</label>
+                <div class="col-sm-6 col-md-9">
+                    <input type="text" @bind-value="Request.Precio" id="precio" class="form-control" />
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label class="col-sm-2 form-label" for="cantidad">Cantidad:</label>
+                <div class="col-sm-6 col-md-9">
+                    <InputNumber @bind-Value="Request.Cantidad" id="cantidad" class="form-control" />
+                    <ValidationMessage For="() => Request.Cantidad" />
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label class="col-sm-2 form-label" for="tipotorta">Tipo de Torta:</label>
+                <div class="col-sm-6 col-md-9">
+                    <InputSelect @bind-Value="Request.TipoTortaId" id="tipotorta" class="form-select">
+                        <option>-Seleccione Tipo Torta-</option>
+                        @foreach (var item in TipoTortas)
+                        {
+                            <option value="@item.Id">@item.Nombre</option>
+                        }
+                    </InputSelect>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3 row">
+                <label class="col-sm-2 form-label" for="relleno">Relleno:</label>
+                <div class="col-sm-6 col-md-9">
+                    <InputText @bind-Value="Request.Relleno" id="relleno" class="form-control" />
+                    <ValidationMessage For="() => Request.Relleno" />
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label class="col-sm-2 form-label" for="size">Tamaño:</label>
+                <div class="col-sm-6 col-md-9">
+                    <input type="number" @bind-value="Request.Tamanio" id="size" class="form-control" />
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    @if (Request.Base64Imagen is not null)
+                    {
+                        <div style="margin:10px">
+                            <img src="data:image/jpeg;base64,@Request.Base64Imagen" alt="@Request.Nombre" style="width: 400px"/>
+                        </div>
+                    }
+                    else
+                    {
+                        <img src="@Request.ImagenUrl" alt="@Request.Nombre" style="width: 400px" />
+                    }
+                </div>
+                <div class="card-footer">
+                    <InputFile accept="image/png, image/jpeg, image/webp" style="display: none"
+                               OnChange="OnFileUploaded" id="file" />
+                    <label for="file" class="btn btn-secondary"><span class="fa fa-camera me-1"></span>IMAGEN</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ValidationSummary />
+
+    <button type="submit" class="btn btn-primary"><i class="fa fa-save me-1"></i>Grabar</button>
+    <button type="reset" class="btn btn-warning"><i class="fa fa-eraser me-1"></i>Limpiar</button>
+
+</EditForm>
+
+@code {
+
+    [Parameter]
+    public ProductoDtoRequest Request { get; set; } = new ProductoDtoRequest();
+
+    [Parameter]
+    public ICollection<TipoTortaDto> TipoTortas { get; set; } = new List<TipoTortaDto>();
+
+    [Parameter]
+    public EventCallback OnSaveClick { get; set; }
+
+    private void Save()
+    {
+        OnSaveClick.InvokeAsync();
+    }
+
+    private async Task OnFileUploaded(InputFileChangeEventArgs e)
+    {
+        try
+        {
+            var imagen = e.File;
+            var buffer = new byte[imagen.Size];
+            var _ = await imagen.OpenReadStream().ReadAsync(buffer);
+
+            Request.Base64Imagen = Convert.ToBase64String(buffer);
+            Request.FileName = imagen.Name;
+            Request.ImagenUrl = null;
+        }
+        catch (Exception ex)
+        {
+            await Swal.FireAsync("Error de Archivo", ex.Message);
+        }
+    }
+}

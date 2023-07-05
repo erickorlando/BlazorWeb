@@ -30,7 +30,8 @@ public static class DependencyInjection
             .AddTransient<IRecetaService, RecetaService>()
             .AddTransient<ITipoTortaService, TipoTortaService>()
             .AddTransient<IUnidadMedidaService, UnidadMedidaService>()
-            .AddTransient<IVendedorService, VendedorService>();
+            .AddTransient<IVendedorService, VendedorService>()
+            .AddTransient<IFileUploader, AzureBlobStorageUploader>();
     }
 
     public static IServiceCollection AddMappers(this IServiceCollection services)

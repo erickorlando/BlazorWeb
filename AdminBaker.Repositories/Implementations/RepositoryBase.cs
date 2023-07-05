@@ -15,7 +15,7 @@ public abstract class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where T
         Context = context;
     }
 
-    public async Task<ICollection<TEntity>> ListAsync(Expression<Func<TEntity, bool>> predicate)
+    public virtual async Task<ICollection<TEntity>> ListAsync(Expression<Func<TEntity, bool>> predicate)
     {
         return await Context.Set<TEntity>()
             .Where(predicate)
@@ -23,7 +23,7 @@ public abstract class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where T
             .ToListAsync();
     }
 
-    public async Task<ICollection<TInfo>> ListAsync<TInfo>(Expression<Func<TEntity, bool>> predicate,
+    public virtual async Task<ICollection<TInfo>> ListAsync<TInfo>(Expression<Func<TEntity, bool>> predicate,
         Expression<Func<TEntity, TInfo>> selector)
     {
         return await Context.Set<TEntity>()
@@ -33,7 +33,7 @@ public abstract class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where T
             .ToListAsync();
     }
 
-    public async Task<(ICollection<TInfo> Collection, int Total)> ListAsync<TInfo, TKey>(
+    public virtual async Task<(ICollection<TInfo> Collection, int Total)> ListAsync<TInfo, TKey>(
         Expression<Func<TEntity, bool>> predicate,
         Expression<Func<TEntity, TInfo>> selector,
         Expression<Func<TEntity, TKey>> orderBy,

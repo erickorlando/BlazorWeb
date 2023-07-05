@@ -1,0 +1,82 @@
+﻿@using System.Globalization
+@inject SweetAlertService Swal
+
+@if (Lista is not null)
+{
+    <table class="table table-primary table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th><i class="fa fa-image"></i></th>
+                <th>Nombre</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Tipo de Torta</th>
+                <th>Relleno</th>
+                <th>Tamaño</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Lista)
+            {
+                <tr>
+                    <td class="align-items-center">
+                        @if (string.IsNullOrEmpty(item.ImagenUrl))
+                        {
+                            <img src="assets/images/noimage.png" alt="@item.Nombre" style="width: 50px; height:50px" />
+                        }
+                        else
+                        {
+                            <img src="@item.ImagenUrl" alt="@item.Nombre" style="width: 80px; height:50px" />
+                        }
+                    </td>
+                    <td>@item.Nombre</td>
+                    <td>@item.Cantidad</td>
+                    <td>@item.Precio.ToString("C2", new CultureInfo("es-CL"))</td>
+                    <td>@item.TipoTorta</td>
+                    <td>@item.Relleno</td>
+                    <td>@item.Tamanio</td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="() => OnEditClick.InvokeAsync(item.Id)"><i class="fa fa-edit"></i></button>
+                        <button class="btn btn-danger" @onclick="() => Delete(item.Id)"><i class="fa fa-trash"></i></button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No hay datos para mostrar</p>
+}
+
+@code {
+
+    [EditorRequired]
+    [Parameter]
+    public ICollection<ProductoDto>? Lista { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnEditClick { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnDeleteClick { get; set; }
+
+    public async Task Delete(int id)
+    {
+        var result = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Text = "Desea eliminar el registro?",
+                Title = "Eliminar",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Si",
+                CancelButtonText = "No"
+            });
+
+        if (result.IsConfirmed)
+        {
+            await OnDeleteClick.InvokeAsync(id);
+        }
+    }
+}

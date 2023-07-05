@@ -41,6 +41,7 @@
     <_ContentIncludedByDefault Remove="Pages\TiposTorta\TiposTortaCreate.razor" />
     <_ContentIncludedByDefault Remove="Shared\LoadingComponent.razor" />
     <_ContentIncludedByDefault Remove="Shared\Maestros\MateriaPrimaList.razor" />
+    <_ContentIncludedByDefault Remove="Shared\Maestros\ProductoEdit.razor" />
     <_ContentIncludedByDefault Remove="Shared\Maestros\RecetaEdit.razor" />
     <_ContentIncludedByDefault Remove="Shared\Maestros\RecetaList.razor" />
     <_ContentIncludedByDefault Remove="Shared\Maestros\UnidadMedidaEdit.razor" />
@@ -85,6 +86,10 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Pages\Productos\ProductosEditPage.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Shared\Maestros\ProductoEdit.razor" />
   </ItemGroup>
 
 </Project>

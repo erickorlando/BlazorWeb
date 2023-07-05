@@ -1,4 +1,5 @@
 ﻿using AdminBaker.Entities;
+using AdminBaker.Entities.Info;
 using AdminBaker.Shared.Request;
 using AdminBaker.Shared.Response;
 using AutoMapper;
@@ -16,9 +17,14 @@ public class MaestrosProfile : Profile
         CreateMap<UnidadMedidaDtoRequest, UnidadMedida>();
 
         CreateMap<MateriaPrima, MateriaPrimaDto>();
+        CreateMap<MateriaPrimaInfo, MateriaPrimaDto>();
         CreateMap<MateriaPrimaDtoRequest, MateriaPrima>();
 
         CreateMap<Receta, RecetaDto>();
         CreateMap<RecetaDtoRequest, Receta>();
+
+        CreateMap<ProductoInfo, ProductoDto>();
+        CreateMap<Producto, ProductoDto>();
+        CreateMap<ProductoDtoRequest, Producto>();
     }
 }

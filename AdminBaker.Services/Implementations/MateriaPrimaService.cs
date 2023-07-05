@@ -27,7 +27,7 @@ public class MateriaPrimaService : IMateriaPrimaService
 
         try
         {
-            response.Data = _mapper.Map<ICollection<MateriaPrimaDto>>(await _repository.ListAsync(p => p.Estado));
+            response.Data = _mapper.Map<ICollection<MateriaPrimaDto>>(await _repository.ListAsync());
             response.Success = true;
         }
         catch (Exception ex)

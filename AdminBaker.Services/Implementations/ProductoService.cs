@@ -14,12 +14,14 @@ public class ProductoService : IProductoService
     private readonly IProductoRepository _repository;
     private readonly ILogger<ProductoService> _logger;
     private readonly IMapper _mapper;
+    private readonly IFileUploader _fileUploader;
 
-    public ProductoService(IProductoRepository repository, ILogger<ProductoService> logger, IMapper mapper)
+    public ProductoService(IProductoRepository repository, ILogger<ProductoService> logger, IMapper mapper, IFileUploader fileUploader)
     {
         _repository = repository;
         _logger = logger;
         _mapper = mapper;
+        _fileUploader = fileUploader;
     }
 
     public async Task<PaginationResponse<ProductoDto>> ListAsync()
@@ -28,7 +30,7 @@ public class ProductoService : IProductoService
 
         try
         {
-            response.Data = _mapper.Map<ICollection<ProductoDto>>(await _repository.ListAsync(p => p.Estado));
+            response.Data = _mapper.Map<ICollection<ProductoDto>>(await _repository.ListAsync(string.Empty));
             response.Success = true;
         }
         catch (Exception ex)
@@ -60,7 +62,11 @@ public class ProductoService : IProductoService
         var response = new BaseResponse();
         try
         {
-            await _repository.AddAsync(_mapper.Map<Producto>(request));
+            var producto = _mapper.Map<Producto>(request);
+
+            producto.ImagenUrl = await _fileUploader.UploadFileAsync(request.Base64Imagen, request.FileName);
+
+            await _repository.AddAsync(producto);
             response.Success = true;
         }
         catch (Exception ex)
@@ -81,6 +87,12 @@ public class ProductoService : IProductoService
             {
                 response.ErrorMessage = "Registro no encontrado";
                 return response;
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.FileName))
+            {
+                entity.ImagenUrl = await _fileUploader.UploadFileAsync(request.Base64Imagen, request.FileName);
+                request.ImagenUrl = entity.ImagenUrl;
             }
 
             _mapper.Map(request, entity);
