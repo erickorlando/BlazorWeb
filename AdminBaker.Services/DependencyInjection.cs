@@ -31,7 +31,9 @@ public static class DependencyInjection
             .AddTransient<ITipoTortaService, TipoTortaService>()
             .AddTransient<IUnidadMedidaService, UnidadMedidaService>()
             .AddTransient<IVendedorService, VendedorService>()
-            .AddTransient<IFileUploader, AzureBlobStorageUploader>();
+            .AddTransient<IFileUploader, AzureBlobStorageUploader>()
+            .AddTransient<IUserService, UserService>()
+            .AddTransient<IEmailService, EmailService>();
     }
 
     public static IServiceCollection AddMappers(this IServiceCollection services)

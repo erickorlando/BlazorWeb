@@ -14,10 +14,12 @@
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.5" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\AdminBaker.Entities\AdminBaker.Entities.csproj" />
+    <ProjectReference Include="..\AdminBaker\Shared\AdminBaker.Shared.csproj" />
   </ItemGroup>
 
 </Project>

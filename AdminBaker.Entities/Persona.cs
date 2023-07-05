@@ -12,4 +12,7 @@ public class Persona : EntityBase
 
     [StringLength(500)]
     public required string Email { get; set; }
+
+    [StringLength(500)]
+    public string? Direccion { get; set; }
 }
