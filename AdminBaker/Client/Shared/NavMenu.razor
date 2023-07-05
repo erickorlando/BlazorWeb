@@ -1,74 +1,125 @@
 ﻿@inject ICarritoServicio CarritoServicio
 @inject SweetAlertService Swal
 @inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AutenticationStateProvider
+@using AdminBaker.Client.Auth
+@using AdminBaker.Shared
 @implements IDisposable
 <header>
-    <nav class="navbar navbar-expand-sm navbar-dark bg-primary"
+    <nav class="navbar navbar-expand navbar-dark bg-primary"
          aria-label="Admin Baker navigation header">
         <div class="container">
             <a class="navbar-brand" href="#">
                 <img src="assets/images/logo.jpg" width="50" height="50" class="d-inline-block align-top mb-2 mt-1"
                      alt="Admin Baker Logo">
-            </a>
 
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
                     aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation"
-                    @onclick="ToggleNavMenu">
+            @onclick="ToggleNavMenu">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="@NavMenuCssClass navbar-collapse d-sm-inline-flex justify-content-center" id="navbarCollapse" @onclick="ToggleNavMenu">
                 <ul class="navbar-nav me-auto mb-2">
+                    <AuthorizeView Roles="@Constantes.RolAdministrador">
+                        <Authorized>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    TABLAS
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li>
+                                        <NavLink class="dropdown-item" href="tipostorta/list">
+                                            Tipos de Torta
+                                        </NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink class="dropdown-item" href="unidadesmedida/list">
+                                            Unidades de Medida
+                                        </NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink class="dropdown-item" href="recetas/list">
+                                            Recetas
+                                        </NavLink>
+                                    </li>
+                                </ul>
+                            </li>
+                        </Authorized>
+                    </AuthorizeView>
+                    <AuthorizeView Roles="Admin,Vendedor">
+                        <Authorized>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    INVENTARIO
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
+                                    <li>
+                                        <NavLink class="dropdown-item" href="materiasprimas/list">
+                                            Materia Prima
+                                        </NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink class="dropdown-item" href="productos/list">
+                                            Productos
+                                        </NavLink>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <NavLink class="nav-link" href="pedidos/list">
+                                    PEDIDOS
+                                </NavLink>
+                            </li>
+                        </Authorized>
+                    </AuthorizeView>
+                    <AuthorizeView Roles="@Constantes.RolAdministrador">
+                        <Authorized>
+                            <li class="nav-item">
+                                <NavLink class="nav-link" href="clientes/list">
+                                    CLIENTES
+                                </NavLink>
+                            </li>
+                            <li class="nav-item">
+                                <NavLink class="nav-link" href="vendedores/list">
+                                    VENDEDORES
+                                </NavLink>
+                            </li>
+                        </Authorized>
+                    </AuthorizeView>
                     <li class="nav-item">
-                        <NavLink class="nav-link" href="tipostorta/list">
-                            <i class="fa fa-birthday-cake me-1"></i>Tipos de Torta
-                        </NavLink>
-                    </li>
-                    <li class="nav-item">
-                        <NavLink class="nav-link" href="unidadesmedida/list">
-                            <i class="fa fa-magnet me-1"></i>Unidades de Medida
-                        </NavLink>
-                    </li>
-                    <li class="nav-item">
-                        <NavLink class="nav-link" href="recetas/list">
-                            <i class="fa fa-book me-1"></i>Recetas
-                        </NavLink>
-                    </li>
-                    <li class="nav-item">
-                        <NavLink class="nav-link" href="materiasprimas/list">
-                            <i class="fa fa-cogs me-1"></i>Materias Primas
-                        </NavLink>
-                    </li>
-                    <li class="nav-item">
-                        <NavLink class="nav-link" href="productos/list">
-                            <i class="fa fa-product-hunt me-1"></i>Productos
-                        </NavLink>
-                    </li>
-                    <li class="nav-item">
-                        <NavLink class="nav-link" href="pedidos/list">
-                            <i class="fa fa-address-book me-1"></i>Pedidos
-                        </NavLink>
-                    </li>
-                    <li class="nav-item">
-                        <NavLink class="nav-link" href="clientes/list">
-                            <i class="fa fa-user-o me-1"></i>Clientes
-                        </NavLink>
-                    </li>
-                    <li class="nav-item">
-                        <NavLink class="nav-link" href="vendedores/list">
-                            <i class="fa fa-user-secret me-1"></i>Vendedores
-                        </NavLink>
-                    </li>
-                    <li class="nav-item">
-                        <NavLink href="Contact" class="nav-link">
-                            <i class="fa fa-user-o me-1"></i>Contacto
+                        <NavLink class="nav-link" href="pedidoespecial">
+                            PEDIDO ESPECIAL
                         </NavLink>
                     </li>
                 </ul>
+                <AuthorizeView>
+                    <Authorized>
+                        <span class="navbar-text text-white me-3">
+                            <i class="fa fa-user mx-2"></i>@context.User.Identity!.Name
+                        </span>
+                    </Authorized>
+                </AuthorizeView>
                 <NavLink class="btn btn-outline-light ms-auto ms-md-0 me-3" href="cart">
                     <i class="fa fa-shopping-cart mx-1"></i>Carrito
-                    <span class="badge bg-primary text-white ms-1 rounded-pill">@MostrarCantidadCarrito()</span>
+                    <span class="badge bg-black text-white ms-1 rounded-pill">@MostrarCantidadCarrito()</span>
                 </NavLink>
+                <AuthorizeView>
+                    <Authorized>
+                        <button class="btn btn-outline-secondary ms-auto ms-md-0 me-3" @onclick="CerrarSesion">
+                            <i class="fa fa-sign-out me-1"></i> Salir
+                        </button>
+                    </Authorized>
+                    <NotAuthorized>
+                        <NavLink class="btn btn-outline-secondary ms-auto ms-md-0 me-3" href="login">
+                            <i class="fa fa-sign-in me-1"></i>Ingresar
+                        </NavLink>
+                        <NavLink class="btn btn-outline-secondary ms-auto ms-md-0 me-3" href="register">
+                            <i class="fa fa-user-circle-o me-1"></i>Registrarse
+                        </NavLink>
+                    </NotAuthorized>
+                </AuthorizeView>
             </div>
         </div>
     </nav>
@@ -98,4 +149,24 @@
     {
         return CarritoServicio.CantidadProductos();
     }
+
+    private async Task CerrarSesion()
+    {
+        var result = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Desea salir?",
+                Icon = SweetAlertIcon.Question,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Si",
+                CancelButtonText = "No"
+            });
+
+        if (result.IsConfirmed)
+        {
+            var auth = (AuthenticationService)AutenticationStateProvider;
+            await auth.Authenticate(null);
+            NavigationManager.NavigateTo("/", forceLoad: true);
+        }
+    }
+
 }

@@ -3,13 +3,14 @@ main {
 }
 .container-footer {
     padding-top: 1em;
+    margin-top: 0.5em;
     background-color: #1a1a1a;
     align-items: baseline;
+    height: 9em;
 }
 
 .elemento {
     margin: 1.5em;
-
 }
 
 .container-footer label {
@@ -28,9 +29,22 @@ main {
     color: white;
 }
 
+
 /* Media Queries para ocultar el footer en el movil*/
 @media (max-width: 768px) {
     .container-footer {
         display: none;
+    }
+}
+
+@media (max-width: 1024px) {
+    .nav-link {
+        text-transform: capitalize;
+    }
+}
+
+@media (max-width: 1440px) {
+    .nav-link {
+        text-transform: capitalize;
     }
 }

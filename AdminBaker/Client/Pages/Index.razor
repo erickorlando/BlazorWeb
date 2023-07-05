@@ -6,12 +6,12 @@
 <PageTitle>Inicio</PageTitle>
 
 <h1 class="titulo">Cual es tu antojo?</h1>
-<div style="margin-bottom: 10em">
+<div class="espaciado">
     <div class="row justify-content-center mt-3 mb-4">
         <div class="col-sm-6 col-md-8 col-xl-9">
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Buscar producto" @bind-value="Buscar" />
-                <button class="btn btn-outline-secondary" @onclick="ObtenerCatalogo">
+                <input type="text" class="form-control bg-light" placeholder="Buscar producto" @bind-value="Buscar" />
+                <button class="btn btn-secondary" @onclick="ObtenerCatalogo">
                     <i class="oi oi-magnifying-glass"></i>
                 </button>
             </div>
@@ -20,7 +20,7 @@
 
     @if (Productos is not null)
     {
-        <div class="container">
+        <div class="container mb-5 gap-5">
             <div class="row gx-4 row-cols-1 row-cols-md-3 row-cols-xl-4 justify-content-start">
                 @foreach (var producto in Productos.OrderBy(p => p.TipoTorta))
                 {

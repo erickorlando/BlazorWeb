@@ -10,6 +10,10 @@ body {
     background-image: linear-gradient(-45deg, #fff6ed 50%, #ffe5f0 50%);
 }
 
+.espaciado {
+    margin-bottom: 10em;
+}
+
 h1:focus {
     outline: none;
 }

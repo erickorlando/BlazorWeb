@@ -23,13 +23,14 @@ builder.Services.AddScoped<IClienteProxy, ClienteProxy>();
 builder.Services.AddScoped<IPedidoProxy, PedidoProxy>();
 builder.Services.AddScoped<IMateriaPrimaProxy, MateriaPrimaProxy>();
 builder.Services.AddScoped<IRecetaProxy, RecetaProxy>();
+builder.Services.AddScoped<ICarritoServicio, CarritoServicio>();
+builder.Services.AddScoped<IProxyUser, ProxyUser>();
 
 builder.Services.AddSweetAlert2();
 builder.Services.AddBlazoredToast();
 builder.Services.AddBlazoredSessionStorage();
 builder.Services.AddBlazoredLocalStorage();
 
-builder.Services.AddScoped<ICarritoServicio, CarritoServicio>();
 
 // Habilitamos el contexto de seguridad en Blazor
 builder.Services.AddScoped<AuthenticationStateProvider, AuthenticationService>();
