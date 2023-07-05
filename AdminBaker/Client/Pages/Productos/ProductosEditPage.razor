@@ -1,0 +1,44 @@
+﻿@page "/productos/edit/{Id:int}"
+@inject IProductoProxy Proxy
+@inject NavigationManager NavigationManager
+@inject SweetAlertService Swal
+
+<h1 class="titulo mb-5">Editar Producto</h1>
+
+<ProductoEdit Request="Model" OnSaveClick="Save" />
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private ProductoDtoRequest Model { get; set; } = new ProductoDtoRequest();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var response = await Proxy.FindByIdAsync(Id);
+        Model.Nombre = response.Nombre;
+        Model.Cantidad = response.Cantidad;
+        Model.Precio = response.Precio;
+        Model.Relleno = response.Relleno;
+        Model.Tamanio = response.Tamanio;
+        Model.TipoTortaId = response.TipoTortaId;
+    }
+
+    private async Task Save()
+    {
+        try
+        {
+            await Proxy.UpdateAsync(Id, Model);
+            NavigationManager.NavigateTo("/productos/list");
+        }
+        catch (Exception ex)
+        {
+            await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Text = ex.Message,
+                    Icon = SweetAlertIcon.Error
+                });
+        }
+    }
+
+}

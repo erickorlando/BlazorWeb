@@ -19,5 +19,9 @@ public class ProductoConfiguration : IEntityTypeConfiguration<Producto>
 
         builder.Property(p => p.Tamanio)
             .HasPrecision(11, 2);
+        
+        builder.Property(p => p.ImagenUrl)
+            .IsUnicode(false)
+            .HasMaxLength(1000);
     }
 }

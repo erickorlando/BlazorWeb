@@ -11,7 +11,11 @@ public class ProductoDtoRequest
     public int Cantidad { get; set; }
     public decimal Precio { get; set; }
     public int TipoTortaId { get; set; }
-    public required string TipoTorta { get; set; }
-    public required string Relleno { get; set; }
+    
+    [Required]
+    public string TipoTorta { get; set; } = default!;
+
+    [Required]
+    public string Relleno { get; set; } = default!;
     public double Tamanio { get; set; }
 }

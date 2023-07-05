@@ -24,7 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Productos\" />
     <Folder Include="Pages\UnidadesMedida\" />
     <Folder Include="Proxy\Services\" />
     <Folder Include="wwwroot\assets\images\" />
@@ -36,6 +35,8 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Pages\MateriasPrima\MateriasPrimaListPage.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Productos\ProductosEditPage.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Productos\ProductosListPage.razor" />
     <_ContentIncludedByDefault Remove="Pages\Recetas\RecetasListPage.razor" />
     <_ContentIncludedByDefault Remove="Pages\TiposTorta\TiposTortaCreate.razor" />
     <_ContentIncludedByDefault Remove="Shared\LoadingComponent.razor" />
@@ -76,6 +77,14 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Pages\MateriasPrima\MateriasPrimaListPage.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Productos\ProductosListPage.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Productos\ProductosEditPage.razor" />
   </ItemGroup>
 
 </Project>
