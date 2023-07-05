@@ -41,6 +41,24 @@ public class ProductoService : IProductoService
         return response;
     }
 
+    public async Task<BaseResponseGeneric<ICollection<ProductoDto>>> ListTopCarousel()
+    {
+        var response = new BaseResponseGeneric<ICollection<ProductoDto>>();
+
+        try
+        {
+            response.Data = _mapper.Map<ICollection<ProductoDto>>(await _repository.ListTopCarousel());
+            response.Success = true;
+        }
+        catch (Exception ex)
+        {
+            response.ErrorMessage = "Error al Cargar el top de productos";
+            _logger.LogCritical(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+        }
+
+        return response;
+    }
+
     public async Task<BaseResponseGeneric<ProductoDto>> FindByIdAsync(int id)
     {
         var response = new BaseResponseGeneric<ProductoDto>();

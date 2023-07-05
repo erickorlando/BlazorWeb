@@ -32,7 +32,7 @@
                     </td>
                     <td>@item.Nombre</td>
                     <td>@item.Cantidad</td>
-                    <td>@item.Precio.ToString("C2", new CultureInfo("es-CL"))</td>
+                    <td>$ @item.Precio.ToString(Constantes.Formato, new CultureInfo(Constantes.Idioma))</td>
                     <td>@item.TipoTorta</td>
                     <td>@item.Relleno</td>
                     <td>@item.Tamanio</td>

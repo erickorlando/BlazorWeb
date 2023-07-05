@@ -46,6 +46,7 @@
     <_ContentIncludedByDefault Remove="Shared\Maestros\RecetaList.razor" />
     <_ContentIncludedByDefault Remove="Shared\Maestros\UnidadMedidaEdit.razor" />
     <_ContentIncludedByDefault Remove="Shared\Maestros\UnidadMedidaList.razor" />
+    <_ContentIncludedByDefault Remove="Shared\Tortas\ProductoCard.razor" />
   </ItemGroup>
 
   <ItemGroup>
@@ -90,6 +91,10 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Shared\Maestros\ProductoEdit.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Shared\Tortas\ProductoCard.razor" />
   </ItemGroup>
 
 </Project>

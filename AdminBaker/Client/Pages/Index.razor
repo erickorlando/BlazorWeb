@@ -1,5 +1,37 @@
 ﻿@page "/"
+@inject IProductoProxy ProductoProxy
+@inject IToastService ToastService
 
 <PageTitle>Inicio</PageTitle>
 
 <h1 class="titulo">Cual es tu antojo?</h1>
+
+<ProductoCarousel Top5Productos="Productos" />
+
+<LoadingComponent IsLoading="IsLoading" />
+
+@code
+{
+
+    public ICollection<ProductoDto>? Productos { get; set; }
+    public bool IsLoading { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            IsLoading = true;
+            Productos = await ProductoProxy.ListTopCarouselAsync();
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError(ex.Message);
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+
+    }
+
+}

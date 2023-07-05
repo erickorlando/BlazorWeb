@@ -23,6 +23,14 @@ public class ProductosController : ControllerBase
 
         return Ok(response);
     }
+    
+    [HttpGet("carousel")]
+    public async Task<IActionResult> GetCarousel()
+    {
+        var response = await _service.ListTopCarousel();
+
+        return Ok(response);
+    }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(int id)

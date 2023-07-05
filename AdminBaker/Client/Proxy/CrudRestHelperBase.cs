@@ -8,11 +8,11 @@ public abstract class CrudRestHelperBase<TRequest, TResponse>
     where TRequest : class
     where TResponse : class
 {
-    private readonly HttpClient _httpClient;
+    protected readonly HttpClient HttpClient;
 
     protected CrudRestHelperBase(string baseUrl, HttpClient httpClient)
     {
-        _httpClient = httpClient;
+        HttpClient = httpClient;
         BaseUrl = baseUrl;
     }
 
@@ -20,7 +20,7 @@ public abstract class CrudRestHelperBase<TRequest, TResponse>
 
     public async Task<PaginationResponse<TResponse>> ListAsync(string? filter, int page = 1, int pageSize = 5)
     {
-        var response = await _httpClient.GetFromJsonAsync<PaginationResponse<TResponse>>($"{BaseUrl}{filter}");
+        var response = await HttpClient.GetFromJsonAsync<PaginationResponse<TResponse>>($"{BaseUrl}{filter}");
         if (response!.Success)
             return response;
 
@@ -29,7 +29,7 @@ public abstract class CrudRestHelperBase<TRequest, TResponse>
 
     public async Task<ICollection<TResponse>> ListAsync()
     {
-        var response = await _httpClient.GetFromJsonAsync<PaginationResponse<TResponse>>($"{BaseUrl}");
+        var response = await HttpClient.GetFromJsonAsync<PaginationResponse<TResponse>>($"{BaseUrl}");
         if (response!.Success)
             return response.Data!;
 
@@ -38,7 +38,7 @@ public abstract class CrudRestHelperBase<TRequest, TResponse>
 
     public async Task<TResponse> FindByIdAsync(int id)
     {
-        var response = await _httpClient.GetFromJsonAsync<BaseResponseGeneric<TResponse>>($"{BaseUrl}/{id}");
+        var response = await HttpClient.GetFromJsonAsync<BaseResponseGeneric<TResponse>>($"{BaseUrl}/{id}");
         if (response!.Success)
             return response.Data!;
 
@@ -47,7 +47,7 @@ public abstract class CrudRestHelperBase<TRequest, TResponse>
 
     public async Task CreateAsync(TRequest request)
     {
-        var response = await _httpClient.PostAsJsonAsync(BaseUrl, request);
+        var response = await HttpClient.PostAsJsonAsync(BaseUrl, request);
         if (response.IsSuccessStatusCode)
         {
             var resultado = await response.Content.ReadFromJsonAsync<BaseResponse>();
@@ -62,7 +62,7 @@ public abstract class CrudRestHelperBase<TRequest, TResponse>
 
     public async Task UpdateAsync(int id, TRequest request)
     {
-        var response = await _httpClient.PutAsJsonAsync($"{BaseUrl}/{id}", request);
+        var response = await HttpClient.PutAsJsonAsync($"{BaseUrl}/{id}", request);
         if (response.IsSuccessStatusCode)
         {
             var resultado = await response.Content.ReadFromJsonAsync<BaseResponse>();
@@ -77,7 +77,7 @@ public abstract class CrudRestHelperBase<TRequest, TResponse>
 
     public async Task DeleteAsync(int id)
     {
-        var response = await _httpClient.DeleteAsync($"{BaseUrl}/{id}");
+        var response = await HttpClient.DeleteAsync($"{BaseUrl}/{id}");
         if (response.IsSuccessStatusCode)
         {
             var resultado = await response.Content.ReadFromJsonAsync<BaseResponse>();

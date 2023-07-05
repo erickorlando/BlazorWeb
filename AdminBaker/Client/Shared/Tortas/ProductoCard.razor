@@ -1,0 +1,30 @@
+﻿@using System.Globalization
+<div class="col mb-5">
+    <div class="card h-100">
+        <div>
+            <img class="card-img-top border-dark border-1"
+                 src="@Producto.ImagenUrl" style="width: 320px;height: 200px" />
+        </div>
+        <div class="card-body p-4 text-center">
+            <h5 class="fw-bolder">@Producto.Nombre</h5>
+            <span>$ @Producto.Precio.ToString(Constantes.Formato, new CultureInfo(Constantes.Idioma))</span>
+        </div>
+        <div class="card-footer p-3 pt-0 border-top-0 bg-transparent">
+            <div class="text-center">
+                <a class="btn btn-outline-primary mt-auto" @onclick="() => OnClick.InvokeAsync(Producto.Id)">
+                    Ver producto
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [EditorRequired]
+    [Parameter]
+    public ProductoDto Producto { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback<int> OnClick { get; set; }
+}

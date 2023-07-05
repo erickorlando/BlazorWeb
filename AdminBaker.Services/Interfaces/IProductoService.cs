@@ -8,6 +8,8 @@ public interface IProductoService
 
     Task<PaginationResponse<ProductoDto>> ListAsync();
 
+    Task<BaseResponseGeneric<ICollection<ProductoDto>>> ListTopCarousel();
+
     Task<BaseResponseGeneric<ProductoDto>> FindByIdAsync(int id);
 
     Task<BaseResponse> CreateAsync(ProductoDtoRequest request);
