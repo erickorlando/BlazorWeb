@@ -6,7 +6,7 @@ namespace AdminBaker.Services.Interfaces;
 public interface IProductoService
 {
 
-    Task<PaginationResponse<ProductoDto>> ListAsync();
+    Task<PaginationResponse<ProductoDto>> ListAsync(string? filter);
 
     Task<BaseResponseGeneric<ICollection<ProductoDto>>> ListTopCarousel();
 

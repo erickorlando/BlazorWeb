@@ -19,4 +19,13 @@ public class ProductoProxy : CrudRestHelperBase<ProductoDtoRequest, ProductoDto>
 
         throw new InvalidOperationException(response.ErrorMessage);
     }
+
+    public async Task<ICollection<ProductoDto>> ListAsync(string filter)
+    {
+        var response = await HttpClient.GetFromJsonAsync<BaseResponseGeneric<ICollection<ProductoDto>>>($"{BaseUrl}?filter={filter}");
+        if (response!.Success)
+            return response.Data!;
+
+        throw new InvalidOperationException(response.ErrorMessage);
+    }
 }

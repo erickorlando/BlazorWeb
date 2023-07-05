@@ -19,7 +19,7 @@ public class ProductosController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> Get(string? filter)
     {
-        var response = await _service.ListAsync();
+        var response = await _service.ListAsync(filter);
 
         return Ok(response);
     }

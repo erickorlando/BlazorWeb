@@ -24,13 +24,13 @@ public class ProductoService : IProductoService
         _fileUploader = fileUploader;
     }
 
-    public async Task<PaginationResponse<ProductoDto>> ListAsync()
+    public async Task<PaginationResponse<ProductoDto>> ListAsync(string? filter)
     {
         var response = new PaginationResponse<ProductoDto>();
 
         try
         {
-            response.Data = _mapper.Map<ICollection<ProductoDto>>(await _repository.ListAsync(string.Empty));
+            response.Data = _mapper.Map<ICollection<ProductoDto>>(await _repository.ListAsync(filter ?? string.Empty));
             response.Success = true;
         }
         catch (Exception ex)

@@ -12,7 +12,7 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+builder.Services.AddSingleton(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddScoped<ITipoTortaProxy, TipoTortaProxy>();
 builder.Services.AddScoped<IUnidadMedidaProxy, UnidadMedidaProxy>();
 builder.Services.AddScoped<IVendedorProxy, VendedorProxy>();
@@ -26,6 +26,8 @@ builder.Services.AddSweetAlert2();
 builder.Services.AddBlazoredToast();
 builder.Services.AddBlazoredSessionStorage();
 builder.Services.AddBlazoredLocalStorage();
+
+builder.Services.AddScoped<ICarritoServicio, CarritoServicio>();
 
 
 await builder.Build().RunAsync();

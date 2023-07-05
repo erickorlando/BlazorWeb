@@ -1,0 +1,84 @@
+﻿@page "/detalle/{Id:int}"
+@using AdminBaker.Shared
+@using System.Globalization
+@inject IProductoProxy ProductoProxy
+@inject ICarritoServicio CarritoServicio
+
+<div class="container px-4 px-lg-5 my-5">
+    @if (Modelo is not null)
+    {
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <div class="col-md-6">
+                <img class="card-img-top border-dark border-1"
+                     src="@Modelo.ImagenUrl" style="width: 100%" />
+            </div>
+            <div class="col-md-6">
+                <h1 class="display-5 fw-bolder">@Modelo.Nombre</h1>
+                <div class="fs-5 mb-5">
+                    <span>$ @Modelo.Precio.ToString(Constantes.Formato, new CultureInfo(Constantes.Idioma))</span>
+                </div>
+                <p class="lead">
+                    Relleno: @Modelo.Relleno
+                </p>
+                <p class="lead">
+                    Tamaño: @Modelo.Tamanio cm
+                </p>
+                <div class="d-flex">
+                    <input class="form-control text-center me-3" type="number" min="1"
+                    @bind-value="Cantidad" style="width: 60px" />
+                    <button class="btn btn-secondary flex-shrink-0 me-3"
+                    @onclick="() => AgregarCarrito(Modelo)">
+                        <i class="fa fa-cart-plus me-1"></i>
+                        Agregar al carrito
+                    </button>
+                    <NavLink class="btn btn-secondary flex-shrink-0" href="">
+                        <i class="fa fa-backward me-1"></i>
+                        Volver
+                    </NavLink>
+                </div>
+            </div>
+        </div>
+    }
+
+    <LoadingComponent IsLoading="(Modelo is null)"></LoadingComponent>
+</div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    public ProductoDto? Modelo { get; set; }
+
+    public int Cantidad { get; set; } = 1;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var response = await ProductoProxy.FindByIdAsync(Id);
+        Modelo = new ProductoDto()
+            {
+                Id = Id,
+                Nombre = response.Nombre,
+                Cantidad = response.Cantidad,
+                Precio = response.Precio,
+                TipoTortaId = response.TipoTortaId,
+                TipoTorta = response.TipoTorta,
+                Relleno = response.Relleno,
+                Tamanio = response.Tamanio,
+                ImagenUrl = response.ImagenUrl
+            };
+    }
+
+    private async Task AgregarCarrito(ProductoDto model)
+    {
+        var carrito = new CarritoDto()
+            {
+                ProductoDto = model,
+                Cantidad = Cantidad,
+                Precio = model.Precio,
+                Total = Cantidad * model.Precio
+            };
+
+        await CarritoServicio.AgregarCarrito(carrito);
+    }
+
+}

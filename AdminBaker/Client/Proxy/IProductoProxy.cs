@@ -7,4 +7,6 @@ public interface IProductoProxy : ICrudRestHelper<ProductoDtoRequest, ProductoDt
 {
     public Task<ICollection<ProductoDto>> ListTopCarouselAsync();
 
+    public Task<ICollection<ProductoDto>> ListAsync(string filter);
+
 }

@@ -1,27 +1,57 @@
 ﻿@page "/"
 @inject IProductoProxy ProductoProxy
 @inject IToastService ToastService
+@inject NavigationManager NavigationManager
 
 <PageTitle>Inicio</PageTitle>
 
 <h1 class="titulo">Cual es tu antojo?</h1>
+<div style="margin-bottom: 10em">
+    <div class="row justify-content-center mt-3 mb-4">
+        <div class="col-sm-6 col-md-8 col-xl-9">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Buscar producto" @bind-value="Buscar" />
+                <button class="btn btn-outline-secondary" @onclick="ObtenerCatalogo">
+                    <i class="oi oi-magnifying-glass"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 
-<ProductoCarousel Top5Productos="Productos" />
+    @if (Productos is not null)
+    {
+        <div class="container">
+            <div class="row gx-4 row-cols-1 row-cols-md-3 row-cols-xl-4 justify-content-start">
+                @foreach (var producto in Productos.OrderBy(p => p.TipoTorta))
+                {
+                    <ProductoCard Producto="producto" OnClick="VerDetalle"></ProductoCard>
+                }
+            </div>
+        </div>
+    }
 
-<LoadingComponent IsLoading="IsLoading" />
+    <LoadingComponent IsLoading="IsLoading" />
+
+</div>
 
 @code
 {
 
     public ICollection<ProductoDto>? Productos { get; set; }
+    public string Buscar { get; set; } = string.Empty;
     public bool IsLoading { get; set; }
+
+    private async Task ObtenerCatalogo()
+    {
+        Productos = await ProductoProxy.ListAsync(Buscar);
+    }
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
             IsLoading = true;
-            Productos = await ProductoProxy.ListTopCarouselAsync();
+            await ObtenerCatalogo();
         }
         catch (Exception ex)
         {
@@ -32,6 +62,11 @@
             IsLoading = false;
         }
 
+    }
+
+    private void VerDetalle(int id)
+    {
+        NavigationManager.NavigateTo($"/detalle/{id}");
     }
 
 }

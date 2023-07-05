@@ -1,3 +1,36 @@
 main {
     flex: 1;
 }
+.container-footer {
+    padding-top: 1em;
+    background-color: #1a1a1a;
+    align-items: baseline;
+}
+
+.elemento {
+    margin: 1.5em;
+
+}
+
+.container-footer label {
+    color: white;
+}
+
+.container-footer .footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+}
+
+.container-footer .footer__social {
+    display: flex;
+    color: white;
+}
+
+/* Media Queries para ocultar el footer en el movil*/
+@media (max-width: 768px) {
+    .container-footer {
+        display: none;
+    }
+}
