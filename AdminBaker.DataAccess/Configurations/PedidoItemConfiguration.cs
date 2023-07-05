@@ -19,5 +19,9 @@ public class PedidoItemConfiguration : IEntityTypeConfiguration<PedidoItem>
 
         builder.Property(p => p.Tamanio)
             .HasPrecision(11, 2);
+        
+        builder.Property(p => p.Total)
+            .HasPrecision(11, 2);
+        
     }
 }

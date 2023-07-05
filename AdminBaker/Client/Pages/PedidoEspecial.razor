@@ -1,0 +1,134 @@
+﻿@page "/pedidos/especial"
+@inject IPedidoProxy PedidoProxy
+@inject ITipoTortaProxy TipoTortaProxy
+@inject NavigationManager NavigationManager
+@inject IToastService ToastService
+@inject SweetAlertService Swal
+@attribute [Authorize]
+
+<div class="espaciado">
+    <div class="container h-100">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="card shadow-lg mt-1 mb-5">
+                    <div class="card-header">
+                        <h2 class="titulo text-center">¿Cómo quieres tu pedido?</h2>
+                    </div>
+                    <div class="card-body">
+                        <EditForm Model="Pedido" OnValidSubmit="Save">
+                            <DataAnnotationsValidator />
+                            <div class="form-floating mb-1">
+                                <input class="form-control" id="inputRut" type="text" placeholder="1-3" @bind-value="Pedido.Rut" autocomplete="off" />
+                                <label for="inputRut">RUT</label>
+                                <ValidationMessage For="@(() => Pedido.Rut)" />
+                            </div>
+                            <div class="form-floating mb-1">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <InputFile accept="image/png, image/jpeg, image/webp" style="display: none"
+                                                   OnChange="OnFileUploaded" id="file" />
+                                        <label for="file" class="btn btn-secondary"><span class="fa fa-camera me-1"></span>Escoger decoracion</label>
+                                    </div>
+                                    <div class="card-body">
+                                        @if (Pedido.Base64Imagen is not null)
+                                        {
+                                            <div style="margin: 10px">
+                                                <img src="data:image/jpeg;base64,@Pedido.Base64Imagen" alt="decoracion" style="width: 200px"/>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <img src="@Pedido.ImagenUrl" alt="decoracion" style="width: 200px"/>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-floating mb-1">
+                                <InputSelect @bind-Value="Pedido.TipoTortaId" id="tipotorta" class="form-select">
+                                    <option>-Seleccione Tipo Torta-</option>
+                                    @foreach (var item in TipoTortas)
+                                    {
+                                        <option value="@item.Id">@item.Nombre</option>
+                                    }
+                                </InputSelect>
+                            </div>
+                            <div class="form-floating mb-1">
+                                <input class="form-control" id="inputRelleno" type="text" @bind-value="Pedido.Relleno" />
+                                <label for="inputRelleno">Relleno</label>
+                                <ValidationMessage For="@(() => Pedido.Relleno)" />
+                            </div>
+                            <div class="form-floating mb-1">
+                                <input class="form-control" id="inputTamanio" type="number" @bind-value="Pedido.Tamanio"  />
+                                <label for="inputTamanio">Tamaño</label>
+                                <ValidationMessage For="@(() => Pedido.Tamanio)" />
+                            </div>
+                            <div class="form-floating mb-1">
+                                <input class="form-control" id="inputFechaRetiro" type="date" @bind-value="Pedido.FechaRetiro" />
+                                <label for="inputFechaRetiro">Fecha Retiro</label>
+                                <ValidationMessage For="@(() => Pedido.FechaRetiro)" />
+                            </div>
+                            <div class="d-grid gap-1 mt-4 mb-0">
+                                <button class="btn btn-primary" type="submit">Aceptar</button>
+                            </div>
+                        </EditForm>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<LoadingComponent IsLoading="IsLoading" />
+
+@code {
+
+    public PedidoDtoRequest Pedido { get; set; } = new PedidoDtoRequest();
+    public ICollection<TipoTortaDto> TipoTortas { get; set; } = new List<TipoTortaDto>();
+    public bool IsLoading { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Pedido.TipoPedido = 1; // Pedido Especial
+        TipoTortas = await TipoTortaProxy.ListAsync();
+    }
+
+    private async Task Save()
+    {
+        try
+        {
+            IsLoading = true;
+            await PedidoProxy.CreateAsync(Pedido);
+
+            ToastService.ShowInfo("Se ha realizado su pedido con éxito");
+
+            NavigationManager.NavigateTo("/");
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError(ex.Message);
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    private async Task OnFileUploaded(InputFileChangeEventArgs e)
+    {
+        try
+        {
+            var imagen = e.File;
+            var buffer = new byte[imagen.Size];
+            var _ = await imagen.OpenReadStream().ReadAsync(buffer);
+
+            Pedido.Base64Imagen = Convert.ToBase64String(buffer);
+            Pedido.FileName = imagen.Name;
+            Pedido.ImagenUrl = null;
+        }
+        catch (Exception ex)
+        {
+            await Swal.FireAsync("Error de Archivo", ex.Message);
+        }
+    }
+
+}
