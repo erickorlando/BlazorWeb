@@ -1,0 +1,37 @@
+﻿@page "/materiasprimas/create"
+@inject IMateriaPrimaProxy Proxy
+@inject IUnidadMedidaProxy UnidadMedidaProxy
+@inject NavigationManager NavigationManager
+@inject SweetAlertService Swal
+
+<h1 class="titulo mb-5">Crear Materia Prima</h1>
+
+<MateriaPrimaEdit Request="Model" UnidadesMedida="UnidadesMedida" OnSaveClick="Save" />
+
+@code {
+    private MateriaPrimaDtoRequest Model { get; set; } = new MateriaPrimaDtoRequest();
+
+    private ICollection<UnidadMedidaDto> UnidadesMedida { get; set; } = new List<UnidadMedidaDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        UnidadesMedida = await UnidadMedidaProxy.ListAsync();
+    }
+
+    private async Task Save()
+    {
+        try
+        {
+            await Proxy.CreateAsync(Model);
+            NavigationManager.NavigateTo("/materiasprimas/list");
+        }
+        catch (Exception ex)
+        {
+            await Swal.FireAsync(new SweetAlertOptions
+            {
+                Text = ex.Message,
+                Icon = SweetAlertIcon.Error
+            });
+        }
+    }
+}

@@ -12,17 +12,17 @@
                 </div>
             </div>
             <div class="mb-3 row">
-                <label class="col-sm-2 form-label" for="cantidad">Cantidad:</label>
-                <div class="col-sm-6 col-md-9">
-                    <InputNumber @bind-Value="Request.Cantidad" id="cantidad" class="form-control" />
-                    <ValidationMessage For="() => Request.Cantidad" />
-                </div>
-            </div>
-            <div class="mb-3 row">
                 <label class="col-sm-2 form-label" for="caducidad">Caducidad:</label>
                 <div class="col-sm-6 col-md-9">
                     <InputDate @bind-Value="Request.Caducidad" id="caducidad" class="form-control" />
                     <ValidationMessage For="() => Request.Caducidad" />
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label class="col-sm-2 form-label" for="cantidad">Cantidad:</label>
+                <div class="col-sm-6 col-md-9">
+                    <InputNumber @bind-Value="Request.Cantidad" id="cantidad" class="form-control" />
+                    <ValidationMessage For="() => Request.Cantidad" />
                 </div>
             </div>
             <div class="mb-3 row">

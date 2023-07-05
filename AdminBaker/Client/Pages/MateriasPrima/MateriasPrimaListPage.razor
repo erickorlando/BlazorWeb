@@ -1,0 +1,42 @@
+﻿@page "/materiasprimas/list"
+@inject IMateriaPrimaProxy Proxy
+@inject NavigationManager NavigationManager
+
+<h1 class="titulo">Materias Primas</h1>
+
+<MateriaPrimaList Lista="List" OnEditClick="Edit" OnDeleteClick="Delete" />
+<LoadingComponent IsLoading="@(List is null)" />
+
+<button class="btn btn-primary" @onclick="LoadData"><i class="fa fa-refresh me-1"></i>Volver a cargar</button>
+<button class="btn btn-primary" @onclick="Add"><i class="fa fa-plus me-1"></i>Agregar</button>
+
+@code {
+
+    private ICollection<MateriaPrimaDto>? List { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        List = await Proxy.ListAsync();
+    }
+
+    private async Task Delete(int id)
+    {
+        await Proxy.DeleteAsync(id);
+        await LoadData();
+    }
+
+    private void Edit(int id)
+    {
+        NavigationManager.NavigateTo($"/materiasprimas/edit/{id}");
+    }
+
+    private void Add()
+    {
+        NavigationManager.NavigateTo("/materiasprimas/create");
+    }
+}

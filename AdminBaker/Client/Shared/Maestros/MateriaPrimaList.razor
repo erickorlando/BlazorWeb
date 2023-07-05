@@ -6,8 +6,8 @@
         <thead>
             <tr>
                 <th>Nombre</th>
-                <th>Cantidad</th>
                 <th>Caducidad</th>
+                <th>Cantidad</th>
                 <th>Unidad de Medida</th>
                 <th>Acciones</th>
             </tr>
@@ -17,8 +17,8 @@
             {
                 <tr>
                     <td>@item.Nombre</td>
-                    <td>@item.Cantidad</td>
                     <td>@item.Caducidad.ToString("dd/MM/yyyy")</td>
+                    <td>@item.Cantidad</td>
                     <td>@item.UnidadMedida</td>
                     <td>
                         <button class="btn btn-primary" @onclick="() => OnEditClick.InvokeAsync(item.Id)"><i class="fa fa-edit"></i></button>

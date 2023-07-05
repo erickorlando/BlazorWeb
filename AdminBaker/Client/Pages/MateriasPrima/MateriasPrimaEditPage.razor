@@ -1,0 +1,47 @@
+﻿@page "/materiasprimas/edit/{Id:int}"
+@inject IMateriaPrimaProxy Proxy
+@inject IUnidadMedidaProxy UnidadMedidaProxy
+@inject NavigationManager NavigationManager
+@inject SweetAlertService Swal
+
+<h1 class="titulo mb-5">Editar Materia Prima</h1>
+
+<MateriaPrimaEdit Request="Model" UnidadesMedida="UnidadesMedida" OnSaveClick="Save" />
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private ICollection<UnidadMedidaDto> UnidadesMedida { get; set; } = new List<UnidadMedidaDto>();
+
+    private MateriaPrimaDtoRequest Model { get; set; } = new MateriaPrimaDtoRequest();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var response = await Proxy.FindByIdAsync(Id);
+        Model.Nombre = response.Nombre;
+        Model.Cantidad = response.Cantidad;
+        Model.Caducidad = response.Caducidad;
+        Model.UnidadMedidaId = response.UnidadMedidaId;
+
+        UnidadesMedida = await UnidadMedidaProxy.ListAsync();
+    }
+
+    private async Task Save()
+    {
+        try
+        {
+            await Proxy.UpdateAsync(Id, Model);
+            NavigationManager.NavigateTo("/materiasprimas/list");
+        }
+        catch (Exception ex)
+        {
+            await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Text = ex.Message,
+                    Icon = SweetAlertIcon.Error
+                });
+        }
+    }
+
+}

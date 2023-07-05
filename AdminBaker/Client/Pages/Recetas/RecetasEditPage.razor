@@ -1,0 +1,40 @@
+﻿@page "/recetas/edit/{Id:int}"
+@inject IRecetaProxy Proxy
+@inject NavigationManager NavigationManager
+@inject SweetAlertService Swal
+
+<h1 class="titulo mb-5">Editar Receta</h1>
+
+<RecetaEdit Request="Model" OnSaveClick="Save" />
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private RecetaDtoRequest Model { get; set; } = new RecetaDtoRequest();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var response = await Proxy.FindByIdAsync(Id);
+        Model.Nombre = response.Nombre;
+        Model.Detalle = response.Detalle;
+    }
+
+    private async Task Save()
+    {
+        try
+        {
+            await Proxy.UpdateAsync(Id, Model);
+            NavigationManager.NavigateTo("/recetas/list");
+        }
+        catch (Exception ex)
+        {
+            await Swal.FireAsync(new SweetAlertOptions
+            {
+                Text = ex.Message,
+                Icon = SweetAlertIcon.Error
+            });
+        }
+    }
+
+}

@@ -1,0 +1,29 @@
+﻿@page "/recetas/create"
+@inject IRecetaProxy Proxy
+@inject NavigationManager NavigationManager
+@inject SweetAlertService Swal
+
+<h1 class="titulo mb-5">Crear Receta</h1>
+
+<RecetaEdit Request="Model" OnSaveClick="Save" />
+
+@code {
+    private RecetaDtoRequest Model { get; set; } = new RecetaDtoRequest();
+
+    private async Task Save()
+    {
+        try
+        {
+            await Proxy.CreateAsync(Model);
+            NavigationManager.NavigateTo("/recetas/list");
+        }
+        catch (Exception ex)
+        {
+            await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Text = ex.Message,
+                    Icon = SweetAlertIcon.Error
+                });
+        }
+    }
+}
