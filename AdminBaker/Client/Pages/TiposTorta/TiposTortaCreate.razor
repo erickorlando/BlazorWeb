@@ -1,0 +1,29 @@
+﻿@page "/tipostorta/create"
+@inject ITipoTortaProxy Proxy
+@inject NavigationManager NavigationManager
+@inject SweetAlertService Swal
+
+<h1 class="titulo mb-5">Crear Tipo de Torta</h1>
+
+<TipoTortaEdit Request="Model" OnSaveClick="Save" />
+
+@code {
+    private TipoTortaDtoRequest Model { get; set; } = new TipoTortaDtoRequest();
+
+    private async Task Save()
+    {
+        try
+        {
+            await Proxy.CreateAsync(Model);
+            NavigationManager.NavigateTo("/tipostorta/list");
+        }
+        catch (Exception ex)
+        {
+            await Swal.FireAsync(new SweetAlertOptions
+            {
+                Text = ex.Message,
+                Icon = SweetAlertIcon.Error
+            });
+        }
+    }
+}

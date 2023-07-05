@@ -2,6 +2,7 @@
 using AdminBaker.Repositories.Interfaces;
 using AdminBaker.Services.Implementations;
 using AdminBaker.Services.Interfaces;
+using AdminBaker.Services.Profiles;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AdminBaker.Services;
@@ -30,5 +31,13 @@ public static class DependencyInjection
             .AddTransient<ITipoTortaService, TipoTortaService>()
             .AddTransient<IUnidadMedidaService, UnidadMedidaService>()
             .AddTransient<IVendedorService, VendedorService>();
+    }
+
+    public static IServiceCollection AddMappers(this IServiceCollection services)
+    {
+        return services.AddAutoMapper(p =>
+        {
+            p.AddProfile<MaestrosProfile>();
+        });
     }
 }

@@ -1,0 +1,39 @@
+﻿@page "/tipostorta/edit/{Id:int}"
+@inject ITipoTortaProxy Proxy
+@inject NavigationManager NavigationManager
+@inject SweetAlertService Swal
+
+<h1 class="titulo mb-5">Editar Tipo de Torta</h1>
+
+<TipoTortaEdit Request="Model" OnSaveClick="Save" />
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private TipoTortaDtoRequest Model { get; set; } = new TipoTortaDtoRequest();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var response = await Proxy.FindByIdAsync(Id);
+        Model.Nombre = response.Nombre;
+    }
+
+    private async Task Save()
+    {
+        try
+        {
+            await Proxy.UpdateAsync(Id, Model);
+            NavigationManager.NavigateTo("/tipostorta/list");
+        }
+        catch (Exception ex)
+        {
+            await Swal.FireAsync(new SweetAlertOptions
+            {
+                Text = ex.Message,
+                Icon = SweetAlertIcon.Error
+            });
+        }
+    }
+
+}

@@ -1,6 +1,9 @@
-﻿namespace AdminBaker.Shared.Request;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace AdminBaker.Shared.Request;
 
 public class TipoTortaDtoRequest
 {
-    public required string Nombre { get; set; }
+    [Required]
+    public string Nombre { get; set; } = default!;
 }

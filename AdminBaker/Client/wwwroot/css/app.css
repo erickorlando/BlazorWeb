@@ -1,7 +1,12 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
 html, body {
-    font-family: 'Roboto', Verdana, Arial, sans-serif;
+    font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+}
+
+body {
+    padding-top: 0px;
+    background-image: linear-gradient(-45deg, #fff6ed 50%, #ffe5f0 50%);
 }
 
 h1:focus {
@@ -10,6 +15,13 @@ h1:focus {
 
 a, .btn-link {
     color: #0071c1;
+}
+
+.titulo {
+    font-family: 'Dancing Script', cursive;
+    color: black;
+    text-align: center;
+    text-transform: capitalize;
 }
 
 .btn-primary {

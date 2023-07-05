@@ -16,7 +16,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
-builder.Services.AddRepositories()
+builder.Services
+    .AddRepositories()
+    .AddMappers()
     .AddServices();
 
 var app = builder.Build();

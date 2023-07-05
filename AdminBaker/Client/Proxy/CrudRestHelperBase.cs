@@ -38,7 +38,7 @@ public abstract class CrudRestHelperBase<TRequest, TResponse>
 
     public async Task<TResponse> FindByIdAsync(int id)
     {
-        var response = await _httpClient.GetFromJsonAsync<BaseResponseGeneric<TResponse>>($"{BaseUrl}");
+        var response = await _httpClient.GetFromJsonAsync<BaseResponseGeneric<TResponse>>($"{BaseUrl}/{id}");
         if (response!.Success)
             return response.Data!;
 

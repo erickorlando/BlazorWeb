@@ -3,19 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminBaker.Server", "AdminBaker\Server\AdminBaker.Server.csproj", "{4DBD6362-E73B-49C7-95B3-DA0718CB0B7C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminBaker.Server", "AdminBaker\Server\AdminBaker.Server.csproj", "{4DBD6362-E73B-49C7-95B3-DA0718CB0B7C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminBaker.Client", "AdminBaker\Client\AdminBaker.Client.csproj", "{4DDD0023-BAAC-49BE-8900-532AFF56C118}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminBaker.Client", "AdminBaker\Client\AdminBaker.Client.csproj", "{4DDD0023-BAAC-49BE-8900-532AFF56C118}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminBaker.Shared", "AdminBaker\Shared\AdminBaker.Shared.csproj", "{2192A7DB-C8D0-499A-86D5-910E4ECDC880}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminBaker.Shared", "AdminBaker\Shared\AdminBaker.Shared.csproj", "{2192A7DB-C8D0-499A-86D5-910E4ECDC880}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminBaker.Entities", "AdminBaker.Entities\AdminBaker.Entities.csproj", "{B2AC72E9-B0AE-46A8-A07C-39597C1F485D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminBaker.Entities", "AdminBaker.Entities\AdminBaker.Entities.csproj", "{B2AC72E9-B0AE-46A8-A07C-39597C1F485D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminBaker.DataAccess", "AdminBaker.DataAccess\AdminBaker.DataAccess.csproj", "{C4C0A212-F81C-4356-99A8-AE152854B424}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminBaker.DataAccess", "AdminBaker.DataAccess\AdminBaker.DataAccess.csproj", "{C4C0A212-F81C-4356-99A8-AE152854B424}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminBaker.Repositories", "AdminBaker.Repositories\AdminBaker.Repositories.csproj", "{82C14E59-299A-4762-A777-A0C9AF7DBD30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminBaker.Repositories", "AdminBaker.Repositories\AdminBaker.Repositories.csproj", "{82C14E59-299A-4762-A777-A0C9AF7DBD30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminBaker.Services", "AdminBaker.Services\AdminBaker.Services.csproj", "{19E65AB0-E699-4E4B-A1DC-BB8550D63963}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminBaker.Services", "AdminBaker.Services\AdminBaker.Services.csproj", "{19E65AB0-E699-4E4B-A1DC-BB8550D63963}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

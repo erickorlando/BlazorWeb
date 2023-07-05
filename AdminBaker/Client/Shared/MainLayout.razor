@@ -1,17 +1,40 @@
 ﻿@inherits LayoutComponentBase
-
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
+<BlazoredToasts />
+<div>
+    <NavMenu />
 </div>
+<div class="container content position-relative">
+    @Body
+</div>
+
+<footer>
+    <nav class="navbar fixed-bottom navbar-dark bg-dark">
+        <div class="container">
+            <div class="row text-white">
+                <div class="col-md-4">
+                    <h5>Contacto</h5>
+                    <p>Correo electrónico: kaoc25@hotmail.com</p>
+                    <p>Whatsapp: +56 9 8785 1012</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Dirección</h5>
+                    <p>Calle Principal 123</p>
+                    <p>Ciudad, País</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Horario de Atención</h5>
+                    <ul class="list-unstyled">
+                        <li>Lunes a Viernes: 9:00 AM - 6:00 PM</li>
+                        <li>Sábado: 10:00 AM - 2:00 PM</li>
+                        <li>Domingo: Cerrado</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-center text-white">
+                    <p class="small">&copy; 2023 PastelesdeKari.cl Todos los derechos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </nav>
+</footer>

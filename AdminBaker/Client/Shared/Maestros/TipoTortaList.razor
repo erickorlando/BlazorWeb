@@ -1,0 +1,42 @@
+﻿@inject SweetAlertService Swal
+
+@if (Lista is not null)
+{
+    <table class="table table-primary table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Lista)
+            {
+                <tr>
+                    <td>@item.Nombre</td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="() => OnEditClick.InvokeAsync(item.Id)"><i class="fa fa-edit"></i></button>
+                        <button class="btn btn-danger" @onclick="() => OnDeleteClick.InvokeAsync(item.Id)"><i class="fa fa-trash"></i></button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No hay datos para mostrar</p>
+}
+
+@code {
+    
+    [EditorRequired]
+    [Parameter]
+    public ICollection<TipoTortaDto>? Lista { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnEditClick { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnDeleteClick { get; set; }
+}

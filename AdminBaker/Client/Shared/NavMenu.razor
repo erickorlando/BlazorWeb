@@ -1,31 +1,44 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">AdminBaker</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</div>
+﻿<header>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-primary"
+         aria-label="Admin Baker navigation header">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="assets/images/logo.jpg" width="50" height="50" class="d-inline-block align-top mb-2 mt-1"
+                     alt="Admin Baker Logo">
+            </a>
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation"
+                    @onclick="ToggleNavMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="@NavMenuCssClass navbar-collapse d-sm-inline-flex justify-content-center" id="navbarCollapse" @onclick="ToggleNavMenu">
+                <ul class="navbar-nav me-auto mb-2">
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="tipostorta/list">
+                            <i class="fa fa-birthday-cake me-1"></i>Tipos de Torta
+                        </NavLink>
+                    </li>
+                    <li class="nav-item">
+                        <NavLink href="Contact" class="nav-link">
+                            <i class="fa fa-user-o me-1"></i>Contacto
+                        </NavLink>
+                    </li>
+                </ul>
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Pie" asp-action="Search">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
-</div>
+</header>
 
 @code {
     private bool collapseNavMenu = true;

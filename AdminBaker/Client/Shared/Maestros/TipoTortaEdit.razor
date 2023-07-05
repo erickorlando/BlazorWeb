@@ -1,0 +1,34 @@
+﻿<EditForm Model="Request" OnValidSubmit="Save">
+
+    <DataAnnotationsValidator />
+
+    <div class="row row-cols-1 row-cols-md-2 g-2">
+        <div class="mb-3 row">
+            <label class="col-sm-2 form-label" for="nombre">Nombre:</label>
+            <div class="col-sm-6 col-md-9">
+                <InputText @bind-Value="Request.Nombre" id="nombre" class="form-control" />
+                <ValidationMessage For="() => Request.Nombre" />
+            </div>
+        </div>
+    </div>
+
+    <ValidationSummary />
+
+    <button type="submit" class="btn btn-primary"><i class="fa fa-save me-1"></i>Grabar</button>
+    <button type="reset" class="btn btn-warning"><i class="fa fa-eraser me-1"></i>Limpiar</button>
+
+</EditForm>
+
+@code {
+
+    [Parameter]
+    public TipoTortaDtoRequest Request { get; set; } = new TipoTortaDtoRequest();
+
+    [Parameter]
+    public EventCallback OnSaveClick { get; set; }
+
+    private void Save()
+    {
+        OnSaveClick.InvokeAsync();
+    }
+}
