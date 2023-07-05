@@ -1,12 +1,28 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
-    <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
-    </Found>
-    <NotFound>
-        <PageTitle>Not found</PageTitle>
-        <LayoutView Layout="@typeof(MainLayout)">
-            <p role="alert">Sorry, there's nothing at this address.</p>
-        </LayoutView>
-    </NotFound>
-</Router>
+﻿@inject NavigationManager NavigationManager
+
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(App).Assembly">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    @{
+                        if (context.User.Identity!.IsAuthenticated == false)
+                        {
+                            NavigationManager.NavigateTo("/login");
+                        }
+                        else
+                        {
+                            <p class="alert alert-danger">No esta autorizado para ver esta pagina</p>
+                        }
+                    }
+                </NotAuthorized>
+            </AuthorizeRouteView>
+        </Found>
+        <NotFound>
+            <PageTitle>Error 404 - Pagina no encontrada</PageTitle>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <NotFoundComponent />
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>

@@ -1,0 +1,62 @@
+﻿@page "/recover"
+@inject IProxyUser ProxyUser
+@inject IToastService ToastService
+@inject SweetAlertService Swal
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-5">
+            <div class="card shadow-lg mt-5">
+                <div class="card-header">
+                    <h3 class="text-center">Solicitud de Reseteo de Clave</h3>
+                </div>
+                <div class="card-body">
+                    <EditForm Model="Request" OnSubmit="OnSubmit">
+                        <div class="form-floating mb-3">
+                            <input class="form-control" id="inputEmail" type="email" placeholder="admin@example.com"
+                            @bind-value="Request.Email" autocomplete="off" />
+                            <label for="inputEmail">Correo</label>
+                        </div>
+                        <div class="d-grid gap-1 mt-4 mb-0">
+                            <button class="btn btn-primary" type="submit">Enviar</button>
+                        </div>
+                    </EditForm>
+                </div>
+                <div class="card-footer text-center py-3">
+                    <div class="small">
+                        <NavLink href="login">Ingresa con tu cuenta</NavLink>
+                    </div>
+                    <div class="small">
+                        <NavLink href="register">¿No tienes una cuenta? Regístrate</NavLink>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<LoadingComponent IsLoading="IsLoading" />
+
+@code {
+    private GenerateTokenToResetDtoRequest Request { get; set; } = new GenerateTokenToResetDtoRequest();
+
+    public bool IsLoading { get; set; }
+
+    private async Task OnSubmit()
+    {
+        try
+        {
+            IsLoading = true;
+            await ProxyUser.SendTokenToResetPassword(Request);
+            ToastService.ShowInfo("Se ha enviado un correo con las instrucciones para recuperar su cuenta");
+        }
+        catch (Exception ex)
+        {
+            await Swal.FireAsync("Error", ex.Message);
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+}

@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Auth\" />
     <Folder Include="Pages\UnidadesMedida\" />
     <Folder Include="Proxy\Services\" />
     <Folder Include="wwwroot\assets\images\" />
@@ -34,6 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Auth\Login.razor" />
     <_ContentIncludedByDefault Remove="Pages\MateriasPrima\MateriasPrimaListPage.razor" />
     <_ContentIncludedByDefault Remove="Pages\Productos\ProductosEditPage.razor" />
     <_ContentIncludedByDefault Remove="Pages\Productos\ProductosListPage.razor" />
@@ -46,6 +48,7 @@
     <_ContentIncludedByDefault Remove="Shared\Maestros\RecetaList.razor" />
     <_ContentIncludedByDefault Remove="Shared\Maestros\UnidadMedidaEdit.razor" />
     <_ContentIncludedByDefault Remove="Shared\Maestros\UnidadMedidaList.razor" />
+    <_ContentIncludedByDefault Remove="Shared\NotFoundComponent.razor" />
     <_ContentIncludedByDefault Remove="Shared\Tortas\ProductoCard.razor" />
   </ItemGroup>
 
@@ -106,6 +109,14 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Auth\Login.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Shared\NotFoundComponent.razor" />
   </ItemGroup>
 
 </Project>

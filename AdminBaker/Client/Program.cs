@@ -1,10 +1,12 @@
 using AdminBaker.Client;
+using AdminBaker.Client.Auth;
 using AdminBaker.Client.Proxy;
 using AdminBaker.Client.Proxy.Services;
 using Blazored.LocalStorage;
 using Blazored.SessionStorage;
 using Blazored.Toast;
 using CurrieTechnologies.Razor.SweetAlert2;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
@@ -29,5 +31,8 @@ builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddScoped<ICarritoServicio, CarritoServicio>();
 
+// Habilitamos el contexto de seguridad en Blazor
+builder.Services.AddScoped<AuthenticationStateProvider, AuthenticationService>();
+builder.Services.AddAuthorizationCore();
 
 await builder.Build().RunAsync();

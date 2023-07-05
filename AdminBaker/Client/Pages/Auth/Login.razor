@@ -1,0 +1,83 @@
+﻿@page "/login"
+@using AdminBaker.Client.Auth
+@inject IToastService ToastService
+@inject IProxyUser ProxyUser
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-5">
+            <div class="card shadow-lg mt-5">
+                <div class="card-header">
+                    <h3 class="text-center">Inicio de Sesión</h3>
+                </div>
+                <div class="card-body">
+                    <EditForm Model="LoginDtoRequest" OnValidSubmit="ValidLogin">
+                        <DataAnnotationsValidator />
+                        <div class="form-floating mb-3">
+                            <input class="form-control" id="inputEmail" type="text" placeholder="admin@example.com"
+                            @bind-value="LoginDtoRequest.UserName" autocomplete="off" />
+                            <label for="inputEmail">Correo</label>
+                            <ValidationMessage For="@(() => LoginDtoRequest.UserName)"></ValidationMessage>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input class="form-control" id="inputPassword" type="password" placeholder="123"
+                            @bind-value="LoginDtoRequest.Password" autocomplete="off" />
+                            <label for="inputPassword">Contraseña</label>
+                            <ValidationMessage For="@(() => LoginDtoRequest.Password)"></ValidationMessage>
+                        </div>
+                        <div class="d-grid gap-1 mt-4 mb-0">
+                            <button class="btn btn-primary" type="submit">Ingresar</button>
+                        </div>
+                    </EditForm>
+                </div>
+                <div class="card-footer text-center py-3">
+                    <div class="small">
+                        <NavLink href="recover">¿Olvidaste tu contraseña?</NavLink>
+                    </div>
+                    <div class="small">
+                        <NavLink href="register">¿No tienes una cuenta? Regístrate</NavLink>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<LoadingComponent IsLoading="IsLoading" />
+
+@code {
+
+    private LoginDtoRequest LoginDtoRequest { get; set; } = new LoginDtoRequest();
+    public bool IsLoading { get; set; }
+
+    private async Task ValidLogin()
+    {
+        try
+        {
+            IsLoading = true;
+            var response = await ProxyUser.Login(LoginDtoRequest);
+            if (response.Success)
+            {
+                var auth = (AuthenticationService)AuthenticationStateProvider;
+                await auth.Authenticate(response);
+
+                NavigationManager.NavigateTo("/");
+            }
+            else
+            {
+                ToastService.ShowWarning(response.ErrorMessage!);
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError(ex.Message);
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+}

@@ -26,4 +26,9 @@ public class RegistrarUsuarioDto
     
     [Compare(nameof(Clave))]
     public string ConfirmarClave { get; set; } = null!;
+
+    public RegistrarUsuarioDto()
+    {
+        FechaNacimiento = DateTime.Today.AddDays(-18);
+    }
 }

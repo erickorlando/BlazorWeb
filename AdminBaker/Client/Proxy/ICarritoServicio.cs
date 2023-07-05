@@ -1,6 +1,6 @@
 ﻿using AdminBaker.Shared;
 
-namespace AdminBaker.Client.Proxy.Services;
+namespace AdminBaker.Client.Proxy;
 
 public interface ICarritoServicio
 {
