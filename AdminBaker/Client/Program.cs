@@ -14,6 +14,13 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddScoped<ITipoTortaProxy, TipoTortaProxy>();
+builder.Services.AddScoped<IUnidadMedidaProxy, UnidadMedidaProxy>();
+builder.Services.AddScoped<IVendedorProxy, VendedorProxy>();
+builder.Services.AddScoped<IProductoProxy, ProductoProxy>();
+builder.Services.AddScoped<IClienteProxy, ClienteProxy>();
+builder.Services.AddScoped<IPedidoProxy, PedidoProxy>();
+builder.Services.AddScoped<IMateriaPrimaProxy, MateriaPrimaProxy>();
+builder.Services.AddScoped<IRecetaProxy, RecetaProxy>();
 
 builder.Services.AddSweetAlert2();
 builder.Services.AddBlazoredToast();
