@@ -6,6 +6,9 @@
         <thead>
             <tr>
                 <th>Nombre</th>
+                <th>Cantidad</th>
+                <th>Caducidad</th>
+                <th>Unidad de Medida</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -14,6 +17,9 @@
             {
                 <tr>
                     <td>@item.Nombre</td>
+                    <td>@item.Cantidad</td>
+                    <td>@item.Caducidad.ToString("dd/MM/yyyy")</td>
+                    <td>@item.UnidadMedida</td>
                     <td>
                         <button class="btn btn-primary" @onclick="() => OnEditClick.InvokeAsync(item.Id)"><i class="fa fa-edit"></i></button>
                         <button class="btn btn-danger" @onclick="() => Delete(item.Id)"><i class="fa fa-trash"></i></button>
@@ -29,10 +35,10 @@ else
 }
 
 @code {
-    
+
     [EditorRequired]
     [Parameter]
-    public ICollection<TipoTortaDto>? Lista { get; set; }
+    public ICollection<MateriaPrimaDto>? Lista { get; set; }
 
     [Parameter]
     public EventCallback<int> OnEditClick { get; set; }

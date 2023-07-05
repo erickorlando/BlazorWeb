@@ -4,7 +4,7 @@ namespace AdminBaker.Shared.Request;
 
 public class RecetaDtoRequest
 {
-    [StringLength(50)]
-    public required string Nombre { get; set; }
-    public required string Detalle { get; set; }
+    [StringLength(50)] 
+    public string Nombre { get; set; } = default!;
+    public string Detalle { get; set; } = default!;
 }

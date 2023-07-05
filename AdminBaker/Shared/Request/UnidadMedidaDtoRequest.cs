@@ -1,7 +1,12 @@
-﻿namespace AdminBaker.Shared.Request;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace AdminBaker.Shared.Request;
 
 public class UnidadMedidaDtoRequest
 {
-    public required string Codigo { get; set; }
-    public required string Descripcion { get; set; }
+    [Required]
+    public string Codigo { get; set; } = default!;
+
+    [Required]
+    public string Descripcion { get; set; } = default!;
 }

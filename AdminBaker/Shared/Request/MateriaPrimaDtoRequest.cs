@@ -1,8 +1,11 @@
-﻿namespace AdminBaker.Shared.Request;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace AdminBaker.Shared.Request;
 
 public class MateriaPrimaDtoRequest
 {
-    public required string Nombre { get; set; }
+    [Required]
+    public string Nombre { get; set; } = default!;
     public decimal Cantidad { get; set; }
     public int UnidadMedidaId { get; set; }
     public DateTime Caducidad { get; set; }

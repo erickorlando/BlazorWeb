@@ -1,0 +1,29 @@
+﻿@page "/unidadesmedida/create"
+@inject IUnidadMedidaProxy Proxy
+@inject NavigationManager NavigationManager
+@inject SweetAlertService Swal
+
+<h1 class="titulo mb-5">Crear Unidad de Medida</h1>
+
+<UnidadMedidaEdit Request="Model" OnSaveClick="Save" />
+
+@code {
+    private UnidadMedidaDtoRequest Model { get; set; } = new UnidadMedidaDtoRequest();
+
+    private async Task Save()
+    {
+        try
+        {
+            await Proxy.CreateAsync(Model);
+            NavigationManager.NavigateTo("/unidadesmedida/list");
+        }
+        catch (Exception ex)
+        {
+            await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Text = ex.Message,
+                    Icon = SweetAlertIcon.Error
+                });
+        }
+    }
+}

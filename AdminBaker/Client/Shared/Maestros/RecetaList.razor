@@ -6,6 +6,7 @@
         <thead>
             <tr>
                 <th>Nombre</th>
+                <th>Detalle</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -14,6 +15,7 @@
             {
                 <tr>
                     <td>@item.Nombre</td>
+                    <td>@item.Detalle</td>
                     <td>
                         <button class="btn btn-primary" @onclick="() => OnEditClick.InvokeAsync(item.Id)"><i class="fa fa-edit"></i></button>
                         <button class="btn btn-danger" @onclick="() => Delete(item.Id)"><i class="fa fa-trash"></i></button>
@@ -29,10 +31,10 @@ else
 }
 
 @code {
-    
+
     [EditorRequired]
     [Parameter]
-    public ICollection<TipoTortaDto>? Lista { get; set; }
+    public ICollection<RecetaDto>? Lista { get; set; }
 
     [Parameter]
     public EventCallback<int> OnEditClick { get; set; }

@@ -1,0 +1,43 @@
+﻿<EditForm Model="Request" OnValidSubmit="Save">
+
+    <DataAnnotationsValidator />
+
+    <div class="row row-cols-1 row-cols-md-2 g-2">
+        <div class="col">
+            <div class="mb-3 row">
+                <label class="col-sm-2 form-label" for="nombre">Codigo:</label>
+                <div class="col-sm-6 col-md-9">
+                    <InputText @bind-Value="Request.Codigo" id="nombre" class="form-control" />
+                    <ValidationMessage For="() => Request.Codigo" />
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label class="col-sm-2 form-label" for="descripcion">Descripcion:</label>
+                <div class="col-sm-6 col-md-9">
+                    <InputText @bind-Value="Request.Descripcion" id="descripcion" class="form-control" />
+                    <ValidationMessage For="() => Request.Descripcion" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ValidationSummary />
+
+    <button type="submit" class="btn btn-primary"><i class="fa fa-save me-1"></i>Grabar</button>
+    <button type="reset" class="btn btn-warning"><i class="fa fa-eraser me-1"></i>Limpiar</button>
+
+</EditForm>
+
+@code {
+
+    [Parameter]
+    public UnidadMedidaDtoRequest Request { get; set; } = new UnidadMedidaDtoRequest();
+
+    [Parameter]
+    public EventCallback OnSaveClick { get; set; }
+
+    private void Save()
+    {
+        OnSaveClick.InvokeAsync();
+    }
+}

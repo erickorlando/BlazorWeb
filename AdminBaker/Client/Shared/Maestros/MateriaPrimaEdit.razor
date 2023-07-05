@@ -1,0 +1,65 @@
+﻿<EditForm Model="Request" OnValidSubmit="Save">
+
+    <DataAnnotationsValidator />
+
+    <div class="row row-cols-1 row-cols-md-2 g-2">
+        <div class="col">
+            <div class="mb-3 row">
+                <label class="col-sm-2 form-label" for="nombre">Nombre:</label>
+                <div class="col-sm-6 col-md-9">
+                    <InputText @bind-Value="Request.Nombre" id="nombre" class="form-control" />
+                    <ValidationMessage For="() => Request.Nombre" />
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label class="col-sm-2 form-label" for="cantidad">Cantidad:</label>
+                <div class="col-sm-6 col-md-9">
+                    <InputNumber @bind-Value="Request.Cantidad" id="cantidad" class="form-control" />
+                    <ValidationMessage For="() => Request.Cantidad" />
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label class="col-sm-2 form-label" for="caducidad">Caducidad:</label>
+                <div class="col-sm-6 col-md-9">
+                    <InputDate @bind-Value="Request.Caducidad" id="caducidad" class="form-control" />
+                    <ValidationMessage For="() => Request.Caducidad" />
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label class="col-sm-2 form-label" for="unidadmedida">Unidad de Medida:</label>
+                <div class="col-sm-6 col-md-9">
+                    <InputSelect @bind-Value="Request.UnidadMedidaId" id="unidadmedida" class="form-select">
+                        <option>-Seleccione Unidad Medida-</option>
+                        @foreach (var item in UnidadesMedida)
+                        {
+                            <option value="@item.Id">@item.Texto</option>
+                        }
+                    </InputSelect>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ValidationSummary />
+
+    <button type="submit" class="btn btn-primary"><i class="fa fa-save me-1"></i>Grabar</button>
+    <button type="reset" class="btn btn-warning"><i class="fa fa-eraser me-1"></i>Limpiar</button>
+
+</EditForm>
+
+@code {
+
+    [Parameter]
+    public MateriaPrimaDtoRequest Request { get; set; } = new MateriaPrimaDtoRequest();
+
+    [Parameter]
+    public ICollection<UnidadMedidaDto> UnidadesMedida { get; set; } = new List<UnidadMedidaDto>();
+
+    [Parameter]
+    public EventCallback OnSaveClick { get; set; }
+
+    private void Save()
+    {
+        OnSaveClick.InvokeAsync();
+    }
+}

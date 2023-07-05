@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Pages\UnidadesMedida\" />
     <Folder Include="Proxy\Services\" />
     <Folder Include="wwwroot\assets\images\" />
   </ItemGroup>
@@ -35,10 +36,35 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Pages\TiposTorta\TiposTortaCreate.razor" />
     <_ContentIncludedByDefault Remove="Shared\LoadingComponent.razor" />
+    <_ContentIncludedByDefault Remove="Shared\Maestros\MateriaPrimaList.razor" />
+    <_ContentIncludedByDefault Remove="Shared\Maestros\RecetaEdit.razor" />
+    <_ContentIncludedByDefault Remove="Shared\Maestros\RecetaList.razor" />
+    <_ContentIncludedByDefault Remove="Shared\Maestros\UnidadMedidaEdit.razor" />
+    <_ContentIncludedByDefault Remove="Shared\Maestros\UnidadMedidaList.razor" />
   </ItemGroup>
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Pages\TiposTorta\TiposTortaCreate.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Shared\Maestros\UnidadMedidaList.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Shared\Maestros\UnidadMedidaEdit.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Shared\Maestros\RecetaEdit.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Shared\Maestros\RecetaList.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Shared\Maestros\MateriaPrimaList.razor" />
   </ItemGroup>
 
 </Project>

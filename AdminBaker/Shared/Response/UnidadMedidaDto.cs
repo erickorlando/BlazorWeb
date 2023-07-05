@@ -1,8 +1,8 @@
 ﻿namespace AdminBaker.Shared.Response;
 
-public class UnidadMedidaDto
+public class UnidadMedidaDto : CommonDtoResponse
 {
-    public string Nombre { get; set; } = default!;
+    public string Codigo { get; set; } = default!;
     public string Descripcion { get; set; } = default!;
-    public string Texto => $"{Nombre} - {Descripcion}";
+    public string Texto => $"{Codigo} - {Descripcion}";
 }
