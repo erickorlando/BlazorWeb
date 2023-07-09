@@ -18,11 +18,6 @@
                         <EditForm Model="Pedido" OnValidSubmit="Save">
                             <DataAnnotationsValidator />
                             <div class="form-floating mb-1">
-                                <input class="form-control" id="inputRut" type="text" placeholder="1-3" @bind-value="Pedido.Rut" autocomplete="off" />
-                                <label for="inputRut">RUT</label>
-                                <ValidationMessage For="@(() => Pedido.Rut)" />
-                            </div>
-                            <div class="form-floating mb-1">
                                 <div class="card">
                                     <div class="card-header">
                                         <InputFile accept="image/png, image/jpeg, image/webp" style="display: none"

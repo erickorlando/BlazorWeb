@@ -22,7 +22,7 @@
     {
         <div class="container mb-5 gap-5">
             <div class="row gx-4 row-cols-1 row-cols-md-3 row-cols-xl-4 justify-content-start">
-                @foreach (var producto in Productos.OrderBy(p => p.TipoTorta))
+                @foreach (var producto in Productos.Where(x => !x.Especial).OrderBy(p => p.TipoTorta))
                 {
                     <ProductoCard Producto="producto" OnClick="VerDetalle"></ProductoCard>
                 }

@@ -11,4 +11,5 @@ public class ProductoInfo
     public required string Relleno { get; set; }
     public double Tamanio { get; set; }
     public string? ImagenUrl { get; set; }
+    public bool Especial { get; set; }
 }

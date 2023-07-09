@@ -25,6 +25,7 @@
         Model.Tamanio = response.Tamanio;
         Model.TipoTortaId = response.TipoTortaId;
         Model.ImagenUrl = response.ImagenUrl;
+        Model.Especial = response.Especial;
 
         TiposTorta = await ProxyTipoTorta.ListAsync();
     }

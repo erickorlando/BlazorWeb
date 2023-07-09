@@ -1,0 +1,233 @@
+﻿@page "/cart"
+@using AdminBaker.Shared
+@using System.Globalization
+@inject ICarritoServicio CarritoServicio
+@inject IPedidoProxy PedidoProxy
+@inject IToastService ToastService
+@inject NavigationManager NavigationManager
+
+
+<div class="row mt-4">
+    <div class="col-sm-8">
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm table-primary table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th style="width: 100px"></th>
+                                <th>Producto</th>
+                                <th>Precio</th>
+                                <th>Cantidad</th>
+                                <th>Total</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Lista.Any())
+                            {
+                                foreach (var item in Lista)
+                                {
+                                    <tr>
+                                        <td>
+                                            <img class="card-img-top"
+                                                 src="@item.ProductoDto.ImagenUrl"
+                                                 style="width: 100px" />
+                                        </td>
+                                        <td>@item.ProductoDto.Nombre</td>
+                                        <td>$ @item.ProductoDto.Precio.ToString(Constantes.Formato, new CultureInfo(Constantes.Idioma))</td>
+                                        <td class="text-center">
+                                            <div class="btn-group">
+                                                <button class="btn btn-outline-dark"
+                                                @onclick="() => Disminuir(item.ProductoDto.Id)">
+                                                    <i class="fa fa-minus"></i>
+                                                </button>
+                                                <input class="form-control" readonly="readonly"
+                                                       style="width: 50px"
+                                                @bind-value="item.Cantidad" />
+                                                <button class="btn btn-outline-dark"
+                                                @onclick="() => Aumentar(item.ProductoDto.Id)">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td>$ @item.Total</td>
+                                        <td>
+                                            <button class="btn btn-outline-dark"
+                                            @onclick="() => Eliminar(item.ProductoDto.Id)">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="6">
+                                        <div class="alert alert-warning" role="alert">
+                                            No hay productos en el carrito
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card mb-3">
+            <div class="card-body">
+                <EditForm Model="Tarjeta" OnValidSubmit="ProcesarPago">
+                    <DataAnnotationsValidator />
+
+                    <div class="mb-2">
+                        <label class="form-label">Nombre Titular</label>
+                        <input type="text" class="form-control form-control-sm"
+                               placeholder="Usuario Apellido" @bind-value="Tarjeta.Titular"
+                               autocomplete="off"
+                               disabled="@_disabled" />
+                        <ValidationMessage For="@(() => Tarjeta.Titular)" />
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Numero Tarjeta</label>
+                        <input type="text" class="form-control form-control-sm"
+                               placeholder="################" @bind-value="Tarjeta.Numero"
+                               autocomplete="off"
+                               disabled="@_disabled" />
+                        <ValidationMessage For="@(() => Tarjeta.Numero)" />
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="mb-2">
+                                <label class="form-label">Vigencia</label>
+                                <input type="text" class="form-control form-control-sm"
+                                       placeholder="MM/YY" @bind-value="Tarjeta.Vigencia"
+                                       autocomplete="off"
+                                       disabled="@_disabled" />
+                                <ValidationMessage For="@(() => Tarjeta.Vigencia)" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="mb-2">
+                                <label class="form-label">CVV</label>
+                                <input type="text" class="form-control form-control-sm"
+                                       placeholder="###" @bind-value="Tarjeta.Cvv"
+                                       autocomplete="off"
+                                       disabled="@_disabled" />
+                                <ValidationMessage For="@(() => Tarjeta.Cvv)" />
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="d-flex justify-content-between">
+                        <div>Total a pagar:</div>
+                        <div>$ @(Lista.Sum(i => i.Total))</div>
+                    </div>
+                    <div class="mt-2">
+                        <div class="d-grid gap-1">
+                            <button class="btn btn-primary float-end" type="submit" disabled="@_disabled">
+                                Procesar pago
+                            </button>
+                        </div>
+                    </div>
+                </EditForm>
+                <AuthorizeView>
+                    <NotAuthorized>
+                        <div class="alert alert-danger mt-2" role="alert">
+                            Debes iniciar sesion para poder realizar la compra
+                        </div>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationState { get; set; } = default!;
+
+    private bool _disabled = true;
+
+    public List<CarritoDto> Lista { get; set; } = new List<CarritoDto>();
+    public TarjetaDto Tarjeta { get; set; } = new TarjetaDto();
+
+    public bool IsLoading { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Lista = await CarritoServicio.ObtenerCarrito();
+
+        var authState = await AuthenticationState;
+        if (authState.User.Identity!.IsAuthenticated)
+        {
+            _disabled = false;
+        }
+    }
+
+    private void Disminuir(int id)
+    {
+        var item = Lista.First(i => i.ProductoDto.Id == id);
+
+        if (item.Cantidad - 1 > 0)
+        {
+            item.Cantidad--;
+            item.Total = item.Cantidad * item.Precio;
+        }
+    }
+
+    private void Aumentar(int id)
+    {
+        var item = Lista.First(i => i.ProductoDto.Id == id);
+        item.Cantidad++;
+        item.Total = item.Cantidad * item.Precio;
+    }
+
+    private async Task Eliminar(int idProducto)
+    {
+        var producto = Lista.First(i => i.ProductoDto.Id == idProducto);
+        Lista.Remove(producto);
+        await CarritoServicio.EliminarCarrito(idProducto);
+    }
+
+    private async Task ProcesarPago()
+    {
+        try
+        {
+            if (!Lista.Any())
+            {
+                ToastService.ShowWarning("No se encontraron productos");
+                return;
+            }
+
+            IsLoading = true;
+
+            var listProductos = new List<PedidoItemDtoRequest>();
+
+            foreach (var item in Lista)
+            {
+                listProductos.Add(new PedidoItemDtoRequest(item.ProductoDto.Id, item.Cantidad));
+            }
+
+            var request = new PedidoDtoRequest() { Items = listProductos };
+
+            await PedidoProxy.CreateAsync(request);
+
+            await CarritoServicio.LimpiarCarrito();
+            ToastService.ShowSuccess("Pedido registrado");
+            NavigationManager.NavigateTo("/");
+        }
+        catch (Exception e)
+        {
+            ToastService.ShowError(e.Message);
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+}

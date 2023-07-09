@@ -14,6 +14,7 @@
                 <th>Tipo de Torta</th>
                 <th>Relleno</th>
                 <th>Tamaño</th>
+                <th>Especial</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -37,6 +38,7 @@
                     <td>@item.TipoTorta</td>
                     <td>@item.Relleno</td>
                     <td>@item.Tamanio</td>
+                    <td>@(item.Especial ? "Si" : "No")</td><td>@item.Tamanio</td>
                     <td>
                         <button class="btn btn-primary" @onclick="() => OnEditClick.InvokeAsync(item.Id)"><i class="fa fa-edit"></i></button>
                         <button class="btn btn-danger" @onclick="() => Delete(item.Id)"><i class="fa fa-trash"></i></button>

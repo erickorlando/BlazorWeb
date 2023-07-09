@@ -19,7 +19,8 @@ public class ProductoRepository : RepositoryBase<Producto>, IProductoRepository
         Cantidad = p.Cantidad,
         Tamanio = p.Tamanio,
         Precio = p.Precio,
-        ImagenUrl = p.ImagenUrl
+        ImagenUrl = p.ImagenUrl,
+        Especial = p.Especial
     };
 
     public ProductoRepository(AdminBakerDbContext context) : base(context)

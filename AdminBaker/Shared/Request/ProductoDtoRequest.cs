@@ -22,4 +22,5 @@ public class ProductoDtoRequest
 
     public string? Base64Imagen { get; set; }
     public string? FileName { get; set; }
+    public bool Especial { get; set; }
 }

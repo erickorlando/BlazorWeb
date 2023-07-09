@@ -2,7 +2,6 @@
 
 public class PedidoDtoRequest
 {
-    public string Rut { get; set; } = default!;
     public int? VendedorId { get; set; }
     public int EstadoPedido { get; set; }
     public int TipoPedido { get; set; }
@@ -22,6 +21,17 @@ public class PedidoDtoRequest
 
 public class PedidoItemDtoRequest
 {
+    public PedidoItemDtoRequest()
+    {
+        
+    }
+
+    public PedidoItemDtoRequest(int productoId, decimal cantidad)
+    {
+        ProductoId = productoId;
+        Cantidad = cantidad;
+    }
+
     public int ProductoId { get; set; }
     public int TipoTortaId { get; set; }
     public decimal Cantidad { get; set; }
