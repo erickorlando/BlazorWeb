@@ -34,6 +34,7 @@ public class PedidoRepository : RepositoryBase<Pedido>, IPedidoRepository
                 ClienteId = p.ClienteId,
                 VendedorId = p.VendedorId
             })
+            .OrderByDescending(p => p.Fecha)
             .ToListAsync();
     }
 

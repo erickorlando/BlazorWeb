@@ -26,5 +26,7 @@ public class MaestrosProfile : Profile
         CreateMap<ProductoInfo, ProductoDto>();
         CreateMap<Producto, ProductoDto>();
         CreateMap<ProductoDtoRequest, Producto>();
+
+        CreateMap<PedidoInfo, PedidoDto>();
     }
 }

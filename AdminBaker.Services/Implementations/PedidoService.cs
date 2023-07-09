@@ -119,7 +119,8 @@ public class PedidoService : IPedidoService
                         TipoTortaId = producto.TipoTortaId,
                         Relleno = producto.Relleno,
                         Tamanio = producto.Tamanio,
-                        PrecioUnitario = producto.Precio
+                        PrecioUnitario = producto.Precio,
+                        Cantidad = item.Cantidad
                     };
                     pedidoItem.Total = pedidoItem.Cantidad * pedidoItem.PrecioUnitario;
 
