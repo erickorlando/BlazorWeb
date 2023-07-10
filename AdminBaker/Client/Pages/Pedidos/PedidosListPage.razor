@@ -2,24 +2,33 @@
 @inject IPedidoProxy PedidoProxy
 
 <h1 class="titulo">Lista de Pedidos</h1>
-<div class="container-xxl">
+<div class="container-xxl espaciado">
     <div class="row align-items-center mb-3 justify-content-start">
         <div class="col-3">
             <div class="form-floating">
-                <input type="date" @bind-value="FechaInicio" id="FechaInicio" class="form-control" />
+                <input type="date" @bind-value="FechaInicio" 
+                       max="@DateTime.Today.ToString(Constantes.FormatoFecha)" id="FechaInicio" class="form-control" />
                 <label class="form-label" for="FechaInicio">Fecha Inicio</label>
             </div>
         </div>
         <div class="col-3">
             <div class="form-floating">
                 <input type="date" @bind-value="FechaFin" id="FechaFin" 
-                       max="@DateTime.Today.ToString("yyyy-MM-dd")"
+                       max="@DateTime.Today.ToString(Constantes.FormatoFecha)"
                        class="form-control" />
                 <label class="form-label" for="FechaFin">Fecha Fin</label>
             </div>
         </div>
+        <div class="col-3">
+            <div class="form-floating">
+                <input type="text" @bind-value="Filter" id="Filtro" 
+                       class="form-control" />
+                <label class="form-label" for="Filtro">Filtro</label>
+            </div>
+        </div>
+
         <div class="col-auto">
-            <button class="btn btn-primary"><i class="fa fa-refresh me-1" @onclick="LoadData"></i>Volver a cargar</button>
+            <button class="btn btn-primary"><i class="fa fa-search me-1" @onclick="LoadData"></i>Listar</button>
         </div>
     </div>
     <div class="row justify-content-between">
@@ -33,6 +42,7 @@
 
     public DateTime FechaInicio { get; set; }
     public DateTime FechaFin { get; set; }
+    public string? Filter { get; set; }
 
     public ICollection<PedidoDto>? ListaPedidos { get; set; }
 
@@ -45,7 +55,7 @@
 
     private async Task LoadData()
     {
-        ListaPedidos = await PedidoProxy.ListAsync(FechaInicio, FechaFin, string.Empty);
+        ListaPedidos = await PedidoProxy.ListAsync(FechaInicio, FechaFin, Filter);
     }
 
 }

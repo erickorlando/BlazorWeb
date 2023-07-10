@@ -85,6 +85,7 @@ public class PedidoService : IPedidoService
             {
                 pedido.UrlImagen = await _fileUploader.UploadFileAsync(request.Base64Imagen, $"especial-{request.FileName}");
                 pedido.MensajePersonalizado = request.MensajePersonalizado;
+                pedido.FechaRetiro = request.FechaRetiro;
 
                 var productoEspecial = await _productoRepository.GetSpecialAsync();
                 if (productoEspecial is null)
