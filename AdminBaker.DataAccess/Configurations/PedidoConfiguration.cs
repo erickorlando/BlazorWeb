@@ -20,5 +20,11 @@ public class PedidoConfiguration : IEntityTypeConfiguration<Pedido>
         builder.Property(p => p.UrlImagen)
             .IsUnicode(false)
             .HasMaxLength(1000);
+
+        builder.Property(p => p.NroPedido)
+            .HasMaxLength(30);
+        
+        builder.Property(p => p.MensajePersonalizado)
+            .HasMaxLength(500);
     }
 }

@@ -5,7 +5,7 @@ namespace AdminBaker.Services.Interfaces;
 
 public interface IPedidoService
 {
-    Task<PaginationResponse<PedidoDto>> ListAsync(string filter);
+    Task<PaginationResponse<PedidoDto>> ListAsync(DateTime fechaInicio, DateTime fechaFin, string? filter);
 
     Task<BaseResponseGeneric<PedidoDto>> FindByIdAsync(int id);
 

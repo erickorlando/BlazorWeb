@@ -5,5 +5,5 @@ namespace AdminBaker.Client.Proxy;
 
 public interface IPedidoProxy : ICrudRestHelper<PedidoDtoRequest, PedidoDto>
 {
-    
+    Task<ICollection<PedidoDto>> ListAsync(DateTime fechaInicio, DateTime fechaFin, string? filtro);
 }

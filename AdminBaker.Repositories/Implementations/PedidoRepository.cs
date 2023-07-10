@@ -12,29 +12,12 @@ public class PedidoRepository : RepositoryBase<Pedido>, IPedidoRepository
     {
     }
 
-    public async Task<ICollection<PedidoInfo>> ListAsync(string? filter)
+    public async Task<ICollection<PedidoInfo>> ListAsync(DateTime fechaInicio, DateTime fechaFin, string? filter)
     {
-        var query = Context.Set<Pedido>()
-            .Where(p => p.Estado);
-
-        if (!string.IsNullOrWhiteSpace(filter))
-            query = query.Where(p => p.Cliente.NombreCompleto.Contains(filter));
+        var query = Context.Set<PedidoInfo>()
+            .FromSql($"EXEC uspListarPedidos {fechaInicio}, {fechaFin}, {filter}");
 
         return await query
-            .Select(p => new PedidoInfo
-            {
-                Id = p.Id,
-                Cliente = p.Cliente.NombreCompleto,
-                FechaRetiro = p.FechaRetiro,
-                Fecha = p.Fecha,
-                UrlImagen = p.UrlImagen,
-                TotalVenta = p.TotalVenta,
-                TipoPedido = p.TipoPedido,
-                EstadoPedido = p.EstadoPedido,
-                ClienteId = p.ClienteId,
-                VendedorId = p.VendedorId
-            })
-            .OrderByDescending(p => p.Fecha)
             .ToListAsync();
     }
 

@@ -27,6 +27,7 @@
     <Folder Include="Auth\" />
     <Folder Include="Pages\UnidadesMedida\" />
     <Folder Include="Proxy\Services\" />
+    <Folder Include="Shared\Pedidos\" />
     <Folder Include="wwwroot\assets\images\" />
   </ItemGroup>
 
@@ -38,6 +39,7 @@
     <_ContentIncludedByDefault Remove="Pages\Auth\Login.razor" />
     <_ContentIncludedByDefault Remove="Pages\MateriasPrima\MateriasPrimaListPage.razor" />
     <_ContentIncludedByDefault Remove="Pages\PedidoEspecial.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Pedidos\PedidosListPage.razor" />
     <_ContentIncludedByDefault Remove="Pages\Productos\ProductosEditPage.razor" />
     <_ContentIncludedByDefault Remove="Pages\Productos\ProductosListPage.razor" />
     <_ContentIncludedByDefault Remove="Pages\Recetas\RecetasListPage.razor" />
@@ -122,6 +124,10 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Pages\PedidoEspecial.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Pedidos\PedidosListPage.razor" />
   </ItemGroup>
 
 </Project>

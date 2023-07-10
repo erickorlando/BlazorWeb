@@ -39,7 +39,9 @@
                                 <ValidationMessage For="@(() => Request.Direccion)" />
                             </div>
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="inputFecha" type="date" @bind-value="Request.FechaNacimiento" autocomplete="off" />
+                                <input class="form-control" id="inputFecha" 
+                                       max="@DateTime.Today.ToString("yyyy-MM-dd")"
+                                       type="date" @bind-value="Request.FechaNacimiento" autocomplete="off" />
                                 <label for="inputFecha">Fecha Nacimiento</label>
                                 <ValidationMessage For="@(() => Request.FechaNacimiento)" />
                             </div>

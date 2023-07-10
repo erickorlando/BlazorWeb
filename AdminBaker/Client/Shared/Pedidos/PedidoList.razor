@@ -1,0 +1,166 @@
+﻿@using System.Globalization
+@inject SweetAlertService Swal
+
+@if (ListaPedidos is null)
+{
+    <p class="alert alert-warning">Sin datos para mostrar</p>
+}
+else
+{
+    <table class="table table-primary table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th>N° Pedido</th>
+                <th>Fecha</th>
+                <th>Relleno</th>
+                <th>Tamaño</th>
+                <th>Tipo de Torta</th>
+                <th>Cliente</th>
+                <th>Vendedor</th>
+                <th>Total Venta</th>
+                <th>Fecha Retiro</th>
+                <th>Estado</th>
+                <th>Origen</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ListaPedidos)
+            {
+                <tr>
+                    <td>@item.NroPedido</td>
+                    <td>@item.Fecha.ToString("yyyy-MM-dd")</td>
+                    <td>@item.Relleno</td>
+                    <td>@item.Tamanio</td>
+                    <td>@item.TipoTorta</td>
+                    <td>@item.Cliente</td>
+                    <td>@item.Vendedor</td>
+                    <td>$ @item.TotalVenta.ToString(Constantes.Formato, new CultureInfo(Constantes.Idioma))</td>
+                    @if (item.FechaRetiro.HasValue)
+                    {
+                        <td>@item.FechaRetiro.Value.ToString("yyyy-MM-dd")</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+                    <td>@item.EstadoPedido</td>
+                    <td>@item.Origen</td>
+                    <td>
+                        <AuthorizeView Roles="@Constantes.RolVendedor">
+                            <Authorized>
+                                <button class="btn btn-outline-success" @onclick="() => TomarPedido(item.Id)">
+                                    <i class="fa fa-check-circle"></i>
+                                </button>
+                            </Authorized>
+                        </AuthorizeView>
+                        <AuthorizeView Roles="@Constantes.RolAdministrador">
+                            <Authorized>
+                                <button class="btn btn-outline-danger" @onclick="() => CancelarPedido(item.Id)">
+                                    <i class="fa fa-times-circle"></i>
+                                </button>
+                            </Authorized>
+                        </AuthorizeView>
+                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="@item.TargetModal"><i class="fa fa-eye"></i></button>
+
+                        <div class="modal fade" id="@item.Modal" tabindex="-1" aria-labelledby="detalleLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title fw-bolder" id="detalleLabel">Detalles del Pedido N° @item.NroPedido</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-floating mb-2">
+                                            <input type="text" class="form-control" value="@item.Cliente" id="cliente" readonly/>
+                                            <label for="cliente" class="form-label">Cliente:</label>
+                                        </div>
+                                        <div class="form-floating mb-2">
+                                            <input type="text" id="RUT" class="form-control" value="@item.Rut" readonly />
+                                            <label for="RUT" class="form-label">RUT:</label>
+                                        </div>
+                                        <div class="form-floating mb-2">
+                                            <input type="text" id="direccion" class="form-control" value="@item.Direccion" readonly />
+                                            <label for="direccion" class="form-label">Dirección:</label>
+                                        </div>
+                                        @if (!string.IsNullOrWhiteSpace(item.UrlImagen))
+                                        {
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h6>Decoración del Pedido</h6>
+                                                </div>
+                                                <div class="card-body">
+
+                                                    <img src="@item.UrlImagen" class="img-fluid" alt="Imagen del pedido"/>
+
+                                                </div>
+                                            </div>
+                                        }
+                                        @if (!string.IsNullOrWhiteSpace(item.MensajePersonalizado))
+                                        {
+                                            <div class="form-floating">
+                                                <textarea class="form-control" id="personalizado" readonly>@item.MensajePersonalizado</textarea>
+                                                <label for="personalizado" class="form-label">Mensaje Personalizado:</label>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+
+
+}
+
+@code {
+
+    [Parameter]
+    public ICollection<PedidoDto>? ListaPedidos { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnTomarPedidoClick { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnCancelarPedidoClick { get; set; }
+
+    private async Task TomarPedido(int id)
+    {
+        var result = await Swal.FireAsync(new SweetAlertOptions("Tomar Pedido")
+            {
+                Text = "Está seguro de tomar este pedido? Esta acción no se puede deshacer",
+                AllowEnterKey = true,
+                ConfirmButtonText = "Tomar",
+                CancelButtonText = "Cancelar",
+                ShowCancelButton = true,
+                Icon = SweetAlertIcon.Question,
+            });
+
+        if (result.IsConfirmed)
+        {
+            await OnTomarPedidoClick.InvokeAsync(id);
+        }
+    }
+
+    private async Task CancelarPedido(int id)
+    {
+        var result = await Swal.FireAsync(new SweetAlertOptions("Cancelar Pedido")
+            {
+                Text = "Está seguro de cancelar este pedido? Esta acción no se puede deshacer",
+                AllowEnterKey = true,
+                ConfirmButtonText = "Cancelar Pedido",
+                CancelButtonText = "No",
+                ShowCancelButton = true,
+                Icon = SweetAlertIcon.Warning,
+            });
+
+        if (result.IsConfirmed)
+        {
+            await OnCancelarPedidoClick.InvokeAsync(id);
+        }
+    }
+}

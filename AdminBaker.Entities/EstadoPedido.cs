@@ -5,5 +5,6 @@ public enum EstadoPedido
     Pendiente,
     EnPreparacion,
     EnCamino,
-    Entregado
+    Entregado,
+    Cancelado
 }

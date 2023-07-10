@@ -49,4 +49,9 @@ public class ProductoRepository : RepositoryBase<Producto>, IProductoRepository
             .Select(_selector)
             .ToListAsync();
     }
+
+    public async Task<Producto?> GetSpecialAsync()
+    {
+        return await Context.Set<Producto>().FirstOrDefaultAsync(p => p.Especial);
+    }
 }

@@ -24,6 +24,7 @@ public class UserService : IUserService
     private readonly UserManager<IdentityUserECommerce> _userManager;
     private readonly ILogger<UserService> _logger;
     private readonly IClienteRepository _clienteRepository;
+    private readonly IVendedorRepository _vendedorRepository;
     private readonly IEmailService _emailService;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly Jwt _jwt;
@@ -33,13 +34,15 @@ public class UserService : IUserService
         IClienteRepository clienteRepository,
         IOptions<AppConfig> options,
         IEmailService emailService,
-        IHttpContextAccessor httpContextAccessor)
+        IHttpContextAccessor httpContextAccessor, 
+        IVendedorRepository vendedorRepository)
     {
         _userManager = userManager;
         _logger = logger;
         _clienteRepository = clienteRepository;
         _emailService = emailService;
         _httpContextAccessor = httpContextAccessor;
+        _vendedorRepository = vendedorRepository;
         _jwt = options.Value.Jwt;
     }
 
@@ -80,6 +83,20 @@ public class UserService : IUserService
             claims.AddRange(roles.Select(x => new Claim(ClaimTypes.Role, x)));
             response.Roles = new List<string>();
             response.Roles.AddRange(roles);
+
+            if (response.Roles.Contains(Constantes.RolVendedor))
+            {
+                var vendedor = await _vendedorRepository.FindByEmailAsync(request.UserName);
+                if (vendedor is not null)
+                    claims.Add(new Claim("IdVendedor", vendedor.Id.ToString()));
+            }
+
+            if (response.Roles.Contains(Constantes.RolCliente))
+            {
+                var cliente = await _clienteRepository.FindByEmailAsync(request.UserName);
+                if (cliente is not null)
+                    claims.Add(new Claim("IdCliente", cliente.Id.ToString()));
+            }
 
             // Creacion del JWT
             var llaveSimetrica = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.SecretKey));

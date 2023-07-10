@@ -1,8 +1,8 @@
-﻿using System.Security.Claims;
-using AdminBaker.Services.Interfaces;
+﻿using AdminBaker.Services.Interfaces;
 using AdminBaker.Shared.Request;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AdminBaker.Server.Controllers;
 
@@ -19,9 +19,9 @@ public class PedidosController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get(string? filter)
+    public async Task<IActionResult> Get(DateTime fechaInicio, DateTime fechaFin, string? filter)
     {
-        var response = await _service.ListAsync(filter ?? string.Empty);
+        var response = await _service.ListAsync(fechaInicio, fechaFin, filter);
 
         return Ok(response);
     }
@@ -38,7 +38,7 @@ public class PedidosController : ControllerBase
     [Authorize]
     public async Task<IActionResult> Post(PedidoDtoRequest request)
     {
-        var email = HttpContext.User.Claims.First(x => x.Type == ClaimTypes.Email)?.Value!;
+        var email = HttpContext.User.Claims.First(x => x.Type == ClaimTypes.Email).Value;
 
         var response = await _service.CreateAsync(email, request);
 

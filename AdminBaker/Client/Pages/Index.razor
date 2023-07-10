@@ -8,7 +8,7 @@
 <h1 class="titulo">Cual es tu antojo?</h1>
 <div class="espaciado">
     <div class="row justify-content-center mt-3 mb-4">
-        <div class="col-sm-6 col-md-8 col-xl-9">
+        <div class="col-sm-6 col-md-6 col-xl-6">
             <div class="input-group">
                 <input type="text" class="form-control bg-light" placeholder="Buscar producto" @bind-value="Buscar" />
                 <button class="btn btn-secondary" @onclick="ObtenerCatalogo">
@@ -21,7 +21,7 @@
     @if (Productos is not null)
     {
         <div class="container mb-5 gap-5">
-            <div class="row gx-4 row-cols-1 row-cols-md-3 row-cols-xl-4 justify-content-start">
+            <div class="row gx-4 row-cols-1 row-cols-md-3 row-cols-xl-5 justify-content-start">
                 @foreach (var producto in Productos.Where(x => !x.Especial).OrderBy(p => p.TipoTorta))
                 {
                     <ProductoCard Producto="producto" OnClick="VerDetalle"></ProductoCard>

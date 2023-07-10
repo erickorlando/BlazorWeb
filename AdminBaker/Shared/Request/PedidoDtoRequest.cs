@@ -15,6 +15,7 @@ public class PedidoDtoRequest
     public string? Relleno { get; set; } 
     public double? Tamanio { get; set; }
     public int TipoTortaId { get; set; }
+    public string? MensajePersonalizado { get; set; }
 
     public ICollection<PedidoItemDtoRequest>? Items { get; set; } 
 }

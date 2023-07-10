@@ -27,6 +27,7 @@ public class MaestrosProfile : Profile
         CreateMap<Producto, ProductoDto>();
         CreateMap<ProductoDtoRequest, Producto>();
 
-        CreateMap<PedidoInfo, PedidoDto>();
+        CreateMap<PedidoInfo, PedidoDto>()
+            .ForMember(d => d.EstadoPedido, o => o.MapFrom(x => x.EstadoPedido.ToString()));
     }
 }

@@ -88,11 +88,15 @@
                             </li>
                         </Authorized>
                     </AuthorizeView>
-                    <li class="nav-item">
-                        <NavLink class="nav-link" href="pedidos/especial">
-                            PEDIDO ESPECIAL
-                        </NavLink>
-                    </li>
+                    <AuthorizeView Roles="@Constantes.RolCliente">
+                        <Authorized>
+                            <li class="nav-item">
+                                <NavLink class="nav-link" href="pedidos/especial">
+                                    PEDIDO ESPECIAL
+                                </NavLink>
+                            </li>
+                        </Authorized>
+                    </AuthorizeView>
                 </ul>
                 <AuthorizeView>
                     <Authorized>

@@ -4,13 +4,13 @@
 @inject NavigationManager NavigationManager
 @inject IToastService ToastService
 @inject SweetAlertService Swal
-@attribute [Authorize]
+@attribute [Authorize(Roles = Constantes.RolCliente)]
 
 <div class="espaciado">
     <div class="container h-100">
         <div class="row justify-content-center">
             <div class="col-lg-6">
-                <div class="card shadow-lg mt-1 mb-5">
+                <div class="card bg-secondary shadow-lg mt-1 mb-5">
                     <div class="card-header">
                         <h2 class="titulo text-center">¿Cómo quieres tu pedido?</h2>
                     </div>
@@ -28,12 +28,16 @@
                                         @if (Pedido.Base64Imagen is not null)
                                         {
                                             <div style="margin: 10px">
-                                                <img src="data:image/jpeg;base64,@Pedido.Base64Imagen" alt="decoracion" style="width: 200px"/>
+                                                <img src="data:image/jpeg;base64,@Pedido.Base64Imagen" alt="Decoracion" style="width: 200px"/>
                                             </div>
+                                        }
+                                        else if (!string.IsNullOrEmpty(Pedido.ImagenUrl))
+                                        {
+                                            <img src="@Pedido.ImagenUrl" alt="decoracion" style="width: 200px"/>
                                         }
                                         else
                                         {
-                                            <img src="@Pedido.ImagenUrl" alt="decoracion" style="width: 200px"/>
+                                            <img src="assets/images/noimage.png" style="width: 200px"/>
                                         }
                                     </div>
                                 </div>
@@ -46,20 +50,28 @@
                                         <option value="@item.Id">@item.Nombre</option>
                                     }
                                 </InputSelect>
+                                <label for="tipotorta" class="form-label">Tipo de Torta</label>
                             </div>
                             <div class="form-floating mb-1">
                                 <input class="form-control" id="inputRelleno" type="text" @bind-value="Pedido.Relleno" />
-                                <label for="inputRelleno">Relleno</label>
+                                <label for="inputRelleno" class="form-label">Relleno</label>
                                 <ValidationMessage For="@(() => Pedido.Relleno)" />
                             </div>
                             <div class="form-floating mb-1">
                                 <input class="form-control" id="inputTamanio" type="number" @bind-value="Pedido.Tamanio"  />
-                                <label for="inputTamanio">Tamaño</label>
+                                <label for="inputTamanio" class="form-label">Tamaño (cm)</label>
                                 <ValidationMessage For="@(() => Pedido.Tamanio)" />
                             </div>
                             <div class="form-floating mb-1">
-                                <input class="form-control" id="inputFechaRetiro" type="date" @bind-value="Pedido.FechaRetiro" />
-                                <label for="inputFechaRetiro">Fecha Retiro</label>
+                                <InputTextArea class="form-control" id="inputMensaje" type="text" @bind-Value="Pedido.MensajePersonalizado"  />
+                                <label for="inputMensaje" class="form-label">Mensaje Personalizado</label>
+                                <ValidationMessage For="@(() => Pedido.MensajePersonalizado)" />
+                            </div>
+                            <div class="form-floating mb-1">
+                                <input class="form-control" id="inputFechaRetiro" type="date"
+                                       min="@DateTime.Today.AddDays(14).ToString("yyyy-MM-dd")"
+                                       @bind-value="Pedido.FechaRetiro" />
+                                <label for="inputFechaRetiro" class="form-label">Fecha Retiro</label>
                                 <ValidationMessage For="@(() => Pedido.FechaRetiro)" />
                             </div>
                             <div class="d-grid gap-1 mt-4 mb-0">

@@ -16,4 +16,10 @@ public class ClienteRepository : RepositoryBase<Cliente>, IClienteRepository
     {
         return await Context.Set<Cliente>().FirstOrDefaultAsync(c => c.Email == email);
     }
+
+    public async Task<string> GetLastNumberAsync()
+    {
+        var number = await Context.Set<Pedido>().CountAsync() + 1;
+        return $"{number:000000}";
+    }
 }

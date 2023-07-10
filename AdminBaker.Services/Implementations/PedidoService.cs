@@ -32,13 +32,13 @@ public class PedidoService : IPedidoService
         _productoRepository = productoRepository;
     }
 
-    public async Task<PaginationResponse<PedidoDto>> ListAsync(string filter)
+    public async Task<PaginationResponse<PedidoDto>> ListAsync(DateTime fechaInicio, DateTime fechaFin, string? filter)
     {
         var response = new PaginationResponse<PedidoDto>();
 
         try
         {
-            response.Data = _mapper.Map<ICollection<PedidoDto>>(await _repository.ListAsync(filter));
+            response.Data = _mapper.Map<ICollection<PedidoDto>>(await _repository.ListAsync(fechaInicio, fechaFin, filter));
             response.Success = true;
         }
         catch (Exception ex)
@@ -76,22 +76,34 @@ public class PedidoService : IPedidoService
                 TipoPedido = (TipoPedido)request.TipoPedido
             };
 
+            var lastNumber = await _clienteRepository.GetLastNumberAsync();
+            pedido.NroPedido = lastNumber;
+
             var listaItems = new List<PedidoItem>();
             // Si es un pedido especial crear los detalles
             if (pedido.TipoPedido == TipoPedido.PedidoEspecial)
             {
                 pedido.UrlImagen = await _fileUploader.UploadFileAsync(request.Base64Imagen, $"especial-{request.FileName}");
+                pedido.MensajePersonalizado = request.MensajePersonalizado;
+
+                var productoEspecial = await _productoRepository.GetSpecialAsync();
+                if (productoEspecial is null)
+                {
+                    response.ErrorMessage = "No se encontró el producto especial";
+                    response.Success = false;
+                    return response;
+                }
 
                 var pedidoItem = new PedidoItem
                 {
                     Pedido = pedido,
-                    ProductoId = 1,
+                    ProductoId = productoEspecial.Id,
                     TipoTortaId = request.TipoTortaId,
-                    Relleno = request.Relleno ?? string.Empty,
-                    Tamanio = request.Tamanio ?? 0,
+                    Relleno = request.Relleno ?? productoEspecial.Relleno,
+                    Tamanio = request.Tamanio ?? productoEspecial.Tamanio,
                     Cantidad = 1,
-                    PrecioUnitario = 10,
-                    Total = 10
+                    PrecioUnitario = productoEspecial.Precio,
+                    Total = productoEspecial.Precio
                 };
 
                 listaItems.Add(pedidoItem);
@@ -145,13 +157,50 @@ public class PedidoService : IPedidoService
         return response;
     }
 
-    public Task<BaseResponse> UpdateAsync(int id, PedidoDtoRequest request)
+    public async Task<BaseResponse> UpdateAsync(int id, PedidoDtoRequest request)
     {
-        throw new NotImplementedException();
+        var response = new BaseResponse();
+
+        try
+        {
+            var pedido = await _repository.FindByIdAsync(id);
+            if (pedido is null)
+            {
+                response.ErrorMessage = "Pedido no encontrado";
+                response.Success = false;
+                return response;
+            }
+
+            pedido.EstadoPedido = (EstadoPedido)request.EstadoPedido;
+
+            await _repository.UpdateAsync();
+
+            response.Success = true;
+        }
+        catch (Exception ex)
+        {
+            response.ErrorMessage = "Error al actualizar";
+            _logger.LogCritical(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+        }
+
+        return response;
     }
 
-    public Task<BaseResponse> DeleteAsync(int id)
+    public async Task<BaseResponse> DeleteAsync(int id)
     {
-        throw new NotImplementedException();
+        var response = new BaseResponse();
+
+        try
+        {
+            await _clienteRepository.DeleteAsync(id);
+            response.Success = true;
+        }
+        catch (Exception ex)
+        {
+            response.ErrorMessage = "Error al eliminar";
+            _logger.LogCritical(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+        }
+
+        return response;
     }
 }

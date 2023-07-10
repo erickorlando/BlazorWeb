@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using AdminBaker.Entities.Info;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +9,7 @@ namespace AdminBaker.DataAccess
     public class AdminBakerDbContext : IdentityDbContext<IdentityUserECommerce>
     {
         public AdminBakerDbContext(DbContextOptions<AdminBakerDbContext> options)
-            :base(options)
+            : base(options)
         {
 
         }
@@ -36,6 +37,19 @@ namespace AdminBaker.DataAccess
             {
                 e.ToTable("UsuarioRol");
             });
+
+            modelBuilder.Entity<PedidoInfo>()
+                .HasNoKey()
+                .Property(p => p.TotalVenta)
+                .HasPrecision(11, 2);
+            
+            modelBuilder.Entity<PedidoInfo>()
+                .Property(p => p.Cantidad)
+                .HasPrecision(11, 2);
+            
+            modelBuilder.Entity<PedidoInfo>()
+                .Property(p => p.Precio)
+                .HasPrecision(11, 2);
 
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }

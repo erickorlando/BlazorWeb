@@ -4,5 +4,7 @@ namespace AdminBaker.Repositories.Interfaces;
 
 public interface IVendedorRepository : IRepositoryBase<Vendedor>
 {
-    
+
+    Task<Vendedor?> FindByEmailAsync(string email);
+
 }

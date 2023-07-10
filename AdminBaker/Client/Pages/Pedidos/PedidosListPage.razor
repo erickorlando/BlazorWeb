@@ -1,0 +1,51 @@
+﻿@page "/pedidos/list"
+@inject IPedidoProxy PedidoProxy
+
+<h1 class="titulo">Lista de Pedidos</h1>
+<div class="container-xxl">
+    <div class="row align-items-center mb-3 justify-content-start">
+        <div class="col-3">
+            <div class="form-floating">
+                <input type="date" @bind-value="FechaInicio" id="FechaInicio" class="form-control" />
+                <label class="form-label" for="FechaInicio">Fecha Inicio</label>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="form-floating">
+                <input type="date" @bind-value="FechaFin" id="FechaFin" 
+                       max="@DateTime.Today.ToString("yyyy-MM-dd")"
+                       class="form-control" />
+                <label class="form-label" for="FechaFin">Fecha Fin</label>
+            </div>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-primary"><i class="fa fa-refresh me-1" @onclick="LoadData"></i>Volver a cargar</button>
+        </div>
+    </div>
+    <div class="row justify-content-between">
+        <div class="col-lg-12 col-md-12">
+            <PedidoList ListaPedidos="ListaPedidos" />
+        </div>
+    </div>
+</div>
+
+@code {
+
+    public DateTime FechaInicio { get; set; }
+    public DateTime FechaFin { get; set; }
+
+    public ICollection<PedidoDto>? ListaPedidos { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        FechaInicio = DateTime.Today.AddDays(-14);
+        FechaFin = DateTime.Today;
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        ListaPedidos = await PedidoProxy.ListAsync(FechaInicio, FechaFin, string.Empty);
+    }
+
+}

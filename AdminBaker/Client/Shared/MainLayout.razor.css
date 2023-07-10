@@ -2,15 +2,16 @@ main {
     flex: 1;
 }
 .container-footer {
-    padding-top: 1em;
+    padding-top: 1.5em;
     margin-top: 0.5em;
     background-color: #1a1a1a;
-    align-items: baseline;
-    height: 9em;
+    align-items: center;
+    height: 5em;
+    box-sizing: initial;
 }
 
 .elemento {
-    margin: 1.5em;
+    margin: 1em;
 }
 
 .container-footer label {
@@ -21,7 +22,11 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1em;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 4em; /* Altura del footer */
+    padding-bottom: 1px;
 }
 
 .container-footer .footer__social {

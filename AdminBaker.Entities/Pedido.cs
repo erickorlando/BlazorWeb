@@ -12,4 +12,6 @@ public class Pedido : EntityBase
     public decimal TotalVenta { get; set; }
     public string? UrlImagen { get; set; }
     public DateTime? FechaRetiro { get; set; }
+    public string? MensajePersonalizado { get; set; }
+    public string? NroPedido { get; set; }
 }
