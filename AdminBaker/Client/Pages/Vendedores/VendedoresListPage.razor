@@ -1,0 +1,119 @@
+﻿@page "/vendedores/list"
+@inject SweetAlertService Swal
+@inject IVendedorProxy VendedorProxy
+@inject IToastService ToastService
+
+<div class="espaciado">
+    <h1 class="titulo">Lista de Vendedores</h1>
+
+    @if (Lista is not null)
+    {
+        <table class="table table-primary table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Codigo</th>
+                    <th>Nombres Completos</th>
+                    <th>RUT</th>
+                    <th>Correo</th>
+                    <th>Direccion</th>
+                    <th>Horario</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Lista)
+                {
+                    <tr>
+                        <td>@item.CodigoTrabajador</td>
+                        <td>@item.NombreCompleto</td>
+                        <td>@item.Rut</td>
+                        <td>@item.Email</td>
+                        <td>@item.Direccion</td>
+                        <td>@item.Horario</td>
+                        <td>
+                            @if (item.Estado == "Activo")
+                            {
+                                <button class="btn btn-danger" @onclick="() => DarBaja(item.Id)"><i class="fa fa-arrow-down"></i></button>
+                            }
+                            else
+                            {
+                                <button class="btn btn-success" @onclick="() => Reactivar(item.Id)"><i class="fa fa-arrow-up"></i></button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <LoadingComponent IsLoading="IsLoading" />
+    }
+</div>
+
+
+@code {
+
+    public string? Filter { get; set; }
+    public bool IsLoading { get; set; }
+    public ICollection<VendedorDto>? Lista { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        IsLoading = true;
+        Lista = await VendedorProxy.ListAsync(Filter);
+        IsLoading = false;
+    }
+
+    public async Task DarBaja(int id)
+    {
+        try
+        {
+            var result = await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Text = "Desea dar de baja al Vendedor?",
+                    Title = "Dar de Baja",
+                    Icon = SweetAlertIcon.Warning,
+                    ShowCancelButton = true,
+                    ConfirmButtonText = "Si",
+                    CancelButtonText = "No"
+                });
+
+            if (result.IsConfirmed)
+            {
+                await VendedorProxy.DeleteAsync(id);
+                ToastService.ShowWarning("Se dio de baja al Vendedor, no podrá iniciar sesión");
+                await LoadData();
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError(ex.Message);
+        }
+
+    }
+
+    public async Task Reactivar(int id)
+    {
+        try
+        {
+            IsLoading = true;
+            await VendedorProxy.ReactivateAsync(id);
+            ToastService.ShowSuccess("Se reactivó el Vendedor");
+            await LoadData();
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError(ex.Message);
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+
+    }
+
+}

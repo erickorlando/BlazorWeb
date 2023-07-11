@@ -1,0 +1,117 @@
+﻿@page "/clientes/list"
+@inject SweetAlertService Swal
+@inject IClienteProxy ClienteProxy
+@inject IToastService ToastService
+
+<div class="espaciado">
+    <h1 class="titulo">Lista de Clientes</h1>
+
+    @if (Lista is not null)
+    {
+        <table class="table table-primary table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Nombres Completos</th>
+                    <th>RUT</th>
+                    <th>Correo</th>
+                    <th>Direccion</th>
+                    <th>Fecha Nacimiento</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Lista)
+                {
+                    <tr>
+                        <td>@item.NombreCompleto</td>
+                        <td>@item.Rut</td>
+                        <td>@item.Email</td>
+                        <td>@item.Direccion</td>
+                        <td>@item.FechaNacimiento.ToString(Constantes.FormatoFecha)</td>
+                        <td>
+                            @if (item.Estado == "Activo")
+                            {
+                                <button class="btn btn-danger" @onclick="() => DarBaja(item.Id)"><i class="fa fa-arrow-down"></i></button>
+                            }
+                            else
+                            {
+                                <button class="btn btn-success" @onclick="() => Reactivar(item.Id)"><i class="fa fa-arrow-up"></i></button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <LoadingComponent IsLoading="IsLoading" />
+    }
+</div>
+
+
+@code {
+
+    public string? Filter { get; set; }
+    public bool IsLoading { get; set; }
+    public ICollection<ClienteDto>? Lista { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        IsLoading = true;
+        Lista = await ClienteProxy.ListAsync(Filter);
+        IsLoading = false;
+    }
+
+    public async Task DarBaja(int id)
+    {
+        try
+        {
+            var result = await Swal.FireAsync(new SweetAlertOptions
+                {
+                    Text = "Desea dar de baja al cliente?",
+                    Title = "Dar de Baja",
+                    Icon = SweetAlertIcon.Warning,
+                    ShowCancelButton = true,
+                    ConfirmButtonText = "Si",
+                    CancelButtonText = "No"
+                });
+
+            if (result.IsConfirmed)
+            {
+                await ClienteProxy.DeleteAsync(id);
+                ToastService.ShowWarning("Se dio de baja al cliente, no podrá iniciar sesión");
+                await LoadData();
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError(ex.Message);
+        }
+
+    }
+
+    public async Task Reactivar(int id)
+    {
+        try
+        {
+            IsLoading = true;
+            await ClienteProxy.ReactivateAsync(id);
+            ToastService.ShowSuccess("Se reactivó el cliente");
+            await LoadData();
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError(ex.Message);
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+
+    }
+
+}

@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <Folder Include="Auth\" />
-    <Folder Include="Pages\Clientes\" />
     <Folder Include="Pages\UnidadesMedida\" />
     <Folder Include="Proxy\Services\" />
     <Folder Include="Shared\Pedidos\" />
@@ -45,6 +44,7 @@
     <_ContentIncludedByDefault Remove="Pages\Productos\ProductosListPage.razor" />
     <_ContentIncludedByDefault Remove="Pages\Recetas\RecetasListPage.razor" />
     <_ContentIncludedByDefault Remove="Pages\TiposTorta\TiposTortaCreate.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Vendedores\VendedoresListPage.razor" />
     <_ContentIncludedByDefault Remove="Shared\LoadingComponent.razor" />
     <_ContentIncludedByDefault Remove="Shared\Maestros\MateriaPrimaList.razor" />
     <_ContentIncludedByDefault Remove="Shared\Maestros\ProductoEdit.razor" />
@@ -129,6 +129,10 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Pages\Pedidos\PedidosListPage.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Vendedores\VendedoresListPage.razor" />
   </ItemGroup>
 
 </Project>

@@ -13,7 +13,7 @@ public class VendedorProxy : CrudRestHelperBase<VendedorDtoRequest, VendedorDto>
 
     public async Task<ICollection<VendedorDto>> ListAsync(string? filter)
     {
-        var response = await HttpClient.GetAsync($"{BaseUrl}filter={filter}");
+        var response = await HttpClient.GetAsync($"{BaseUrl}?filter={filter}");
 
         if (response.IsSuccessStatusCode)
         {
@@ -34,10 +34,6 @@ public class VendedorProxy : CrudRestHelperBase<VendedorDtoRequest, VendedorDto>
         {
             var content = await response.Content.ReadFromJsonAsync<BaseResponse>();
             throw new InvalidOperationException(content!.ErrorMessage);
-        }
-        else
-        {
-            throw new InvalidOperationException(response.ReasonPhrase);
         }
     }
 }

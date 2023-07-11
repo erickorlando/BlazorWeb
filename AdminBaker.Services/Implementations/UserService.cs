@@ -34,7 +34,7 @@ public class UserService : IUserService
         IClienteRepository clienteRepository,
         IOptions<AppConfig> options,
         IEmailService emailService,
-        IHttpContextAccessor httpContextAccessor, 
+        IHttpContextAccessor httpContextAccessor,
         IVendedorRepository vendedorRepository)
     {
         _userManager = userManager;
@@ -48,6 +48,8 @@ public class UserService : IUserService
 
     public async Task<LoginDtoResponse> LoginAsync(LoginDtoRequest request)
     {
+        const string mensajeDesactivado = "Su usuario fue desactivado, no puede iniciar sesion";
+
         var response = new LoginDtoResponse();
         try
         {
@@ -88,14 +90,26 @@ public class UserService : IUserService
             {
                 var vendedor = await _vendedorRepository.FindByEmailAsync(request.UserName);
                 if (vendedor is not null)
+                {
                     claims.Add(new Claim("IdVendedor", vendedor.Id.ToString()));
+                    if (!vendedor.Estado)
+                    {
+                        throw new SecurityException(mensajeDesactivado);
+                    }
+                }
             }
 
             if (response.Roles.Contains(Constantes.RolCliente))
             {
                 var cliente = await _clienteRepository.FindByEmailAsync(request.UserName);
                 if (cliente is not null)
+                {
                     claims.Add(new Claim("IdCliente", cliente.Id.ToString()));
+                    if (!cliente.Estado)
+                    {
+                        throw new SecurityException(mensajeDesactivado);
+                    }
+                }
             }
 
             // Creacion del JWT
@@ -157,22 +171,48 @@ public class UserService : IUserService
 
                 if (userIdentity is not null)
                 {
-                    await _userManager.AddToRoleAsync(userIdentity, Constantes.RolCliente);
-
-                    var cliente = new Cliente
+                    if (request.Vendedor)
                     {
-                        NombreCompleto = userIdentity.NombreCompleto,
-                        Email = userIdentity.Email!,
-                        Rut = userIdentity.Rut,
-                        Direccion = userIdentity.Direccion,
-                        FechaNacimiento = userIdentity.FechaNacimiento,
-                        Estado = true
-                    };
+                        await _userManager.AddToRoleAsync(userIdentity, Constantes.RolVendedor);
 
-                    await _clienteRepository.AddAsync(cliente);
+                        var vendedor = new Vendedor
+                        {
+                            CodigoTrabajador = userIdentity.Rut,
+                            NombreCompleto = userIdentity.NombreCompleto,
+                            Email = userIdentity.Email!,
+                            Rut = userIdentity.Rut,
+                            Direccion = userIdentity.Direccion,
+                            Horario = "08:00 - 18:00",
+                            Estado = false
+                        };
 
-                    // Mandar un correo electronico, felicitando la creacion de la cuenta.
-                    await _emailService.SendEmailAsync(request.Email, $"{cliente.NombreCompleto}, Bienvenido al sistema Admin Baker", @"<p style=""font-family:Verdana,Helvetica"">Gracias por registrarse en AdminBaker Web</p>");
+                        await _vendedorRepository.AddAsync(vendedor);
+
+                        // Mandar un correo electronico, felicitando la creacion de la cuenta.
+                        await _emailService.SendEmailAsync(request.Email, $"{vendedor.NombreCompleto}, Bienvenido al sistema Admin Baker, debe esperar a que un administrador habilite su usuario", @"<p style=""font-family:Verdana,Helvetica"">Gracias por registrarse en AdminBaker Web</p>");
+                    }
+                    else
+                    {
+
+                        await _userManager.AddToRoleAsync(userIdentity, Constantes.RolCliente);
+
+                        var cliente = new Cliente
+                        {
+                            NombreCompleto = userIdentity.NombreCompleto,
+                            Email = userIdentity.Email!,
+                            Rut = userIdentity.Rut,
+                            Direccion = userIdentity.Direccion,
+                            FechaNacimiento = userIdentity.FechaNacimiento,
+                            Estado = true
+                        };
+
+                        await _clienteRepository.AddAsync(cliente);
+
+                        // Mandar un correo electronico, felicitando la creacion de la cuenta.
+                        await _emailService.SendEmailAsync(request.Email,
+                            $"{cliente.NombreCompleto}, Bienvenido al sistema Admin Baker",
+                            @"<p style=""font-family:Verdana,Helvetica"">Gracias por registrarse en AdminBaker Web</p>");
+                    }
 
                     response.Success = true;
                 }
@@ -381,7 +421,7 @@ public class UserService : IUserService
                 response.ErrorMessage = sb.ToString();
                 sb.Clear();
             }
-            
+
         }
         catch (SecurityException ex)
         {
