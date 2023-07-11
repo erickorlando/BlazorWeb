@@ -59,4 +59,24 @@ public class ProxyUser : IProxyUser
             throw new InvalidOperationException(jsonResponse!.ErrorMessage);
         }
     }
+
+    public async Task ChangePassword(ChangePasswordDtoRequest request)
+    {
+        var response = await _httpClient.PostAsJsonAsync("api/Users/ChangePassword", request);
+        if (!response.IsSuccessStatusCode)
+        {
+            var jsonResponse = await response.Content.ReadFromJsonAsync<BaseResponse>();
+            throw new InvalidOperationException(jsonResponse!.ErrorMessage);
+        }
+    }
+
+    public async Task UpdateProfile(UpdateProfileDtoRequest request)
+    {
+        var response = await _httpClient.PostAsJsonAsync("api/Users/UpdateProfile", request);
+        if (!response.IsSuccessStatusCode)
+        {
+            var jsonResponse = await response.Content.ReadFromJsonAsync<BaseResponse>();
+            throw new InvalidOperationException(jsonResponse!.ErrorMessage);
+        }
+    }
 }

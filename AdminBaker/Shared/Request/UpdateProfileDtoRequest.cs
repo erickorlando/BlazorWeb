@@ -1,6 +1,6 @@
 ﻿namespace AdminBaker.Shared.Request;
 
-public class ClienteDtoRequest : PersonaDtoRequest
+public class UpdateProfileDtoRequest : PersonaDtoRequest
 {
     public DateTime FechaNacimiento { get; set; }
 }

@@ -46,4 +46,20 @@ public class UsersController : ControllerBase
         var response = await _service.ResetPasswordAsync(request);
         return response.Success ? Ok(response) : BadRequest(response);
     }
+
+    // POST: api/Users/ChangePassword
+    [HttpPost]
+    public async Task<IActionResult> ChangePassword(ChangePasswordDtoRequest request)
+    {
+        var response = await _service.ChangePasswordAsync(request);
+        return response.Success ? Ok(response) : BadRequest(response);
+    }
+
+    // POST: api/Users/UpdateProfile
+    [HttpPost]
+    public async Task<IActionResult> UpdateProfile(UpdateProfileDtoRequest request)
+    {
+        var response = await _service.UpdateProfileAsync(request);
+        return response.Success ? Ok(response) : BadRequest(response);
+    }
 }

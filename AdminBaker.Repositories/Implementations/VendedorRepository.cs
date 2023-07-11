@@ -15,4 +15,29 @@ public class VendedorRepository : RepositoryBase<Vendedor>, IVendedorRepository
     {
         return await Context.Set<Vendedor>().FirstOrDefaultAsync(x => x.Email == email);
     }
+
+    public async Task<ICollection<Vendedor>> ListAsync(string? filter)
+    {
+        var query = Context.Set<Vendedor>()
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(filter))
+        {
+            query = query.Where(x => x.NombreCompleto.Contains(filter) || x.Rut.Contains(filter));
+        }
+
+        return await query
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
+    public async Task ReactivarAsync(int id)
+    {
+        var registro = await Context.Set<Vendedor>().FindAsync(id);
+        if (registro is not null)
+        {
+            registro.Estado = true;
+            await Context.SaveChangesAsync();
+        }
+    }
 }

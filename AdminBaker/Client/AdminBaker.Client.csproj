@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <Folder Include="Auth\" />
+    <Folder Include="Pages\Clientes\" />
     <Folder Include="Pages\UnidadesMedida\" />
     <Folder Include="Proxy\Services\" />
     <Folder Include="Shared\Pedidos\" />

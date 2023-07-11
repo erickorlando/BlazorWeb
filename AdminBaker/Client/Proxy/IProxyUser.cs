@@ -9,4 +9,6 @@ public interface IProxyUser
     Task Register(RegistrarUsuarioDto request);
     Task SendTokenToResetPassword(GenerateTokenToResetDtoRequest request);
     Task ResetPassword(ResetPasswordDtoRequest request);
+    Task ChangePassword(ChangePasswordDtoRequest request);
+    Task UpdateProfile(UpdateProfileDtoRequest request);
 }

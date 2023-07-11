@@ -10,4 +10,6 @@ public interface IUserService
     Task<BaseResponse> RegisterAsync(RegistrarUsuarioDto request);
     Task<BaseResponse> SendTokenToResetPasswordAsync(GenerateTokenToResetDtoRequest request);
     Task<BaseResponse> ResetPasswordAsync(ResetPasswordDtoRequest request);
+    Task<BaseResponse> ChangePasswordAsync(ChangePasswordDtoRequest request);
+    Task<BaseResponse> UpdateProfileAsync(UpdateProfileDtoRequest request);
 }

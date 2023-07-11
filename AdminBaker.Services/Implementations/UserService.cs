@@ -280,4 +280,121 @@ public class UserService : IUserService
 
         return response;
     }
+
+    public async Task<BaseResponse> ChangePasswordAsync(ChangePasswordDtoRequest request)
+    {
+        var response = new BaseResponse();
+        try
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user is null)
+                throw new SecurityException("Usuario no existe");
+
+            var result = await _userManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
+            response.Success = result.Succeeded;
+
+            if (!result.Succeeded)
+            {
+                var sb = new StringBuilder();
+                foreach (var error in result.Errors)
+                {
+                    sb.AppendLine(error.Description);
+                }
+
+                response.ErrorMessage = sb.ToString();
+                sb.Clear();
+            }
+            else
+            {
+                // enviamos un email con la confirmación de que se cambio la clave con exito
+                await _emailService.SendEmailAsync(request.Email, "Admin Baker - Cambio de clave",
+                    "<p>Su clave ha sido cambiada con exito</p>");
+            }
+        }
+        catch (SecurityException ex)
+        {
+            response.ErrorMessage = ex.Message;
+            _logger.LogWarning(ex, "Se intentó cambiar el password del usuario {email} {Message}", request.Email,
+                response.ErrorMessage);
+        }
+        catch (Exception ex)
+        {
+            response.ErrorMessage = "Error al cambiar la clave";
+            _logger.LogCritical(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+        }
+
+        return response;
+    }
+
+    public async Task<BaseResponse> UpdateProfileAsync(UpdateProfileDtoRequest request)
+    {
+        var response = new BaseResponse();
+        try
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user is null)
+                throw new SecurityException("Usuario no existe");
+
+            user.NombreCompleto = request.NombreCompleto;
+            user.Direccion = request.Direccion;
+            user.FechaNacimiento = request.FechaNacimiento;
+
+            // Si el usuario tiene Rol de Vendedor, tambien se actualiza la tabla de Vendedores
+            if (await _userManager.IsInRoleAsync(user, Constantes.RolVendedor))
+            {
+                var vendedor = await _vendedorRepository.FindByEmailAsync(request.Email);
+                if (vendedor is null)
+                    throw new SecurityException("Vendedor no existe");
+
+                vendedor.NombreCompleto = request.NombreCompleto;
+                vendedor.Rut = request.Rut;
+                vendedor.Direccion = request.Direccion;
+
+                await _vendedorRepository.UpdateAsync();
+            }
+            // Si el usuario tiene Rol de Cliente, tambien se actualiza la tabla de Clientes
+            else if (await _userManager.IsInRoleAsync(user, Constantes.RolCliente))
+            {
+                var cliente = await _clienteRepository.FindByEmailAsync(request.Email);
+                if (cliente is null)
+                    throw new SecurityException("Cliente no existe");
+
+                cliente.NombreCompleto = request.NombreCompleto;
+                cliente.Rut = request.Rut;
+                cliente.Direccion = request.Direccion;
+                cliente.FechaNacimiento = request.FechaNacimiento;
+
+                await _clienteRepository.UpdateAsync();
+            }
+
+            var result = await _userManager.UpdateAsync(user);
+            response.Success = result.Succeeded;
+
+            if (!result.Succeeded)
+            {
+                var sb = new StringBuilder();
+                foreach (var error in result.Errors)
+                {
+                    sb.AppendLine(error.Description);
+                }
+
+                response.ErrorMessage = sb.ToString();
+                sb.Clear();
+            }
+            
+        }
+        catch (SecurityException ex)
+        {
+            response.ErrorMessage = ex.Message;
+            _logger.LogWarning(ex, "Se intentó actualizar el perfil del usuario {email} {Message}", request.Email,
+                response.ErrorMessage);
+        }
+        catch (Exception ex)
+        {
+            response.ErrorMessage = "Error al actualizar el perfil";
+            _logger.LogCritical(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+        }
+
+        return response;
+    }
 }

@@ -22,4 +22,29 @@ public class ClienteRepository : RepositoryBase<Cliente>, IClienteRepository
         var number = await Context.Set<Pedido>().CountAsync() + 1;
         return $"{number:000000}";
     }
+
+    public async Task<ICollection<Cliente>> ListAsync(string? filter)
+    {
+        var query = Context.Set<Cliente>()
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(filter))
+        {
+            query = query.Where(x => x.NombreCompleto.Contains(filter) || x.Rut.Contains(filter));
+        }
+
+        return await query
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
+    public async Task ReactivarAsync(int id)
+    {
+        var registro = await Context.Set<Cliente>().FindAsync(id);
+        if (registro is not null)
+        {
+            registro.Estado = true;
+            await Context.SaveChangesAsync();
+        }
+    }
 }
