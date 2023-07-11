@@ -11,5 +11,10 @@ public class ClienteConfiguration : IEntityTypeConfiguration<Cliente>
         builder
             .Property(p => p.FechaNacimiento)
             .HasColumnType("date");
+
+        builder.ToTable(nameof(Cliente), o =>
+        {
+            o.IsTemporal();
+        });
     }
 }

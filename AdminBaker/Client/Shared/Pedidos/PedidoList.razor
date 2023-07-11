@@ -44,21 +44,28 @@ else
                     {
                         <td></td>
                     }
-                    <td>@item.EstadoPedido</td>
+                    <td><EstadoPedidoComponent Pedido="item" 
+                            OnGrabar="() => OnCambiarEstadoClick.InvokeAsync(item)" /></td>
                     <td>@item.Origen</td>
                     <td>
                         <AuthorizeView Roles="@Constantes.RolVendedor">
                             <Authorized>
-                                <button class="btn btn-outline-success" @onclick="() => TomarPedido(item.Id)">
-                                    <i class="fa fa-check-circle"></i>
-                                </button>
+                                @if (!item.VendedorId.HasValue)
+                                {
+                                    <button class="btn btn-outline-success" @onclick="() => TomarPedido(item.Id)">
+                                        <i class="fa fa-check-circle"></i>
+                                    </button>
+                                }
                             </Authorized>
                         </AuthorizeView>
                         <AuthorizeView Roles="@Constantes.RolAdministrador">
                             <Authorized>
-                                <button class="btn btn-outline-danger" @onclick="() => CancelarPedido(item.Id)">
-                                    <i class="fa fa-times-circle"></i>
-                                </button>
+                                @if (item.EstadoPedido < 3)
+                                {
+                                    <button class="btn btn-outline-danger" @onclick="() => CancelarPedido(item.Id)">
+                                        <i class="fa fa-times-circle"></i>
+                                    </button>
+                                }
                             </Authorized>
                         </AuthorizeView>
                         <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="@item.TargetModal"><i class="fa fa-eye"></i></button>
@@ -127,6 +134,9 @@ else
 
     [Parameter]
     public EventCallback<int> OnCancelarPedidoClick { get; set; }
+
+    [Parameter]
+    public EventCallback<PedidoDto> OnCambiarEstadoClick { get; set; }
 
     private async Task TomarPedido(int id)
     {

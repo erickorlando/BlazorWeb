@@ -1,0 +1,94 @@
+﻿@inject SweetAlertService Swal
+@if (Editando)
+{
+    <EditForm Model="Pedido" OnSubmit="Grabar">
+        <div class="form-floating">
+            <InputSelect @bind-Value="EstadoSelecciondo" class="form-select" id="estado">
+                @foreach (var item in Estados)
+                {
+                    if (item.Key == Pedido.EstadoPedido)
+                    {
+                        <option value="@item.Key" selected>@item.Value</option>
+                    }
+                    else
+                    {
+                        <option value="@item.Key">@item.Value</option>
+                    }
+                }
+            </InputSelect>
+            <label for="estado" class="form-label">Estado:</label>
+        </div>
+        <button class="btn btn-outline-success" type="submit"><i class="fa fa-save"></i></button>
+        <button class="btn btn-outline-danger" @onclick="Cancelar"><i class="fa fa-close"></i></button>
+    </EditForm>
+}
+else
+{
+    <label>@TextoEstado</label>
+    @if (Pedido.EstadoPedido < 4) // Si el pedido esta cancelado no se puede editar
+    {
+        <button class="btn btn-outline-success" @onclick="Editar">
+            <i class="fa fa-check-square"></i>
+        </button>
+    }
+}
+
+@code {
+
+    [Parameter]
+    public PedidoDto Pedido { get; set; } = new PedidoDto();
+
+    public Dictionary<int, string> Estados { get; set; } = default!;
+
+    private bool Editando { get; set; }
+
+    [Parameter]
+    public EventCallback<PedidoDto> OnGrabar { get; set; }
+
+    private int EstadoSelecciondo { get; set; }
+    private string TextoEstado { get; set; } = default!;
+
+    protected override void OnInitialized()
+    {
+        Estados = new Dictionary<int, string>()
+        {
+            { 0, "Pendiente"},
+            { 1, "En Preparación" },
+            { 2, "En Camino" },
+            { 3, "Entregado" },
+        };
+    }
+
+    protected override void OnParametersSet()
+    {
+        TextoEstado = Pedido.EstadoPedido == 4 ? "Cancelado" : Estados[Pedido.EstadoPedido];
+    }
+
+    private async Task Grabar()
+    {
+        var result = await Swal.FireAsync(new SweetAlertOptions("Cambiar Estado")
+            {
+                Icon = SweetAlertIcon.Question,
+                Text = "Está seguro de cambiar el estado del pedido?",
+                ConfirmButtonText = "Cambiar",
+                CancelButtonText = "Cancelar",
+                ShowCancelButton = true,
+                AllowEnterKey = true,
+            });
+
+        if (result.IsConfirmed)
+        {
+            Pedido.EstadoPedido = EstadoSelecciondo;
+            await OnGrabar.InvokeAsync(Pedido);
+            Editando = false;
+        }
+    }
+
+    private void Editar()
+    {
+        Editando = true;
+    }
+
+    private void Cancelar() => Editando = false;
+
+}

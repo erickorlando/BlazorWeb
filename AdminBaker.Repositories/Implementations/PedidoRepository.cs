@@ -31,4 +31,39 @@ public class PedidoRepository : RepositoryBase<Pedido>, IPedidoRepository
         await Context.Set<Pedido>().AddAsync(entity);
         return entity.Id;
     }
+
+    public async Task TomarPedidoAsync(int idVendedor, int id)
+    {
+        var pedido = await Context.Set<Pedido>().FindAsync(id);
+        if (pedido?.VendedorId != null)
+        {
+            throw new InvalidOperationException("El pedido ya fue tomado por otro vendedor");
+        }
+
+        if (pedido != null)
+        {
+            pedido.VendedorId = idVendedor;
+            await Context.SaveChangesAsync();
+        }
+    }
+
+    public async Task CancelarPedidoAsync(int id)
+    {
+        var pedido = await Context.Set<Pedido>().FindAsync(id);
+        if (pedido != null)
+        {
+            pedido.EstadoPedido = EstadoPedido.Cancelado;
+            await Context.SaveChangesAsync();
+        }
+    }
+
+    public async Task CambiarEstadoAsync(int id, EstadoPedido estado)
+    {
+        var pedido = await Context.Set<Pedido>().FindAsync(id);
+        if (pedido != null)
+        {
+            pedido.EstadoPedido = estado;
+            await Context.SaveChangesAsync();
+        }
+    }
 }

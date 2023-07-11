@@ -16,5 +16,10 @@ public class MateriaPrimaConfiguration : IEntityTypeConfiguration<MateriaPrima>
 
         builder.Property(p => p.Caducidad)
             .HasColumnType("date");
+
+        builder.ToTable(nameof(MateriaPrima), o =>
+        {
+            o.IsTemporal();
+        });
     }
 }

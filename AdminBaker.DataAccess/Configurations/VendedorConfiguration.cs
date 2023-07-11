@@ -13,5 +13,10 @@ public class VendedorConfiguration : IEntityTypeConfiguration<Vendedor>
         
         builder.Property(p => p.Horario)
             .HasMaxLength(500);
+
+        builder.ToTable(nameof(Vendedor), o =>
+        {
+            o.IsTemporal();
+        });
     }
 }

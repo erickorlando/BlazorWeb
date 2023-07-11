@@ -18,7 +18,7 @@ public class PedidoDto : CommonDtoResponse
     public int? VendedorId { get; set; }
     public decimal TotalVenta { get; set; }
     public DateTime? FechaRetiro { set; get; }
-    public string EstadoPedido { get; set; } = default!;
+    public int EstadoPedido { get; set; } = default!;
     public string? MensajePersonalizado { get; set; }
     public string Origen { get; set; } = default!;
 

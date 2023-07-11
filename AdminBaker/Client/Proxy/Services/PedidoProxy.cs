@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using System.Security.Claims;
 using AdminBaker.Shared.Request;
 using AdminBaker.Shared.Response;
 
@@ -25,5 +26,38 @@ public class PedidoProxy : CrudRestHelperBase<PedidoDtoRequest, PedidoDto>, IPed
         }
 
         throw new InvalidOperationException(response.ReasonPhrase);
+    }
+
+    public async Task TakeAsync(int id)
+    {
+        var response = await HttpClient.PatchAsync($"{BaseUrl}/take/{id}", null);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var data = await response.Content.ReadFromJsonAsync<BaseResponse>();
+            throw new InvalidOperationException(data!.ErrorMessage);
+        }
+    }
+
+    public async Task CancelAsync(int id)
+    {
+        var response = await HttpClient.PatchAsync($"{BaseUrl}/{id}/cancel", null);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var data = await response.Content.ReadFromJsonAsync<BaseResponse>();
+            throw new InvalidOperationException(data!.ErrorMessage);
+        }
+    }
+
+    public async Task ChangeStatusAsync(int id, int status)
+    {
+        var response = await HttpClient.PatchAsync($"{BaseUrl}/{id}/status/{status}", null);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var data = await response.Content.ReadFromJsonAsync<BaseResponse>();
+            throw new InvalidOperationException(data!.ErrorMessage);
+        }
     }
 }

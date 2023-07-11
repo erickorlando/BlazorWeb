@@ -204,4 +204,58 @@ public class PedidoService : IPedidoService
 
         return response;
     }
+
+    public async Task<BaseResponse> TakeAsync(int idVendedor, int id)
+    {
+        var response = new BaseResponse();
+
+        try
+        {
+            await _repository.TomarPedidoAsync(idVendedor, id);
+            response.Success = true;
+        }
+        catch (Exception ex)
+        {
+            response.ErrorMessage = "Error al tomar el pedido";
+            _logger.LogCritical(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+        }
+
+        return response;
+    }
+
+    public async Task<BaseResponse> CancelAsync(int id)
+    {
+        var response = new BaseResponse();
+
+        try
+        {
+            await _repository.CancelarPedidoAsync(id);
+            response.Success = true;
+        }
+        catch (Exception ex)
+        {
+            response.ErrorMessage = "Error al cancelar el pedido";
+            _logger.LogCritical(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+        }
+
+        return response;
+    }
+
+    public async Task<BaseResponse> ChangeStateAsync(int id, EstadoPedido estado)
+    {
+        var response = new BaseResponse();
+
+        try
+        {
+            await _repository.CambiarEstadoAsync(id, estado);
+            response.Success = true;
+        }
+        catch (Exception ex)
+        {
+            response.ErrorMessage = "Error al cambiar el estado del pedido";
+            _logger.LogCritical(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+        }
+
+        return response;
+    }
 }

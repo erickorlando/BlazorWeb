@@ -1,4 +1,5 @@
-﻿using AdminBaker.Shared.Request;
+﻿using AdminBaker.Entities;
+using AdminBaker.Shared.Request;
 using AdminBaker.Shared.Response;
 
 namespace AdminBaker.Services.Interfaces;
@@ -14,4 +15,10 @@ public interface IPedidoService
     Task<BaseResponse> UpdateAsync(int id, PedidoDtoRequest request);
 
     Task<BaseResponse> DeleteAsync(int id);
+
+    Task<BaseResponse> TakeAsync(int idVendedor, int id);
+
+    Task<BaseResponse> CancelAsync(int id);
+
+    Task<BaseResponse> ChangeStateAsync(int id, EstadoPedido estado);
 }

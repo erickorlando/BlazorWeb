@@ -26,5 +26,10 @@ public class PedidoConfiguration : IEntityTypeConfiguration<Pedido>
         
         builder.Property(p => p.MensajePersonalizado)
             .HasMaxLength(500);
+
+        builder.ToTable(nameof(Pedido), o =>
+        {
+            o.IsTemporal();
+        });
     }
 }

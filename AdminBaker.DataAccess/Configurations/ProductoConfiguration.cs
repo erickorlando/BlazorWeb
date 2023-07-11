@@ -23,5 +23,10 @@ public class ProductoConfiguration : IEntityTypeConfiguration<Producto>
         builder.Property(p => p.ImagenUrl)
             .IsUnicode(false)
             .HasMaxLength(1000);
+
+        builder.ToTable(nameof(Producto), o =>
+        {
+            o.IsTemporal();
+        });
     }
 }
