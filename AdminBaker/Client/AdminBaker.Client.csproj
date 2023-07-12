@@ -45,6 +45,8 @@
     <_ContentIncludedByDefault Remove="Pages\Recetas\RecetasListPage.razor" />
     <_ContentIncludedByDefault Remove="Pages\TiposTorta\TiposTortaCreate.razor" />
     <_ContentIncludedByDefault Remove="Pages\Vendedores\VendedoresListPage.razor" />
+    <_ContentIncludedByDefault Remove="Shared\CambioClave.razor" />
+    <_ContentIncludedByDefault Remove="Shared\DatosPersonales.razor" />
     <_ContentIncludedByDefault Remove="Shared\LoadingComponent.razor" />
     <_ContentIncludedByDefault Remove="Shared\Maestros\MateriaPrimaList.razor" />
     <_ContentIncludedByDefault Remove="Shared\Maestros\ProductoEdit.razor" />
@@ -133,6 +135,14 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Pages\Vendedores\VendedoresListPage.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Shared\DatosPersonales.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Shared\CambioClave.razor" />
   </ItemGroup>
 
 </Project>

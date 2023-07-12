@@ -1,0 +1,128 @@
+﻿@page "/account"
+@attribute [Authorize]
+@inject IProxyUser ProxyUser
+@inject IToastService ToastService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<h1 class="titulo">Mi Cuenta</h1>
+<hr />
+
+<div>
+    <h2>Cambie su información personal</h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-3">
+            <ul class="nav nav-pills flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" @onclick="() => CambiarVista(0)">Datos Personales</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" @onclick="() => CambiarVista(1)">Cambio de Clave</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-9">
+            @if (VistaSeleccionada == 0)
+            {
+                <DatosPersonales Model="Perfil" OnGrabar="GrabarDatosPersonales" />
+            }
+            else
+            {
+                <CambioClave Model="CambioPassword" OnGrabar="CambiarPassword" />
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private int VistaSeleccionada { get; set; }
+
+    private UpdateProfileDtoRequest? Perfil { get; set; }
+
+    private ChangePasswordDtoRequest? CambioPassword { get; set; }
+
+    private bool IsLoading { get; set; }
+
+    private async Task CambiarVista(int index)
+    {
+        try
+        {
+            IsLoading = true;
+            VistaSeleccionada = index;
+
+            var perfil = await ProxyUser.GetProfile();
+
+            switch (VistaSeleccionada)
+            {
+                case 0:
+                    Perfil = new UpdateProfileDtoRequest
+                        {
+                            NombreCompleto = perfil.NombreCompleto,
+                            Email = perfil.Email,
+                            Rut = perfil.Rut,
+                            Direccion = perfil.Direccion,
+                            FechaNacimiento = perfil.FechaNacimiento
+                        };
+
+                    break;
+                case 1:
+                    CambioPassword = new ChangePasswordDtoRequest()
+                    {
+                        Email = perfil.Email
+                    };
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError(ex.Message);
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CambiarVista(0);
+    }
+
+    private async Task GrabarDatosPersonales()
+    {
+        try
+        {
+            IsLoading = true;
+            if (Perfil != null) await ProxyUser.UpdateProfile(Perfil);
+            ToastService.ShowSuccess("Datos actualizados correctamente");
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError(ex.Message);
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    private async Task CambiarPassword()
+    {
+        try
+        {
+            IsLoading = true;
+            if (CambioPassword != null) await ProxyUser.ChangePassword(CambioPassword);
+            ToastService.ShowSuccess("Contraseña actualizada correctamente");
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError(ex.Message);
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+}

@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace AdminBaker.Shared.Response;
+﻿namespace AdminBaker.Shared.Response;
 
 public class ClienteDto : CommonDtoResponse
 {

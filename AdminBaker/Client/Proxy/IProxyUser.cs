@@ -11,4 +11,5 @@ public interface IProxyUser
     Task ResetPassword(ResetPasswordDtoRequest request);
     Task ChangePassword(ChangePasswordDtoRequest request);
     Task UpdateProfile(UpdateProfileDtoRequest request);
+    Task<ClienteDto> GetProfile();
 }

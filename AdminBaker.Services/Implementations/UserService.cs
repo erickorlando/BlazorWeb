@@ -437,4 +437,34 @@ public class UserService : IUserService
 
         return response;
     }
+
+    public async Task<BaseResponseGeneric<ClienteDto>> GetProfileAsync(string email)
+    {
+        var response = new BaseResponseGeneric<ClienteDto>();
+
+        try
+        {
+            var userIdentity = await _userManager.FindByEmailAsync(email);
+            if (userIdentity is null)
+                throw new SecurityException("Usuario no existe");
+
+            response.Data = new ClienteDto
+            {
+                NombreCompleto = userIdentity.NombreCompleto,
+                Direccion = userIdentity.Direccion,
+                Email = userIdentity.Email!,
+                FechaNacimiento = userIdentity.FechaNacimiento,
+                Rut = userIdentity.Rut,
+                Estado = "Activo"
+            };
+            response.Success = true;
+        }
+        catch (Exception ex)
+        {
+            response.ErrorMessage = "Error al obtener el perfil";
+            _logger.LogCritical(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+        }
+
+        return response;
+    }
 }

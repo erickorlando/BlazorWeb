@@ -1,0 +1,61 @@
+﻿@inject SweetAlertService Swal
+
+@if (Model is null)
+{
+    <p>Cargando...</p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-6">
+            <EditForm Model="Model" OnValidSubmit="OnGrabar">
+                <DataAnnotationsValidator />
+                <div class="form-floating mb-3">
+                    <input type="password" @bind-value="Model.OldPassword" class="form-control" autocomplete="current-password" aria-required="true" placeholder="Ingrese su clave actual" id="oldPassword" />
+                    <label for="oldPassword" class="form-label">Clave Actual</label>
+                    <ValidationMessage For="() => Model.OldPassword" />
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" @bind-value="Model.NewPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Ingrese su nueva clave." id="newPassword" />
+                    <label for="newPassword" class="form-label">Nueva Clave</label>
+                    <ValidationMessage For="() => Model.NewPassword" />
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" @bind-value="Model.ConfirmNewPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Confirme la clave." id="confirmPassword" />
+                    <label for="confirmPassword" class="form-label">Confirme la Clave</label>
+                    <ValidationMessage For="() => Model.ConfirmNewPassword" />
+                </div>
+                <ValidationSummary />
+                <button type="submit" class="w-100 btn btn-lg btn-primary">Cambiar Clave</button>
+            </EditForm>
+        </div>
+    </div>
+
+}
+
+@code {
+
+    [Parameter]
+    public ChangePasswordDtoRequest? Model { get; set; }
+
+    [Parameter]
+    public EventCallback OnGrabar { get; set; }
+
+    private async Task OnSave()
+    {
+        var result = await Swal.FireAsync(new SweetAlertOptions("Cambiar contraseña")
+            {
+                Icon = SweetAlertIcon.Question,
+                Text = "Está seguro de proceder?",
+                ConfirmButtonText = "Sí",
+                CancelButtonText = "No",
+                ShowCancelButton = true,
+                AllowEnterKey = true,
+            });
+
+        if (result.IsConfirmed)
+        {
+            await OnGrabar.InvokeAsync();
+        }
+    }
+}

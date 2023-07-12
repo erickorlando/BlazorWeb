@@ -79,4 +79,13 @@ public class ProxyUser : IProxyUser
             throw new InvalidOperationException(jsonResponse!.ErrorMessage);
         }
     }
+
+    public async Task<ClienteDto> GetProfile()
+    {
+        var response = await _httpClient.GetFromJsonAsync<BaseResponseGeneric<ClienteDto>>("api/Users/GetProfile");
+        if (response!.Success)
+            return response.Data!;
+
+        throw new InvalidOperationException(response.ErrorMessage);
+    }
 }

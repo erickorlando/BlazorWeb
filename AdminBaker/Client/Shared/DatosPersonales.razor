@@ -1,0 +1,67 @@
+﻿@inject SweetAlertService Swal
+
+@if (Model is null)
+{
+    <p>Cargando....</p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-6">
+            <EditForm Model="Model" OnValidSubmit="OnGrabar">
+                <DataAnnotationsValidator />
+                <div class="form-floating mb-3">
+                    <input @bind-value="Model.NombreCompleto" class="form-control" placeholder="Ingrese su nombre completo." id="nombres" />
+                    <label for="nombres" class="form-label">No           mbres</label>
+                    <ValidationMessage For="@(() => Model.NombreCompleto)" />
+                </div>
+                <div class="form-floating mb-3">
+                    <input @bind-value="Model.Rut" class="form-control" placeholder="RUT" id="rut" />
+                    <label for="rut" class="form-label">RUT</label>
+                    <ValidationMessage For="@(() => Model.Rut)" />
+                </div>
+                <div class="form-floating mb-3">
+                    <input @bind-value="Model.Direccion" class="form-control" placeholder="Dirección" id="direccion" />
+                    <label for="direccion" class="form-label">Dirección</label>
+                    <ValidationMessage For="@(() => Model.Direccion)" />
+                </div>
+                <div class="form-floating mb-3">
+                    <input @bind-value="Model.FechaNacimiento" class="form-control" type="date" id="fechaNacimiento" />
+                    <label for="fechaNacimiento" class="form-label">Fecha Nacimiento</label>
+                    <ValidationMessage For="@(() => Model.FechaNacimiento)" />
+                </div>
+                <ValidationSummary />
+                <button type="submit" class="w-100 btn btn-lg btn-primary">Guardar cambios</button>
+            </EditForm>
+        </div>
+    </div>
+
+}
+
+
+@code {
+
+    [Parameter]
+    public UpdateProfileDtoRequest? Model { get; set; } 
+
+    [Parameter]
+    public EventCallback OnGrabar { get; set; }
+
+    private async Task OnSave()
+    {
+        var result = await Swal.FireAsync(new SweetAlertOptions("Actualizar cuenta")
+            {
+                Icon = SweetAlertIcon.Question,
+                Text = "Está seguro de proceder?",
+                ConfirmButtonText = "Sí",
+                CancelButtonText = "No",
+                ShowCancelButton = true,
+                AllowEnterKey = true,
+            });
+
+        if (result.IsConfirmed)
+        {
+            await OnGrabar.InvokeAsync();
+        }
+    }
+}

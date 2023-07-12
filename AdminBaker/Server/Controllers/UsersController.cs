@@ -1,5 +1,7 @@
-﻿using AdminBaker.Services.Interfaces;
+﻿using System.Security.Claims;
+using AdminBaker.Services.Interfaces;
 using AdminBaker.Shared.Request;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdminBaker.Server.Controllers;
@@ -61,5 +63,14 @@ public class UsersController : ControllerBase
     {
         var response = await _service.UpdateProfileAsync(request);
         return response.Success ? Ok(response) : BadRequest(response);
+    }
+
+    [HttpGet]
+    [Authorize]
+    public async Task<IActionResult> GetProfile()
+    {
+        var email = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value!;
+        var response = await _service.GetProfileAsync(email);
+        return response.Success ? Ok(response) : NotFound(response);
     }
 }

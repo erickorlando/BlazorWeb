@@ -1,46 +1,7 @@
 main {
     flex: 1;
 }
-.container-footer {
-    padding-top: 1.5em;
-    margin-top: 0.5em;
-    background-color: #1a1a1a;
-    align-items: center;
-    height: 5em;
-    box-sizing: initial;
-}
 
-.elemento {
-    margin: 1em;
-}
-
-.container-footer label {
-    color: white;
-}
-
-.container-footer .footer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 4em; /* Altura del footer */
-    padding-bottom: 1px;
-}
-
-.container-footer .footer__social {
-    display: flex;
-    color: white;
-}
-
-
-/* Media Queries para ocultar el footer en el movil*/
-@media (max-width: 768px) {
-    .container-footer {
-        display: none;
-    }
-}
 
 @media (max-width: 1024px) {
     .nav-link {
