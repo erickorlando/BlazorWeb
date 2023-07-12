@@ -2,7 +2,6 @@
 @attribute [Authorize]
 @inject IProxyUser ProxyUser
 @inject IToastService ToastService
-@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <h1 class="titulo">Mi Cuenta</h1>
 <hr />
@@ -33,6 +32,8 @@
         </div>
     </div>
 </div>
+
+<LoadingComponent IsLoading="IsLoading" />
 
 @code {
     private int VistaSeleccionada { get; set; }
