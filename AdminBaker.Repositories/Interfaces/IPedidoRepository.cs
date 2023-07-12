@@ -14,4 +14,6 @@ public interface IPedidoRepository : IRepositoryBase<Pedido>
     Task CancelarPedidoAsync(int id);
 
     Task CambiarEstadoAsync(int id, EstadoPedido estado);
+    
+    Task<ICollection<PedidoItem>> GetItemsAsync(int id);
 }

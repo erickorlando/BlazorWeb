@@ -33,7 +33,8 @@ public static class DependencyInjection
             .AddTransient<IVendedorService, VendedorService>()
             .AddTransient<IFileUploader, AzureBlobStorageUploader>()
             .AddTransient<IUserService, UserService>()
-            .AddTransient<IEmailService, EmailService>();
+            .AddTransient<IEmailService, EmailService>()
+            .AddTransient<IPayPalTransactionService, PayPalTransactionService>();
     }
 
     public static IServiceCollection AddMappers(this IServiceCollection services)

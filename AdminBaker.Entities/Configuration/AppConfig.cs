@@ -8,6 +8,14 @@ public class AppConfig
 
     public Smtpconfiguration SmtpConfiguration { get; set; } = null!;
 
+    public PayPalConfiguration PayPalConfiguration { get; set; } = null!;
+
+}
+
+public class PayPalConfiguration
+{
+    public string ClientId { get; set; } = default!;
+    public string SecretId { get; set; } = default!;
 }
 
 public class Storageconfiguration

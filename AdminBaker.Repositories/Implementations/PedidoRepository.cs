@@ -66,4 +66,13 @@ public class PedidoRepository : RepositoryBase<Pedido>, IPedidoRepository
             await Context.SaveChangesAsync();
         }
     }
+
+    public async Task<ICollection<PedidoItem>> GetItemsAsync(int id)
+    {
+        return await Context.Set<PedidoItem>()
+            .Include(p => p.Producto)
+            .Where(p => p.PedidoId == id)
+            .AsNoTracking()
+            .ToListAsync();
+    }
 }

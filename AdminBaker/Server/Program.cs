@@ -118,6 +118,9 @@ app.MapFallbackToFile("index.html");
 
 using (var scope = app.Services.CreateScope())
 {
+    // Ejecutar la migracion
+    var db = scope.ServiceProvider.GetRequiredService<AdminBakerDbContext>();
+    db.Database.Migrate();
     await UserDataSeeder.Seed(scope.ServiceProvider);
 }
 

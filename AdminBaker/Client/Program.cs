@@ -25,6 +25,7 @@ builder.Services.AddScoped<IMateriaPrimaProxy, MateriaPrimaProxy>();
 builder.Services.AddScoped<IRecetaProxy, RecetaProxy>();
 builder.Services.AddScoped<ICarritoServicio, CarritoServicio>();
 builder.Services.AddScoped<IProxyUser, ProxyUser>();
+builder.Services.AddScoped<IPayPalProxy, PayPalProxy>();
 
 builder.Services.AddSweetAlert2();
 builder.Services.AddBlazoredToast();

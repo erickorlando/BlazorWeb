@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ElCamino.PayPalCheckoutSdk" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.8" PrivateAssets="all" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="7.0.5" />
@@ -26,7 +27,6 @@
   <ItemGroup>
     <Folder Include="Auth\" />
     <Folder Include="Pages\UnidadesMedida\" />
-    <Folder Include="Proxy\Services\" />
     <Folder Include="Shared\Pedidos\" />
     <Folder Include="wwwroot\assets\images\" />
   </ItemGroup>
