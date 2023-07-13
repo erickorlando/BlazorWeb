@@ -37,6 +37,12 @@ public class PedidosController : ControllerBase
         return response.Success ? Ok(response) : NotFound(response);
     }
 
+    [HttpGet("[action]")]
+    public async Task<IActionResult> ListAudit()
+    {
+        return Ok(await _service.ListAuditAsync());
+    }
+
     [HttpPost]
     [Authorize]
     public async Task<IActionResult> Post(PedidoDtoRequest request)

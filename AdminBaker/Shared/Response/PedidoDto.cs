@@ -30,4 +30,10 @@ public class PedidoDto : CommonDtoResponse
 
     #endregion
 
+    #region Auditoria
+
+    public DateTime? FechaCambio { get; set; }
+
+    #endregion
+
 }

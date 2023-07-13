@@ -21,6 +21,26 @@ public class PedidoRepository : RepositoryBase<Pedido>, IPedidoRepository
             .ToListAsync();
     }
 
+    public async Task<ICollection<PedidoAuditoriaInfo>> ListAuditAsync()
+    {
+        var query = Context.Set<Pedido>()
+            .TemporalAsOf(DateTime.UtcNow)
+            .OrderByDescending(p => p.Id)
+            .Take(50)
+            .Select(p => new PedidoAuditoriaInfo
+            {
+                Id = p.Id,
+                NroPedido = p.NroPedido,
+                Fecha = p.Fecha,
+                Cliente = p.Cliente.NombreCompleto,
+                EstadoPedido = p.EstadoPedido,
+                Vendedor = p.Vendedor != null ? p.Vendedor.NombreCompleto : null,
+                FechaCambio = EF.Property<DateTime>(p, "PeriodEnd")
+            });
+
+        return await query.ToListAsync();
+    }
+
     public async Task AddItemAsync(PedidoItem item)
     {
         await Context.Set<PedidoItem>().AddAsync(item);

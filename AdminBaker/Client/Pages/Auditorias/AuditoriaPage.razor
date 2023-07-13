@@ -1,0 +1,78 @@
+﻿@page "/auditorias"
+@attribute [Authorize(Roles = Constantes.RolAdministrador)]
+@inject IPedidoProxy PedidoProxy
+@inject IToastService ToastService
+
+<h1 class="titulo">Auditorias</h1>
+
+<div>
+    <hr />
+    <div class="row">
+        <div class="col-md-3">
+            <ul class="nav nav-pills flex-column">
+                <li class="nav-item mb-3">
+                    <a class="w-100 btn btn-lg btn-primary" @onclick="() => CambiarVista(0)">Pedidos</a>
+                </li>
+                <li class="nav-item mb-3">
+                    <a class="w-100 btn btn-lg btn-primary" @onclick="() => CambiarVista(1)">Productos</a>
+                </li>
+                <li class="nav-item mb-3">
+                    <a class="w-100 btn btn-lg btn-primary" @onclick="() => CambiarVista(0)">Clientes</a>
+                </li>
+                <li class="nav-item mb-3">
+                    <a class="w-100 btn btn-lg btn-primary" @onclick="() => CambiarVista(1)">Vendedores</a>
+                </li>
+                <li class="nav-item mb-3">
+                    <a class="w-100 btn btn-lg btn-primary" @onclick="() => CambiarVista(1)">Materias Primas</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-9">
+            @if (VistaSeleccionada == 0)
+            {
+                <PedidoAuditoria Pedidos="Pedidos" />
+            }
+            else
+            {
+                <p>Aqui va otro componente</p>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private int VistaSeleccionada { get; set; }
+    private bool IsLoading { get; set; }
+
+    public ICollection<PedidoDto> Pedidos { get; set; } = new List<PedidoDto>();
+
+    private async Task CambiarVista(int index)
+    {
+        try
+        {
+            IsLoading = true;
+            VistaSeleccionada = index;
+
+            switch (VistaSeleccionada)
+            {
+                case 0:
+
+                    Pedidos = await PedidoProxy.ListAuditAsync();
+                    break;
+                case 1:
+
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError(ex.Message);
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+
+    }
+}

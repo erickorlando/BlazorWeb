@@ -50,6 +50,22 @@ public class PedidoService : IPedidoService
         return response;
     }
 
+    public async Task<BaseResponseGeneric<ICollection<PedidoDto>>> ListAuditAsync()
+    {
+        var response = new BaseResponseGeneric<ICollection<PedidoDto>>();
+        try
+        {
+            response.Data = _mapper.Map<ICollection<PedidoDto>>(await _repository.ListAuditAsync());
+            response.Success = true;
+        }
+        catch (Exception ex)
+        {
+            response.ErrorMessage = "Error al Obtener el registro";
+            _logger.LogCritical(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+        }
+        return response;
+    }
+
     public Task<BaseResponseGeneric<PedidoDto>> FindByIdAsync(int id)
     {
         throw new NotImplementedException();
@@ -73,7 +89,7 @@ public class PedidoService : IPedidoService
                 Fecha = DateTime.Today,
                 ClienteId = cliente.Id,
                 EstadoPedido = EstadoPedido.Pendiente,
-                TipoPedido = (TipoPedido)request.TipoPedido
+                TipoPedido = (TipoPedido)request.TipoPedido,
             };
 
             var lastNumber = await _clienteRepository.GetLastNumberAsync();

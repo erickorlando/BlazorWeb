@@ -4,7 +4,6 @@
 @inject IToastService ToastService
 
 <h1 class="titulo">Mi Cuenta</h1>
-<hr />
 
 <div>
     <h2>Cambie su información personal</h2>
@@ -13,10 +12,10 @@
         <div class="col-md-3">
             <ul class="nav nav-pills flex-column">
                 <li class="nav-item mb-3">
-                    <a class="btn btn-outline-primary" @onclick="() => CambiarVista(0)">Datos Personales</a>
+                    <a class="w-100 btn btn-lg btn-primary" @onclick="() => CambiarVista(0)">Datos Personales</a>
                 </li>
                 <li class="nav-item">
-                    <a class="btn btn-outline-primary" @onclick="() => CambiarVista(1)">Cambio de Clave</a>
+                    <a class="w-100 btn btn-lg btn-primary" @onclick="() => CambiarVista(1)">Cambio de Clave</a>
                 </li>
             </ul>
         </div>

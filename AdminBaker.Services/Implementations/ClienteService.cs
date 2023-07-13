@@ -39,6 +39,11 @@ public class ClienteService : IClienteService
         return response;
     }
 
+    public Task<PaginationResponse<ClienteDto>> ListAuditAsync()
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<BaseResponseGeneric<ClienteDto>> FindByIdAsync(int id)
     {
         var response = new BaseResponseGeneric<ClienteDto>();

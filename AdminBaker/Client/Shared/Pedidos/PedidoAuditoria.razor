@@ -1,0 +1,50 @@
+﻿<h3>Pedidos</h3>
+
+@if (Pedidos is null)
+{
+    <p>Cargando...</p>
+}
+else
+{
+    <table class="table table-primary table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Nro. Pedido</th>
+                <th>Fecha del Pedido</th>
+                <th>Cliente</th>
+                <th>Estado</th>
+                <th>Vendedor</th>
+                <th>Fecha de Cambio</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Pedidos)
+            {
+                <tr>
+                    <td>@item.NroPedido</td>
+                    <td>@item.Fecha.ToString(Constantes.FormatoFecha)</td>
+                    <td>@item.Cliente</td>
+                    <td>@Estados[item.EstadoPedido]</td>
+                    <td>@item.Vendedor</td>
+                    <td>@item.FechaCambio?.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    public Dictionary<int, string> Estados { get; set; } = new Dictionary<int, string>()
+    {
+        { 0, "Pendiente"},
+        { 1, "En Preparación" },
+        { 2, "En Camino" },
+        { 3, "Entregado" },
+        { 4, "Cancelado" },
+    };
+
+    [Parameter]
+    public ICollection<PedidoDto>? Pedidos { get; set; }
+
+}

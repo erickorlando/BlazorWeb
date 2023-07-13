@@ -27,7 +27,6 @@
   <ItemGroup>
     <Folder Include="Auth\" />
     <Folder Include="Pages\UnidadesMedida\" />
-    <Folder Include="Shared\Pedidos\" />
     <Folder Include="wwwroot\assets\images\" />
   </ItemGroup>
 
@@ -36,6 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Auditorias\AuditoriaPage.razor" />
     <_ContentIncludedByDefault Remove="Pages\Auth\Login.razor" />
     <_ContentIncludedByDefault Remove="Pages\MateriasPrima\MateriasPrimaListPage.razor" />
     <_ContentIncludedByDefault Remove="Pages\PedidoEspecial.razor" />
@@ -55,6 +55,7 @@
     <_ContentIncludedByDefault Remove="Shared\Maestros\UnidadMedidaEdit.razor" />
     <_ContentIncludedByDefault Remove="Shared\Maestros\UnidadMedidaList.razor" />
     <_ContentIncludedByDefault Remove="Shared\NotFoundComponent.razor" />
+    <_ContentIncludedByDefault Remove="Shared\Pedidos\PedidoAuditoria.razor" />
     <_ContentIncludedByDefault Remove="Shared\Tortas\ProductoCard.razor" />
   </ItemGroup>
 
@@ -143,6 +144,14 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Shared\CambioClave.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Shared\Pedidos\PedidoAuditoria.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Auditorias\AuditoriaPage.razor" />
   </ItemGroup>
 
 </Project>

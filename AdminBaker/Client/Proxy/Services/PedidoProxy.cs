@@ -1,7 +1,6 @@
-﻿using System.Net.Http.Json;
-using System.Security.Claims;
-using AdminBaker.Shared.Request;
+﻿using AdminBaker.Shared.Request;
 using AdminBaker.Shared.Response;
+using System.Net.Http.Json;
 
 namespace AdminBaker.Client.Proxy.Services;
 
@@ -26,6 +25,17 @@ public class PedidoProxy : CrudRestHelperBase<PedidoDtoRequest, PedidoDto>, IPed
         }
 
         throw new InvalidOperationException(response.ReasonPhrase);
+    }
+
+    public async Task<ICollection<PedidoDto>> ListAuditAsync()
+    {
+        var response = await HttpClient.GetFromJsonAsync<BaseResponseGeneric<ICollection<PedidoDto>>>($"{BaseUrl}/ListAudit");
+        if (response!.Success)
+        {
+            return response.Data!;
+        }
+
+        throw new InvalidOperationException(response.ErrorMessage);
     }
 
     public async Task TakeAsync(int id)
