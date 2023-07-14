@@ -1,0 +1,195 @@
+﻿@page "/dashboard"
+@inject IReporteProxy ReporteProxy
+@inject IToastService ToastService
+@attribute [Authorize(Roles = Constantes.RolAdministrador)]
+
+<h1 class="titulo">Dashboard</h1>
+
+<div class="row align-items-center mb-3 justify-content-center">
+    <div class="col-3">
+        <div class="form-floating">
+            <input type="date" @bind-value="FechaInicio"
+                   max="@DateTime.Today.ToString(Constantes.FormatoFecha)" class="form-control" id="inicio"/>
+            <label for="inicio" class="form-label">Fecha Inicio</label>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="form-floating">
+            <input type="date" @bind-value="FechaFin"
+                   max="@DateTime.Today.ToString(Constantes.FormatoFecha)" class="form-control" id="fin"/>
+            <label for="fin" class="form-label">Fecha Fin</label>
+        </div>
+    </div>
+    <div class="col-2">
+        <Button class="btn btn-primary w-100" @onclick="LoadData"><i class="fa fa-refresh mx-1"></i>Volver a Cargar</Button>
+    </div>
+</div>
+
+@if (ReporteCantidad is not null)
+{
+    <div class="row mt-4">
+
+        <div class="col-sm-6 mb-3">
+            <div class="card border-5 border-bottom-0 border-top-0 border-end-0 shadow border-primary p-4">
+                <div class="row align-items-center">
+                    <div class="col ms-2">
+                        <div class="text-lg-start fw-bold text-primary text-uppercase mb-1">
+                            Cantidad Ventas
+                        </div>
+                        <div class="h5 mb-0 fw-bold text-muted">
+                            @ReporteCantidad.CantidadVentas
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="oi oi-dollar text-white" style="font-size:50px"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 mb-3">
+            <div class="card border-5 border-bottom-0 border-top-0 border-end-0 shadow border-success p-4">
+                <div class="row align-items-center">
+                    <div class="col ms-2">
+                        <div class="text-lg-start fw-bold text-success text-uppercase mb-1">
+                            Total Ventas
+                        </div>
+                        <div class="h5 mb-0 fw-bold text-muted">
+                            $ @ReporteCantidad.SumaTotalVentas.ToString("N2")
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="oi oi-tags text-secondary" style="font-size:50px"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 mb-3">
+            <div class="card border-5 border-bottom-0 border-top-0 border-end-0 shadow border-warning p-4">
+                <div class="row align-items-center">
+                    <div class="col ms-2">
+                        <div class="text-lg-start fw-bold text-warning text-uppercase mb-1">
+                            Total Clientes
+                        </div>
+                        <div class="h5 mb-0 fw-bold text-muted">
+                            @ReporteCantidad.CantidadClientes
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="oi oi-people text-secondary" style="font-size:50px"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 mb-3">
+            <div class="card border-5 border-bottom-0 border-top-0 border-end-0 shadow border-info p-4">
+                <div class="row align-items-center">
+                    <div class="col ms-2">
+                        <div class="text-lg-start fw-bold text-info text-uppercase mb-1">
+                            Total Productos
+                        </div>
+                        <div class="h5 mb-0 fw-bold text-muted">
+                            @ReporteCantidad.CantidadProductos
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="oi oi-box text-secondary" style="font-size:50px"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 mb-3">
+            <div class="card border-5 border-bottom-0 border-top-0 border-end-0 shadow border-info p-4">
+                <div class="row align-items-center">
+                    <div class="col ms-2">
+                        <div class="text-lg-start fw-bold text-info text-uppercase mb-1">
+                            Venta Promedio
+                        </div>
+                        <div class="h5 mb-0 fw-bold text-muted">
+                            @ReporteCantidad.VentaPromedio.ToString("N2")
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="oi oi-box text-secondary" style="font-size:50px"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+}
+
+@if (ReporteTipoTorta is not null)
+{
+    <div class="container mt-3 justify-content-center" style="height: 100px; width: 400px">
+        <Chart Config="Config" @ref="_chart1"></Chart>
+    </div>
+}
+
+<LoadingComponent IsLoading="IsLoading"></LoadingComponent>
+
+
+@code {
+
+    private PieChartConfig Config { get; set; } = new PieChartConfig();
+    private Chart _chart1 = null!;
+
+    private DateTime FechaInicio { get; set; }
+    private DateTime FechaFin { get; set; }
+
+    private bool IsLoading { get; set; }
+
+    private ICollection<ReporteTipoTortaDto>? ReporteTipoTorta { get; set; }
+
+    private ReporteCantidadDto? ReporteCantidad { get; set; }
+
+    private async Task LoadData()
+    {
+        try
+        {
+            IsLoading = true;
+
+            ReporteTipoTorta = await ReporteProxy.GetReporteTipoTortaAsync(FechaInicio, FechaFin);
+
+            ReporteCantidad = await ReporteProxy.GetReporteCantidadesAsync(FechaInicio, FechaFin);
+
+            Config = new PieChartConfig();
+            Config.Data.Labels.AddRange(ReporteTipoTorta.Select(p => p.TipoTorta));
+            var pieDataSet = new PieDataset()
+            {
+                Label = "Ventas por Tipo de Torta",
+                Data = new List<decimal?>(),
+                HoverOffset = 4,
+                BackgroundColor = new List<string>() { "#FF6384", "#36A2EB", "#FFCE56" },
+                BorderWidth = 2
+            };
+
+            ReporteTipoTorta.Select(p => p.SumaTotal).ToList().ForEach(x => { pieDataSet.Data.Add(x); });
+
+            Config.Data.Datasets.Add(pieDataSet);
+
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError(ex.Message);
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        FechaInicio = DateTime.Today.AddMonths(-1);
+        FechaFin = DateTime.Today;
+
+        await LoadData();
+    }
+
+}

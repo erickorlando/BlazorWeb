@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using AdminBaker.Shared;
 using AdminBaker.Shared.Response;
 
 namespace AdminBaker.Client.Proxy.Services;
@@ -16,7 +17,7 @@ public class ReporteProxy : IReporteProxy
     {
         var response = await _httpClient
             .GetFromJsonAsync<BaseResponseGeneric<ICollection<ReporteTipoTortaDto>>>
-                ($"api/reportes/tipotorta/{fechaInicio}/{fechaFin}");
+                ($"api/reportes/tipotorta/{fechaInicio.ToString(Constantes.FormatoFecha)}/{fechaFin.ToString(Constantes.FormatoFecha)}");
         
         if (response!.Success)
         {
@@ -30,7 +31,7 @@ public class ReporteProxy : IReporteProxy
     {
         var response = await _httpClient
             .GetFromJsonAsync<BaseResponseGeneric<ReporteCantidadDto>>
-                ($"api/reportes/cantidades/{fechaInicio}/{fechaFin}");
+                ($"api/reportes/cantidades/{fechaInicio.ToString(Constantes.FormatoFecha)}/{fechaFin.ToString(Constantes.FormatoFecha)}");
 
         if (response!.Success)
             return response.Data!;
