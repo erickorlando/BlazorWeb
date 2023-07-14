@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using AdminBaker.Entities;
+using AdminBaker.Services;
 using AdminBaker.Shared;
 using AdminBaker.Shared.Response;
 
 namespace AdminBaker.Server.Controllers;
-
 
 [ApiController]
 [Route("api/[controller]")]
@@ -29,7 +29,7 @@ public class PedidosController : ControllerBase
         return Ok(response);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:int}")]
     public async Task<IActionResult> Get(int id)
     {
         var response = await _service.FindByIdAsync(id);
@@ -47,14 +47,12 @@ public class PedidosController : ControllerBase
     [Authorize]
     public async Task<IActionResult> Post(PedidoDtoRequest request)
     {
-        var email = HttpContext.User.Claims.First(x => x.Type == ClaimTypes.Email).Value;
-
-        var response = await _service.CreateAsync(email, request);
+        var response = await _service.CreateAsync(GetEmail(), request);
 
         return response.Success ? Ok(response) : BadRequest(response);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{id:int}")]
     public async Task<IActionResult> Put(int id, PedidoDtoRequest request)
     {
         var response = await _service.UpdateAsync(id, request);
@@ -62,7 +60,7 @@ public class PedidosController : ControllerBase
         return response.Success ? Ok(response) : NotFound(response);
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
         var response = await _service.DeleteAsync(id);
@@ -82,7 +80,7 @@ public class PedidosController : ControllerBase
                 ErrorMessage = "No se pudo recuperar el ID del Vendedor"
             });
 
-        var response = await _service.TakeAsync(int.Parse(idVendedor), id);
+        var response = await _service.TakeAsync(int.Parse(idVendedor), id, Utils.ParseUserName(GetEmail()));
 
         return response.Success ? Ok(response) : NotFound(response);
     }
@@ -91,17 +89,23 @@ public class PedidosController : ControllerBase
     [HttpPatch("{id:int}/cancel")]
     public async Task<IActionResult> Cancelar(int id)
     {
-        var response = await _service.CancelAsync(id);
+        var response = await _service.CancelAsync(id, Utils.ParseUserName(GetEmail()));
 
         return response.Success ? Ok(response) : NotFound(response);
     }
 
-    [Authorize(Roles = $"{Constantes.RolVendedor},{Constantes.RolAdministrador}")]
+    [Authorize(Roles = $"{Constantes.RolVendedor}, {Constantes.RolAdministrador}")]
     [HttpPatch("{id:int}/status/{estado:int}")]
     public async Task<IActionResult> CambiarEstado(int id, int estado)
     {
-        var response = await _service.ChangeStateAsync(id, (EstadoPedido)estado);
+        var response = await _service.ChangeStateAsync(id, (EstadoPedido)estado, Utils.ParseUserName(GetEmail()));
 
         return response.Success ? Ok(response) : NotFound(response);
+    }
+
+    private string GetEmail()
+    {
+        var email = HttpContext.User.Claims.First(x => x.Type == ClaimTypes.Email).Value;
+        return email;
     }
 }

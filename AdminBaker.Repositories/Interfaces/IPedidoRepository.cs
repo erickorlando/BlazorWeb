@@ -11,11 +11,11 @@ public interface IPedidoRepository : IRepositoryBase<Pedido>
 
     Task AddItemAsync(PedidoItem item);
 
-    Task TomarPedidoAsync(int idVendedor, int id);
+    Task TomarPedidoAsync(int idVendedor, int id, string userName);
 
-    Task CancelarPedidoAsync(int id);
+    Task CancelarPedidoAsync(int id, string userName);
 
-    Task CambiarEstadoAsync(int id, EstadoPedido estado);
+    Task CambiarEstadoAsync(int id, EstadoPedido estado, string userName);
     
     Task<ICollection<PedidoItem>> GetItemsAsync(int id);
 }

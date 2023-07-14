@@ -90,6 +90,8 @@ public class PedidoService : IPedidoService
                 ClienteId = cliente.Id,
                 EstadoPedido = EstadoPedido.Pendiente,
                 TipoPedido = (TipoPedido)request.TipoPedido,
+                Usuario = Utils.ParseUserName(email),
+                FechaRetiro = request.FechaRetiro,
             };
 
             var lastNumber = await _clienteRepository.GetLastNumberAsync();
@@ -101,7 +103,6 @@ public class PedidoService : IPedidoService
             {
                 pedido.UrlImagen = await _fileUploader.UploadFileAsync(request.Base64Imagen, $"especial-{request.FileName}");
                 pedido.MensajePersonalizado = request.MensajePersonalizado;
-                pedido.FechaRetiro = request.FechaRetiro;
 
                 var productoEspecial = await _productoRepository.GetSpecialAsync();
                 if (productoEspecial is null)
@@ -221,13 +222,13 @@ public class PedidoService : IPedidoService
         return response;
     }
 
-    public async Task<BaseResponse> TakeAsync(int idVendedor, int id)
+    public async Task<BaseResponse> TakeAsync(int idVendedor, int id, string userName)
     {
         var response = new BaseResponse();
 
         try
         {
-            await _repository.TomarPedidoAsync(idVendedor, id);
+            await _repository.TomarPedidoAsync(idVendedor, id, userName);
             response.Success = true;
         }
         catch (Exception ex)
@@ -239,13 +240,13 @@ public class PedidoService : IPedidoService
         return response;
     }
 
-    public async Task<BaseResponse> CancelAsync(int id)
+    public async Task<BaseResponse> CancelAsync(int id, string userName)
     {
         var response = new BaseResponse();
 
         try
         {
-            await _repository.CancelarPedidoAsync(id);
+            await _repository.CancelarPedidoAsync(id, userName);
             response.Success = true;
         }
         catch (Exception ex)
@@ -257,13 +258,13 @@ public class PedidoService : IPedidoService
         return response;
     }
 
-    public async Task<BaseResponse> ChangeStateAsync(int id, EstadoPedido estado)
+    public async Task<BaseResponse> ChangeStateAsync(int id, EstadoPedido estado, string userName)
     {
         var response = new BaseResponse();
 
         try
         {
-            await _repository.CambiarEstadoAsync(id, estado);
+            await _repository.CambiarEstadoAsync(id, estado, userName);
             response.Success = true;
         }
         catch (Exception ex)

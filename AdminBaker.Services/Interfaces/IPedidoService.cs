@@ -18,9 +18,9 @@ public interface IPedidoService
 
     Task<BaseResponse> DeleteAsync(int id);
 
-    Task<BaseResponse> TakeAsync(int idVendedor, int id);
+    Task<BaseResponse> TakeAsync(int idVendedor, int id, string userName);
 
-    Task<BaseResponse> CancelAsync(int id);
+    Task<BaseResponse> CancelAsync(int id, string userName);
 
-    Task<BaseResponse> ChangeStateAsync(int id, EstadoPedido estado);
+    Task<BaseResponse> ChangeStateAsync(int id, EstadoPedido estado, string userName);
 }

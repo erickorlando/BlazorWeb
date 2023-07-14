@@ -44,7 +44,7 @@ public class PedidoRepository : RepositoryBase<Pedido>, IPedidoRepository
         return entity.Id;
     }
 
-    public async Task TomarPedidoAsync(int idVendedor, int id)
+    public async Task TomarPedidoAsync(int idVendedor, int id, string userName)
     {
         var pedido = await Context.Set<Pedido>().FindAsync(id);
         if (pedido?.VendedorId != null)
@@ -55,26 +55,29 @@ public class PedidoRepository : RepositoryBase<Pedido>, IPedidoRepository
         if (pedido != null)
         {
             pedido.VendedorId = idVendedor;
+            pedido.Usuario = userName;
             await Context.SaveChangesAsync();
         }
     }
 
-    public async Task CancelarPedidoAsync(int id)
+    public async Task CancelarPedidoAsync(int id, string userName)
     {
         var pedido = await Context.Set<Pedido>().FindAsync(id);
         if (pedido != null)
         {
             pedido.EstadoPedido = EstadoPedido.Cancelado;
+            pedido.Usuario = userName;
             await Context.SaveChangesAsync();
         }
     }
 
-    public async Task CambiarEstadoAsync(int id, EstadoPedido estado)
+    public async Task CambiarEstadoAsync(int id, EstadoPedido estado, string userName)
     {
         var pedido = await Context.Set<Pedido>().FindAsync(id);
         if (pedido != null)
         {
             pedido.EstadoPedido = estado;
+            pedido.Usuario = userName;
             await Context.SaveChangesAsync();
         }
     }
