@@ -18,4 +18,6 @@ public class TarjetaDto
     [Required(ErrorMessage = "El CVV es requerido")]
     [MaxLength(3)]
     public string? Cvv { get; set; }
+
+    public DateTime FechaRetiro { get; set; } = DateTime.Today.AddDays(14);
 }

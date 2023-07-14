@@ -77,7 +77,7 @@ public partial class Cart
                 listProductos.Add(new PedidoItemDtoRequest(item.ProductoDto.Id, item.Cantidad));
             }
 
-            var request = new PedidoDtoRequest() { Items = listProductos };
+            var request = new PedidoDtoRequest() { Items = listProductos, FechaRetiro = Tarjeta.FechaRetiro };
 
             await PedidoProxy.CreateAsync(request);
 
