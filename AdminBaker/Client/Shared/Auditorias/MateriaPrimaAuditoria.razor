@@ -1,0 +1,47 @@
+﻿<h3>Ultimos cambios en registro de Materias Primas</h3>
+
+@if (Lista is null)
+{
+    <p>Cargando...</p>
+}
+else if (Lista.Count == 0)
+{
+    <p>No se encontraron registros</p>
+}
+else
+{
+    <table class="table table-primary table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Fecha de Caducidad</th>
+            <th>Cantidad</th>
+            <th>Unidad de Medida</th>
+            <th>Estado</th>
+            <th>Usuario</th>
+            <th>Fecha de Cambio</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Lista)
+        {
+            <tr>
+                <td>@item.Nombre</td>
+                <td>@item.Caducidad.ToString(Constantes.FormatoFecha)</td>
+                <td>@item.Cantidad</td>
+                <td>@item.UnidadMedida</td>
+                <td>@item.Estado</td>
+                <td>@item.Usuario</td>
+                <td>@item.FechaCambio.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss")</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    [Parameter]
+    public ICollection<MateriaPrimaAuditoriaDto>? Lista { get; set; }
+
+}

@@ -1,4 +1,4 @@
-﻿<h3>Pedidos</h3>
+﻿<h3>Ultimos cambios en registro de Pedidos</h3>
 
 @if (Pedidos is null)
 {
@@ -28,7 +28,7 @@ else
                     <td>@item.EstadoPedido</td>
                     <td>@item.Vendedor</td>
                     <td>@item.Usuario</td>
-                    <td>@item.FechaCambio.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                    <td>@item.FechaCambio.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss")</td>
                 </tr>
             }
         </tbody>

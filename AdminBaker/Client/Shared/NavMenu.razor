@@ -16,7 +16,7 @@
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
                     aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation"
-            @onclick="ToggleNavMenu">
+                    @onclick="ToggleNavMenu">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
@@ -42,6 +42,11 @@
                                     <li>
                                         <NavLink class="dropdown-item" href="recetas/list">
                                             Recetas
+                                        </NavLink>
+                                    </li>
+                                    <li class="nav-item">
+                                        <NavLink class="dropdown-item" href="auditorias">
+                                            Auditorias
                                         </NavLink>
                                     </li>
                                 </ul>
@@ -86,11 +91,7 @@
                                     VENDEDORES
                                 </NavLink>
                             </li>
-                            <li class="nav-item">
-                                <NavLink class="nav-link" href="auditorias">
-                                    AUDITORIAS
-                                </NavLink>
-                            </li>
+
                         </Authorized>
                     </AuthorizeView>
                     <AuthorizeView Roles="@Constantes.RolCliente">
@@ -162,13 +163,13 @@
     private async Task CerrarSesion()
     {
         var result = await Swal.FireAsync(new SweetAlertOptions
-            {
-                Title = "Desea salir?",
-                Icon = SweetAlertIcon.Question,
-                ShowCancelButton = true,
-                ConfirmButtonText = "Si",
-                CancelButtonText = "No"
-            });
+        {
+            Title = "Desea salir?",
+            Icon = SweetAlertIcon.Question,
+            ShowCancelButton = true,
+            ConfirmButtonText = "Si",
+            CancelButtonText = "No"
+        });
 
         if (result.IsConfirmed)
         {

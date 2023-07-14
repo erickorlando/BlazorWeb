@@ -6,4 +6,6 @@ namespace AdminBaker.Repositories.Interfaces;
 public interface IMateriaPrimaRepository : IRepositoryBase<MateriaPrima>
 {
     Task<ICollection<MateriaPrimaInfo>> ListAsync();
+    
+    Task<ICollection<MateriaPrimaAuditoriaInfo>> ListAuditAsync();
 }

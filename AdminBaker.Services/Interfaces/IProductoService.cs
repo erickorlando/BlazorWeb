@@ -7,6 +7,8 @@ public interface IProductoService
 {
 
     Task<PaginationResponse<ProductoDto>> ListAsync(string? filter);
+    
+    Task<BaseResponseGeneric<ICollection<ProductoAuditoriaDto>>> ListAuditAsync();
 
     Task<BaseResponseGeneric<ICollection<ProductoDto>>> ListTopCarousel();
 
@@ -16,5 +18,5 @@ public interface IProductoService
 
     Task<BaseResponse> UpdateAsync(int id, ProductoDtoRequest request);
 
-    Task<BaseResponse> DeleteAsync(int id);
+    Task<BaseResponse> DeleteAsync(int id, string userName);
 }

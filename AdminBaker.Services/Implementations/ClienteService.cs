@@ -39,9 +39,20 @@ public class ClienteService : IClienteService
         return response;
     }
 
-    public Task<PaginationResponse<ClienteDto>> ListAuditAsync()
+    public async Task<BaseResponseGeneric<ICollection<ClienteAuditoriaDto>>> ListAuditAsync()
     {
-        throw new NotImplementedException();
+        var response = new BaseResponseGeneric<ICollection<ClienteAuditoriaDto>>();
+        try
+        {
+            response.Data = _mapper.Map<ICollection<ClienteAuditoriaDto>>(await _repository.ListAuditAsync());
+            response.Success = true;
+        }
+        catch (Exception ex)
+        {
+            response.ErrorMessage = "Error al Lista la auditoria";
+            _logger.LogCritical(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+        }
+        return response;
     }
 
     public async Task<BaseResponseGeneric<ClienteDto>> FindByIdAsync(int id)

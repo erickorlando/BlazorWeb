@@ -7,6 +7,8 @@ public interface IMateriaPrimaService
 {
 
     Task<PaginationResponse<MateriaPrimaDto>> ListAsync();
+    
+    Task<BaseResponseGeneric<ICollection<MateriaPrimaAuditoriaDto>>> ListAuditAsync();
 
     Task<BaseResponseGeneric<MateriaPrimaDto>> FindByIdAsync(int id);
 
@@ -14,5 +16,5 @@ public interface IMateriaPrimaService
 
     Task<BaseResponse> UpdateAsync(int id, MateriaPrimaDtoRequest request);
 
-    Task<BaseResponse> DeleteAsync(int id);
+    Task<BaseResponse> DeleteAsync(int id, string usuario);
 }

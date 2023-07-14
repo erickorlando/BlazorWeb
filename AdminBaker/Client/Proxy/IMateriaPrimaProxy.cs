@@ -5,5 +5,6 @@ namespace AdminBaker.Client.Proxy;
 
 public interface IMateriaPrimaProxy : ICrudRestHelper<MateriaPrimaDtoRequest, MateriaPrimaDto>
 {
-    
+    Task<ICollection<MateriaPrimaAuditoriaDto>> ListAuditAsync();
+
 }

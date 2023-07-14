@@ -11,4 +11,6 @@ public interface IProductoRepository : IRepositoryBase<Producto>
 
     Task<Producto?> GetSpecialAsync();
 
+    Task<ICollection<ProductoAuditoriaInfo>> ListAuditAsync();
+
 }

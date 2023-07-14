@@ -38,6 +38,22 @@ public class MateriaPrimaService : IMateriaPrimaService
         return response;
     }
 
+    public async Task<BaseResponseGeneric<ICollection<MateriaPrimaAuditoriaDto>>> ListAuditAsync()
+    {
+        var response = new BaseResponseGeneric<ICollection<MateriaPrimaAuditoriaDto>>();
+        try
+        {
+            response.Data = _mapper.Map<ICollection<MateriaPrimaAuditoriaDto>>(await _repository.ListAuditAsync());
+            response.Success = true;
+        }
+        catch (Exception ex)
+        {
+            response.ErrorMessage = "Error al Lista la auditoria";
+            _logger.LogCritical(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+        }
+        return response;
+    }
+
     public async Task<BaseResponseGeneric<MateriaPrimaDto>> FindByIdAsync(int id)
     {
         var response = new BaseResponseGeneric<MateriaPrimaDto>();
@@ -94,7 +110,7 @@ public class MateriaPrimaService : IMateriaPrimaService
         return response;
     }
 
-    public async Task<BaseResponse> DeleteAsync(int id)
+    public async Task<BaseResponse> DeleteAsync(int id, string usuario)
     {
         var response = new BaseResponse();
         try
@@ -106,7 +122,10 @@ public class MateriaPrimaService : IMateriaPrimaService
                 return response;
             }
 
-            await _repository.DeleteAsync(id);
+            entity.Usuario = usuario;
+            entity.Estado = false;
+            await _repository.UpdateAsync();
+            
             response.Success = true;
         }
         catch (Exception ex)

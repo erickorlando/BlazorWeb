@@ -1,4 +1,6 @@
 ﻿using AdminBaker.Services.Interfaces;
+using AdminBaker.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdminBaker.Server.Controllers
@@ -22,8 +24,18 @@ namespace AdminBaker.Server.Controllers
 
             return Ok(response);
         }
+        
+        [HttpGet("[action]")]
+        [Authorize(Roles = Constantes.RolAdministrador)]
+        public async Task<IActionResult> ListAudit()
+        {
+            var response = await _service.ListAuditAsync();
+
+            return Ok(response);
+        }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = Constantes.RolAdministrador)]
         public async Task<IActionResult> Delete(int id)
         {
             var response = await _service.DeleteAsync(id);

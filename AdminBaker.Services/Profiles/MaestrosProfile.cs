@@ -31,6 +31,10 @@ public class MaestrosProfile : Profile
             .ForMember(d => d.EstadoPedido, o => o.MapFrom(_ => (int)_.EstadoPedido));
 
         CreateMap<PedidoAuditoriaInfo, PedidoAuditoriaDto>();
+        CreateMap<ProductoAuditoriaInfo, ProductoAuditoriaDto>();
+        CreateMap<MateriaPrimaAuditoriaInfo, MateriaPrimaAuditoriaDto>();
+        CreateMap<VendedorAuditoriaInfo, VendedorAuditoriaDto>();
+        CreateMap<ClienteAuditoriaInfo, ClienteAuditoriaDto>();
 
         CreateMap<Vendedor, VendedorDto>()
             .ForMember(d => d.Estado, o => o.MapFrom(_ => _.Estado ? "Activo" : "Inactivo"));        

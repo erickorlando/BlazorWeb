@@ -1,6 +1,8 @@
 ﻿using AdminBaker.DataAccess;
 using AdminBaker.Entities;
+using AdminBaker.Entities.Info;
 using AdminBaker.Repositories.Interfaces;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
 
 namespace AdminBaker.Repositories.Implementations;
@@ -36,6 +38,15 @@ public class ClienteRepository : RepositoryBase<Cliente>, IClienteRepository
         return await query
             .AsNoTracking()
             .ToListAsync();
+    }
+
+    public async Task<ICollection<ClienteAuditoriaInfo>> ListAuditAsync()
+    {
+        var query = Context.Database.GetDbConnection()
+            .Query<ClienteAuditoriaInfo>(sql: "uspAuditoriaClientes",
+                commandType: System.Data.CommandType.StoredProcedure);
+        
+        return await Task.FromResult(query.ToList());
     }
 
     public async Task ReactivarAsync(int id)

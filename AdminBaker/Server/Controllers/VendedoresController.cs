@@ -1,5 +1,7 @@
 ﻿using AdminBaker.Services.Interfaces;
+using AdminBaker.Shared;
 using AdminBaker.Shared.Request;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdminBaker.Server.Controllers;
@@ -20,6 +22,15 @@ public class VendedoresController : ControllerBase
     public async Task<IActionResult> Get(string? filter)
     {
         var response = await _service.ListAsync(filter);
+
+        return Ok(response);
+    }
+    
+    [HttpGet("[action]")]
+    [Authorize(Roles = Constantes.RolAdministrador)]
+    public async Task<IActionResult> ListAudit()
+    {
+        var response = await _service.ListAuditAsync();
 
         return Ok(response);
     }

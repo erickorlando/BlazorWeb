@@ -41,6 +41,22 @@ public class ProductoService : IProductoService
         return response;
     }
 
+    public async Task<BaseResponseGeneric<ICollection<ProductoAuditoriaDto>>> ListAuditAsync()
+    {
+        var response = new BaseResponseGeneric<ICollection<ProductoAuditoriaDto>>();
+        try
+        {
+            response.Data = _mapper.Map<ICollection<ProductoAuditoriaDto>>(await _repository.ListAuditAsync());
+            response.Success = true;
+        }
+        catch (Exception ex)
+        {
+            response.ErrorMessage = "Error al Lista la auditoria";
+            _logger.LogCritical(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+        }
+        return response;
+    }
+
     public async Task<BaseResponseGeneric<ICollection<ProductoDto>>> ListTopCarousel()
     {
         var response = new BaseResponseGeneric<ICollection<ProductoDto>>();
@@ -83,6 +99,7 @@ public class ProductoService : IProductoService
             var producto = _mapper.Map<Producto>(request);
 
             producto.ImagenUrl = await _fileUploader.UploadFileAsync(request.Base64Imagen, request.FileName);
+            producto.Usuario = request.UserName;
 
             await _repository.AddAsync(producto);
             response.Success = true;
@@ -114,6 +131,7 @@ public class ProductoService : IProductoService
             }
 
             _mapper.Map(request, entity);
+            entity.Usuario = request.UserName;
             await _repository.UpdateAsync();
             response.Success = true;
         }
@@ -125,7 +143,7 @@ public class ProductoService : IProductoService
         return response;
     }
 
-    public async Task<BaseResponse> DeleteAsync(int id)
+    public async Task<BaseResponse> DeleteAsync(int id, string userName)
     {
         var response = new BaseResponse();
         try
@@ -137,7 +155,9 @@ public class ProductoService : IProductoService
                 return response;
             }
 
-            await _repository.DeleteAsync(id);
+            entity.Usuario = userName;
+            entity.Estado = false;
+            await _repository.UpdateAsync();
             response.Success = true;
         }
         catch (Exception ex)

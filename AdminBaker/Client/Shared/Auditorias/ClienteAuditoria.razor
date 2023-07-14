@@ -1,0 +1,47 @@
+﻿<h3>Ultimos cambios en registro de Clientes</h3>
+
+@if (Lista is null)
+{
+    <p>Cargando...</p>
+}
+else if (Lista.Count == 0)
+{
+    <p>No se encontraron registros</p>
+}
+else
+{
+    <table class="table table-primary table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Nombres</th>
+            <th>Fecha de Nacimiento</th>
+            <th>RUT</th>
+            <th>Direccion</th>
+            <th>Estado</th>
+            <th>Usuario</th>
+            <th>Fecha de Cambio</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Lista)
+        {
+            <tr>
+                <td>@item.NombreCompleto</td>
+                <td>@item.FechaNacimiento.ToString(Constantes.FormatoFecha)</td>
+                <td>@item.Rut</td>
+                <td>@item.Direccion</td>
+                <td>@item.Estado</td>
+                <td>@item.Usuario</td>
+                <td>@item.FechaCambio.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss")</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    [Parameter]
+    public ICollection<ClienteAuditoriaDto>? Lista { get; set; }
+
+}

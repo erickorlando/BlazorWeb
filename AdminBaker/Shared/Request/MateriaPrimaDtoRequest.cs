@@ -9,4 +9,5 @@ public class MateriaPrimaDtoRequest
     public decimal Cantidad { get; set; }
     public int UnidadMedidaId { get; set; }
     public DateTime Caducidad { get; set; } = DateTime.Today.AddMonths(6);
+    public string? Usuario { get; set; }
 }

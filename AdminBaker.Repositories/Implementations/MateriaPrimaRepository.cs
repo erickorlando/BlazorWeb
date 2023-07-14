@@ -2,6 +2,7 @@
 using AdminBaker.Entities;
 using AdminBaker.Entities.Info;
 using AdminBaker.Repositories.Interfaces;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
 
 namespace AdminBaker.Repositories.Implementations;
@@ -27,5 +28,14 @@ public class MateriaPrimaRepository : RepositoryBase<MateriaPrima>, IMateriaPrim
                 UnidadMedidaId = x.UnidadMedidaId
             })
             .ToListAsync();
+    }
+
+    public async Task<ICollection<MateriaPrimaAuditoriaInfo>> ListAuditAsync()
+    {
+        var query = Context.Database.GetDbConnection()
+            .Query<MateriaPrimaAuditoriaInfo>(sql: "uspAuditoriaMateriaPrimas",
+                commandType: System.Data.CommandType.StoredProcedure);
+        
+        return await Task.FromResult(query.ToList());
     }
 }

@@ -27,6 +27,15 @@ public class ClienteProxy : CrudRestHelperBase<ClienteDtoRequest, ClienteDto>, I
         throw new InvalidOperationException(response.ReasonPhrase);
     }
 
+    public async Task<ICollection<ClienteAuditoriaDto>> ListAuditAsync()
+    {
+        var response = await HttpClient.GetFromJsonAsync<BaseResponseGeneric<ICollection<ClienteAuditoriaDto>>>($"{BaseUrl}/ListAudit");
+        if (response!.Success)
+            return response.Data!;
+        
+        throw new InvalidOperationException(response.ErrorMessage);
+    }
+
     public async Task ReactivateAsync(int id)
     {
         var response = await HttpClient.PatchAsync($"{BaseUrl}/{id}", null);

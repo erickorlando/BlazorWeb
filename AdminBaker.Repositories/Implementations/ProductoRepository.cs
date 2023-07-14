@@ -1,9 +1,11 @@
-﻿using AdminBaker.DataAccess;
+﻿using System.Data;
+using AdminBaker.DataAccess;
 using AdminBaker.Entities;
 using AdminBaker.Entities.Info;
 using AdminBaker.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using Dapper;
 
 namespace AdminBaker.Repositories.Implementations;
 
@@ -53,5 +55,14 @@ public class ProductoRepository : RepositoryBase<Producto>, IProductoRepository
     public async Task<Producto?> GetSpecialAsync()
     {
         return await Context.Set<Producto>().FirstOrDefaultAsync(p => p.Especial);
+    }
+
+    public async Task<ICollection<ProductoAuditoriaInfo>> ListAuditAsync()
+    {
+        var query = Context.Database.GetDbConnection()
+            .Query<ProductoAuditoriaInfo>(sql: "uspAuditoriaProductos",
+            commandType: CommandType.StoredProcedure);
+
+        return await Task.FromResult(query.ToList());
     }
 }

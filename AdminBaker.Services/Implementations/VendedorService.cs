@@ -39,6 +39,22 @@ public class VendedorService : IVendedorService
         return response;
     }
 
+    public async Task<BaseResponseGeneric<ICollection<VendedorAuditoriaDto>>> ListAuditAsync()
+    {
+        var response = new BaseResponseGeneric<ICollection<VendedorAuditoriaDto>>();
+        try
+        {
+            response.Data = _mapper.Map<ICollection<VendedorAuditoriaDto>>(await _repository.ListAuditAsync());
+            response.Success = true;
+        }
+        catch (Exception ex)
+        {
+            response.ErrorMessage = "Error al Lista la auditoria";
+            _logger.LogCritical(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+        }
+        return response;
+    }
+
     public async Task<BaseResponseGeneric<VendedorDto>> FindByIdAsync(int id)
     {
         var response = new BaseResponseGeneric<VendedorDto>();

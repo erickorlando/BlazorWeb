@@ -38,6 +38,7 @@ public class PedidosController : ControllerBase
     }
 
     [HttpGet("[action]")]
+    [Authorize(Roles = Constantes.RolAdministrador)]
     public async Task<IActionResult> ListAudit()
     {
         return Ok(await _service.ListAuditAsync());

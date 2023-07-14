@@ -6,7 +6,7 @@ public interface IClienteService
 {
     Task<PaginationResponse<ClienteDto>> ListAsync(string? filter);
 
-    Task<PaginationResponse<ClienteDto>> ListAuditAsync();
+    Task<BaseResponseGeneric<ICollection<ClienteAuditoriaDto>>> ListAuditAsync();
 
     Task<BaseResponse> DeleteAsync(int id);
 

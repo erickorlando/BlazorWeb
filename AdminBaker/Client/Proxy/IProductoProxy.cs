@@ -5,8 +5,10 @@ namespace AdminBaker.Client.Proxy;
 
 public interface IProductoProxy : ICrudRestHelper<ProductoDtoRequest, ProductoDto>
 {
-    public Task<ICollection<ProductoDto>> ListTopCarouselAsync();
+    Task<ICollection<ProductoDto>> ListTopCarouselAsync();
 
-    public Task<ICollection<ProductoDto>> ListAsync(string filter);
+    Task<ICollection<ProductoDto>> ListAsync(string filter);
+
+    Task<ICollection<ProductoAuditoriaDto>> ListAuditAsync();
 
 }
