@@ -27,9 +27,9 @@ public class PedidoProxy : CrudRestHelperBase<PedidoDtoRequest, PedidoDto>, IPed
         throw new InvalidOperationException(response.ReasonPhrase);
     }
 
-    public async Task<ICollection<PedidoDto>> ListAuditAsync()
+    public async Task<ICollection<PedidoAuditoriaDto>> ListAuditAsync()
     {
-        var response = await HttpClient.GetFromJsonAsync<BaseResponseGeneric<ICollection<PedidoDto>>>($"{BaseUrl}/ListAudit");
+        var response = await HttpClient.GetFromJsonAsync<BaseResponseGeneric<ICollection<PedidoAuditoriaDto>>>($"{BaseUrl}/ListAudit");
         if (response!.Success)
         {
             return response.Data!;

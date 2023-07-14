@@ -50,12 +50,12 @@ public class PedidoService : IPedidoService
         return response;
     }
 
-    public async Task<BaseResponseGeneric<ICollection<PedidoDto>>> ListAuditAsync()
+    public async Task<BaseResponseGeneric<ICollection<PedidoAuditoriaDto>>> ListAuditAsync()
     {
-        var response = new BaseResponseGeneric<ICollection<PedidoDto>>();
+        var response = new BaseResponseGeneric<ICollection<PedidoAuditoriaDto>>();
         try
         {
-            response.Data = _mapper.Map<ICollection<PedidoDto>>(await _repository.ListAuditAsync());
+            response.Data = _mapper.Map<ICollection<PedidoAuditoriaDto>>(await _repository.ListAuditAsync());
             response.Success = true;
         }
         catch (Exception ex)

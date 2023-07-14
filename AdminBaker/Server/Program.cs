@@ -17,6 +17,10 @@ builder.Services.Configure<AppConfig>(builder.Configuration);
 builder.Services.AddDbContext<AdminBakerDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("AdminBakerDb"));
+    if (builder.Environment.IsDevelopment())
+    {
+        options.EnableSensitiveDataLogging();
+    }
 });
 
 // Configuramos ASP.NET Identity

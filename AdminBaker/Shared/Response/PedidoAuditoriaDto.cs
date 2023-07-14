@@ -1,6 +1,6 @@
-﻿namespace AdminBaker.Entities.Info;
+﻿namespace AdminBaker.Shared.Response;
 
-public class PedidoAuditoriaInfo
+public class PedidoAuditoriaDto
 {
     public int Id { get; set; }
     public string NroPedido { get; set; } = default!;

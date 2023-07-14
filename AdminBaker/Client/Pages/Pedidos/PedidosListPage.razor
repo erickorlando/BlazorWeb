@@ -4,12 +4,12 @@
 @attribute [Authorize(Roles = $"{Constantes.RolAdministrador},{Constantes.RolVendedor}")]
 
 <h1 class="titulo">Lista de Pedidos</h1>
-<div class="container-xxl container-fluid container-md espaciado">
+<div class="container-fluid">
     <div class="row align-items-center mb-3 justify-content-start">
         <div class="col-3">
             <div class="form-floating">
                 <input type="date" @bind-value="FechaInicio"
-                       max="@DateTime.Today.ToString(Constantes.FormatoFecha)" id="FechaInicio" class="form-control" />
+                       max="@DateTime.Today.ToString(Constantes.FormatoFecha)" id="FechaInicio" class="form-control"/>
                 <label class="form-label" for="FechaInicio">Fecha Inicio</label>
             </div>
         </div>
@@ -17,33 +17,28 @@
             <div class="form-floating">
                 <input type="date" @bind-value="FechaFin" id="FechaFin"
                        max="@DateTime.Today.ToString(Constantes.FormatoFecha)"
-                       class="form-control" />
+                       class="form-control"/>
                 <label class="form-label" for="FechaFin">Fecha Fin</label>
             </div>
         </div>
         <div class="col-3">
             <div class="form-floating">
                 <input type="text" @bind-value="Filter" id="Filtro"
-                       class="form-control" />
+                       class="form-control"/>
                 <label class="form-label" for="Filtro">Filtro</label>
             </div>
         </div>
 
         <div class="col-auto">
-            <button class="btn btn-primary"><i class="fa fa-search me-1" @onclick="LoadData"></i>Listar</button>
+            <button class="btn btn-primary" @onclick="LoadData"><i class="fa fa-search me-1"></i>Listar</button>
         </div>
     </div>
-    <div class="row justify-content-between">
-        <div class="col-lg-12 col-md-12">
-            <PedidoList ListaPedidos="ListaPedidos"
-                        OnCambiarEstadoClick="CambiarPedido"
-                        OnCancelarPedidoClick="CancelarPedido"
-                        OnTomarPedidoClick="TomarPedido" />
-        </div>
-    </div>
-
-    <LoadingComponent IsLoading="IsLoading" />
 </div>
+<PedidoList ListaPedidos="ListaPedidos"
+            OnCambiarEstadoClick="CambiarPedido"
+            OnCancelarPedidoClick="CancelarPedido"
+            OnTomarPedidoClick="TomarPedido"/>
+<LoadingComponent IsLoading="IsLoading"/>
 
 @code {
 
@@ -84,7 +79,6 @@
         {
             IsLoading = false;
         }
-
     }
 
     private async Task CancelarPedido(int id)

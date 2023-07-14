@@ -8,7 +8,7 @@ public interface IPedidoService
 {
     Task<PaginationResponse<PedidoDto>> ListAsync(DateTime fechaInicio, DateTime fechaFin, string? filter);
 
-    Task<BaseResponseGeneric<ICollection<PedidoDto>>> ListAuditAsync();
+    Task<BaseResponseGeneric<ICollection<PedidoAuditoriaDto>>> ListAuditAsync();
 
     Task<BaseResponseGeneric<PedidoDto>> FindByIdAsync(int id);
 

@@ -7,54 +7,64 @@
 
 <div>
     <hr />
-    <div class="row">
-        <div class="col-md-3">
-            <ul class="nav nav-pills flex-column">
-                <li class="nav-item mb-3">
-                    <a class="w-100 btn btn-lg btn-primary" @onclick="() => CambiarVista(0)">Pedidos</a>
-                </li>
-                <li class="nav-item mb-3">
-                    <a class="w-100 btn btn-lg btn-primary" @onclick="() => CambiarVista(1)">Productos</a>
-                </li>
-                <li class="nav-item mb-3">
-                    <a class="w-100 btn btn-lg btn-primary" @onclick="() => CambiarVista(0)">Clientes</a>
-                </li>
-                <li class="nav-item mb-3">
-                    <a class="w-100 btn btn-lg btn-primary" @onclick="() => CambiarVista(1)">Vendedores</a>
-                </li>
-                <li class="nav-item mb-3">
-                    <a class="w-100 btn btn-lg btn-primary" @onclick="() => CambiarVista(1)">Materias Primas</a>
-                </li>
-            </ul>
+    <ul class="nav nav-tabs" id="auditoriasTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="pedidos-tab" 
+                    data-bs-toggle="tab" data-bs-target="#pedidos" type="button" role="tab" 
+                    aria-controls="pedidos" aria-selected="True" @onclick="() => CambiarVista(0)">Pedidos</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="productos-tab" 
+                    data-bs-toggle="tab" data-bs-target="#productos" type="button" role="tab" 
+                    aria-controls="productos" aria-selected="false" @onclick="() => CambiarVista(1)">Productos</button>
+        </li>
+        <li class="nav-item" role="presentation">
+           <button class="nav-link" id="clientes-tab" 
+                   data-bs-toggle="tab" data-bs-target="#clientes" type="button" role="tab" 
+                   aria-controls="clientes" aria-selected="false" @onclick="() => CambiarVista(2)">Clientes</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="vendedores-tab"
+                    data-bs-toggle="tab" data-bs-target="#vendedores" type="button" role="tab" 
+                    aria-controls="vendedores" aria-selected="false" @onclick="() => CambiarVista(3)">Vendedores</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="materiaprimas-tab" 
+                    data-bs-toggle="tab" data-bs-target="#materiasprimas" type="button" role="tab" 
+                    aria-controls="materiasprimas" aria-selected="false" @onclick="() => CambiarVista(4)">Materias Primas</button>
+        </li>
+    </ul>
+    <div class="tab-content" id="auditoriasTabContent">
+        <div class="tab-pane fade show active" id="pedidos" role="tabpanel" aria-labelledby="pedidos-tab">
+            <PedidoAuditoria Pedidos="Pedidos" />
         </div>
-        <div class="col-md-9">
-            @if (VistaSeleccionada == 0)
-            {
-                <PedidoAuditoria Pedidos="Pedidos" />
-            }
-            else
-            {
-                <p>Aqui va otro componente</p>
-            }
+        <div class="tab-pane fade" id="productos" role="tabpanel" aria-labelledby="productos-tab">
+            <p>Auditoria de Productos</p>
+        </div>
+        <div class="tab-pane fade" id="materiasprimas" role="tabpanel" aria-labelledby="materiaprimas-tab">
+            <p>Auditoria de Materias Primas</p>
+        </div>
+        <div class="tab-pane fade" id="vendedores" role="tabpanel" aria-labelledby="vendedores-tab">
+            <p>Auditoria de Vendedores</p>
+        </div>
+        <div class="tab-pane fade" id="clientes" role="tabpanel" aria-labelledby="clientes-tab">
+            <p>Auditoria de Clientes</p>
         </div>
     </div>
 </div>
 
 @code {
 
-    private int VistaSeleccionada { get; set; }
     private bool IsLoading { get; set; }
 
-    public ICollection<PedidoDto> Pedidos { get; set; } = new List<PedidoDto>();
+    private ICollection<PedidoAuditoriaDto> Pedidos { get; set; } = new List<PedidoAuditoriaDto>();
 
     private async Task CambiarVista(int index)
     {
         try
         {
             IsLoading = true;
-            VistaSeleccionada = index;
-
-            switch (VistaSeleccionada)
+            switch (index)
             {
                 case 0:
 

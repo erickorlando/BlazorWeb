@@ -2,7 +2,9 @@
 using AdminBaker.Entities;
 using AdminBaker.Entities.Info;
 using AdminBaker.Repositories.Interfaces;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace AdminBaker.Repositories.Implementations;
 
@@ -23,22 +25,12 @@ public class PedidoRepository : RepositoryBase<Pedido>, IPedidoRepository
 
     public async Task<ICollection<PedidoAuditoriaInfo>> ListAuditAsync()
     {
-        var query = Context.Set<Pedido>()
-            .TemporalAsOf(DateTime.UtcNow)
-            .OrderByDescending(p => p.Id)
-            .Take(50)
-            .Select(p => new PedidoAuditoriaInfo
-            {
-                Id = p.Id,
-                NroPedido = p.NroPedido,
-                Fecha = p.Fecha,
-                Cliente = p.Cliente.NombreCompleto,
-                EstadoPedido = p.EstadoPedido,
-                Vendedor = p.Vendedor != null ? p.Vendedor.NombreCompleto : null,
-                FechaCambio = EF.Property<DateTime>(p, "PeriodEnd")
-            });
+        var query = Context.Database.GetDbConnection()
+            .Query<PedidoAuditoriaInfo>
+                (sql: "uspAuditoriaPedidos",
+                    commandType: CommandType.StoredProcedure);
 
-        return await query.ToListAsync();
+        return await Task.FromResult(query.ToList());
     }
 
     public async Task AddItemAsync(PedidoItem item)
