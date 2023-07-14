@@ -14,4 +14,6 @@ public class Pedido : EntityBase
     public DateTime? FechaRetiro { get; set; }
     public string? MensajePersonalizado { get; set; }
     public string? NroPedido { get; set; }
+    
+    public string? JsonPayPalResponse { get; set; }
 }

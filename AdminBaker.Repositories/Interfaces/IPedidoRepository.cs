@@ -18,4 +18,8 @@ public interface IPedidoRepository : IRepositoryBase<Pedido>
     Task CambiarEstadoAsync(int id, EstadoPedido estado, string userName);
     
     Task<ICollection<PedidoItem>> GetItemsAsync(int id);
+    
+    Task<ICollection<ReporteTipoTortaTotalInfo>> GetReporteTipoTortaTotalAsync(DateTime fechaInicio, DateTime fechaFin);
+    
+    Task<ReporteCantidadesInfo> GetReporteCantidadesAsync(DateTime fechaInicio, DateTime fechaFin);
 }

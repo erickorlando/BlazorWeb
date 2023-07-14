@@ -35,11 +35,11 @@ public class VendedorRepository : RepositoryBase<Vendedor>, IVendedorRepository
 
     public async Task<ICollection<VendedorAuditoriaInfo>> ListAuditAsync()
     {
-        var query = Context.Database.GetDbConnection()
-            .Query<VendedorAuditoriaInfo>(sql: "uspAuditoriaVendedores",
+        var query = await Context.Database.GetDbConnection()
+            .QueryAsync<VendedorAuditoriaInfo>(sql: "uspAuditoriaVendedores",
                 commandType: System.Data.CommandType.StoredProcedure);
         
-        return await Task.FromResult(query.ToList());
+        return query.ToList();
     }
 
     public async Task ReactivarAsync(int id)

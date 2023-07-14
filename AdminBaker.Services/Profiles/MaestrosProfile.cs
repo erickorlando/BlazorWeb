@@ -41,5 +41,8 @@ public class MaestrosProfile : Profile
         
         CreateMap<Cliente, ClienteDto>()
             .ForMember(d => d.Estado, o => o.MapFrom(_ => _.Estado ? "Activo" : "Inactivo"));
+
+        CreateMap<ReporteTipoTortaTotalInfo, ReporteTipoTortaDto>();
+        CreateMap<ReporteCantidadesInfo, ReporteCantidadDto>();
     }
 }

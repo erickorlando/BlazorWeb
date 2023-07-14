@@ -34,6 +34,7 @@ public static class DependencyInjection
             .AddTransient<IFileUploader, AzureBlobStorageUploader>()
             .AddTransient<IUserService, UserService>()
             .AddTransient<IEmailService, EmailService>()
+            .AddTransient<IReporteService, ReporteService>()
             .AddTransient<IPayPalTransactionService, PayPalTransactionService>();
     }
 

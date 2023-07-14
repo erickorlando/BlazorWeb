@@ -90,4 +90,32 @@ public class PedidoRepository : RepositoryBase<Pedido>, IPedidoRepository
             .AsNoTracking()
             .ToListAsync();
     }
+
+    public async Task<ICollection<ReporteTipoTortaTotalInfo>> GetReporteTipoTortaTotalAsync(DateTime fechaInicio, DateTime fechaFin)
+    {
+        var query = await Context.Database.GetDbConnection()
+            .QueryAsync<ReporteTipoTortaTotalInfo>(sql: "uspReporteTipoTortaTotal",
+                param: new
+                {
+                    FechaInicio = fechaInicio,
+                    FechaFin = fechaFin
+                },
+                commandType: CommandType.StoredProcedure);
+
+        return query.ToList();
+    }
+
+    public async Task<ReporteCantidadesInfo> GetReporteCantidadesAsync(DateTime fechaInicio, DateTime fechaFin)
+    {
+        var query =  await Context.Database.GetDbConnection()
+            .QuerySingleAsync<ReporteCantidadesInfo>(sql: "uspReporteCantidades",
+                param: new
+                {
+                    FechaInicio = fechaInicio,
+                    FechaFin = fechaFin
+                },
+                commandType: CommandType.StoredProcedure);
+
+        return query;
+    }
 }

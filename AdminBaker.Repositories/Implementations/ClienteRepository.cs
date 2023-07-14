@@ -42,11 +42,11 @@ public class ClienteRepository : RepositoryBase<Cliente>, IClienteRepository
 
     public async Task<ICollection<ClienteAuditoriaInfo>> ListAuditAsync()
     {
-        var query = Context.Database.GetDbConnection()
-            .Query<ClienteAuditoriaInfo>(sql: "uspAuditoriaClientes",
+        var query = await Context.Database.GetDbConnection()
+            .QueryAsync<ClienteAuditoriaInfo>(sql: "uspAuditoriaClientes",
                 commandType: System.Data.CommandType.StoredProcedure);
         
-        return await Task.FromResult(query.ToList());
+        return query.ToList();
     }
 
     public async Task ReactivarAsync(int id)

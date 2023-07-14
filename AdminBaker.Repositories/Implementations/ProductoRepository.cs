@@ -59,10 +59,10 @@ public class ProductoRepository : RepositoryBase<Producto>, IProductoRepository
 
     public async Task<ICollection<ProductoAuditoriaInfo>> ListAuditAsync()
     {
-        var query = Context.Database.GetDbConnection()
-            .Query<ProductoAuditoriaInfo>(sql: "uspAuditoriaProductos",
+        var query = await Context.Database.GetDbConnection()
+            .QueryAsync<ProductoAuditoriaInfo>(sql: "uspAuditoriaProductos",
             commandType: CommandType.StoredProcedure);
 
-        return await Task.FromResult(query.ToList());
+        return query.ToList();
     }
 }

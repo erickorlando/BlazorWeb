@@ -32,10 +32,10 @@ public class MateriaPrimaRepository : RepositoryBase<MateriaPrima>, IMateriaPrim
 
     public async Task<ICollection<MateriaPrimaAuditoriaInfo>> ListAuditAsync()
     {
-        var query = Context.Database.GetDbConnection()
-            .Query<MateriaPrimaAuditoriaInfo>(sql: "uspAuditoriaMateriaPrimas",
+        var query = await Context.Database.GetDbConnection()
+            .QueryAsync<MateriaPrimaAuditoriaInfo>(sql: "uspAuditoriaMateriaPrimas",
                 commandType: System.Data.CommandType.StoredProcedure);
         
-        return await Task.FromResult(query.ToList());
+        return query.ToList();
     }
 }
