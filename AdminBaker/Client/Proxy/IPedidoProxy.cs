@@ -14,4 +14,6 @@ public interface IPedidoProxy : ICrudRestHelper<PedidoDtoRequest, PedidoDto>
     Task CancelAsync(int id);
 
     Task ChangeStatusAsync(int id, int status);
+
+    Task<int> CreatePedidoAsync(PedidoDtoRequest request);
 }

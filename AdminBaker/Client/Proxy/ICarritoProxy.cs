@@ -2,7 +2,7 @@
 
 namespace AdminBaker.Client.Proxy;
 
-public interface ICarritoServicio
+public interface ICarritoProxy
 {
     event Action? ActualizarVista;
     Task AgregarCarrito(CarritoDto modelo);

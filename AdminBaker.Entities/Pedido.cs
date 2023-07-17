@@ -16,4 +16,6 @@ public class Pedido : EntityBase
     public string? NroPedido { get; set; }
     
     public string? JsonPayPalResponse { get; set; }
+
+    public string? PayPalUrlOrder { get; set; }
 }

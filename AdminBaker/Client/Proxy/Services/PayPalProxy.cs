@@ -22,4 +22,14 @@ public class PayPalProxy : IPayPalProxy
         
         throw new InvalidOperationException(result.ErrorMessage);
     }
+
+    public async Task<BaseResponse> CapturePaymentAsync(int pedidoId, string orderId)
+    {
+        var response = await _httpClient.PostAsync($"api/paypal/capturepayment/{pedidoId}/{orderId}", null);
+        var result = await response.Content.ReadFromJsonAsync<BaseResponse>();
+        if (result!.Success)
+            return result;
+        
+        throw new InvalidOperationException(result.ErrorMessage);
+    }
 }

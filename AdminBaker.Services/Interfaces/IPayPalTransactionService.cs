@@ -7,5 +7,5 @@ public interface IPayPalTransactionService
 {
     Task<BaseResponseGeneric<PaymentOrderDtoResponse>> CreateOrderAsync(PaymentOrderDtoRequest request);
 
-    Task<BaseResponse> CapturePaymentAsync(string orderId);
+    Task<BaseResponse> CapturePaymentAsync(int pedidoId, string orderId);
 }

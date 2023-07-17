@@ -27,4 +27,17 @@ public class PayPalController : ControllerBase
 
         return Ok(response);
     }
+
+    [HttpPost("{pedidoId:int}/{orderId}")]
+    public async Task<IActionResult> CapturePayment(int pedidoId, string orderId)
+    {
+        var response = await _service.CapturePaymentAsync(pedidoId, orderId);
+
+        if (!response.Success)
+        {
+            return BadRequest(response);
+        }
+
+        return Ok(response);
+    }
 }

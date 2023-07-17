@@ -1,4 +1,4 @@
-﻿@inject ICarritoServicio CarritoServicio
+﻿@inject ICarritoProxy CarritoProxy
 @inject SweetAlertService Swal
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AutenticationStateProvider
@@ -10,9 +10,9 @@
          aria-label="Admin Baker navigation header">
         <div class="container">
             <a class="navbar-brand" href="#">
-                <img src="assets/images/logo.jpg" style="height: 50px; width: 50px" class="d-inline-block align-top mb-2 mt-1"
+                @*<img src="assets/images/logo.jpg" style="height: 50px; width: 50px" class="d-inline-block align-top mb-2 mt-1"
                      alt="Admin Baker Logo">
-
+*@              <h1 class="titulo text-white">Pasteles de Kari</h1>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
                     aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation"
@@ -152,17 +152,17 @@
 
     protected override void OnInitialized()
     {
-        CarritoServicio.ActualizarVista += StateHasChanged;
+        CarritoProxy.ActualizarVista += StateHasChanged;
     }
 
     public void Dispose()
     {
-        CarritoServicio.ActualizarVista += StateHasChanged;
+        CarritoProxy.ActualizarVista += StateHasChanged;
     }
 
     private int MostrarCantidadCarrito()
     {
-        return CarritoServicio.CantidadProductos();
+        return CarritoProxy.CantidadProductos();
     }
 
     private async Task CerrarSesion()

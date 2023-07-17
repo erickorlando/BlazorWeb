@@ -71,9 +71,9 @@ public class PedidoService : IPedidoService
         throw new NotImplementedException();
     }
 
-    public async Task<BaseResponse> CreateAsync(string email, PedidoDtoRequest request)
+    public async Task<BaseResponseGeneric<int>> CreateAsync(string email, PedidoDtoRequest request)
     {
-        var response = new BaseResponse();
+        var response = new BaseResponseGeneric<int>();
         try
         {
             var cliente = await _clienteRepository.FindByEmailAsync(email);
@@ -165,6 +165,7 @@ public class PedidoService : IPedidoService
 
             await _repository.UpdateAsync();
 
+            response.Data = pedido.Id;
             response.Success = true;
         }
         catch (Exception ex)

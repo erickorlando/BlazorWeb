@@ -4,13 +4,13 @@ using Blazored.Toast.Services;
 
 namespace AdminBaker.Client.Proxy.Services;
 
-public class CarritoServicio : ICarritoServicio
+public class CarritoProxy : ICarritoProxy
 {
     private readonly ILocalStorageService _localStorageService;
     private readonly ISyncLocalStorageService _syncLocalStorage;
     private readonly IToastService _toastService;
 
-    public CarritoServicio(ILocalStorageService localStorageService,
+    public CarritoProxy(ILocalStorageService localStorageService,
         ISyncLocalStorageService syncLocalStorage,
         IToastService toastService)
     {

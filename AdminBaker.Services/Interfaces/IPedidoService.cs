@@ -12,7 +12,7 @@ public interface IPedidoService
 
     Task<BaseResponseGeneric<PedidoDto>> FindByIdAsync(int id);
 
-    Task<BaseResponse> CreateAsync(string email, PedidoDtoRequest request);
+    Task<BaseResponseGeneric<int>> CreateAsync(string email, PedidoDtoRequest request);
 
     Task<BaseResponse> UpdateAsync(int id, PedidoDtoRequest request);
 

@@ -1,0 +1,59 @@
+﻿@page "/paypaltransaction/PaymentApproved"
+@using AdminBaker.Client.Auth
+@inject IPayPalProxy PayPalProxy
+@inject IToastService ToastService
+@inject NavigationManager NavigationManager
+@inject ISessionStorageService SessionStorageService
+
+<h1 class="titulo">Confirmando Pago de PayPal</h1>
+
+<p class="lead fw-bold text-center">No cierre esta página hasta que termine el proceso</p>
+
+<LoadingComponent IsLoading="IsLoading" />
+
+@code {
+
+    [SupplyParameterFromQuery(Name = "token")]
+    public string OrderId { get; set; } = default!;
+
+    public bool IsLoading { get; set; }
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        IsLoading = true;
+
+        try
+        {
+            // recuperamos de la sesion el objeto de pago de Paypal
+            var payment = await SessionStorageService.GetStorage<PaymentOrderDtoResponse>("paypalResponse");
+
+            if (payment is null)
+            {
+                throw new Exception("No se pudo recuperar el pago de PayPal");
+            }
+
+            var response = await PayPalProxy.CapturePaymentAsync(payment.PedidoId, string.IsNullOrEmpty(OrderId) 
+                ? payment.OrderId : OrderId);
+
+            if (response.Success)
+            {
+                ToastService.ShowSuccess("Pago realizado con éxito");
+                NavigationManager.NavigateTo("/");
+            }
+            else
+            {
+                ToastService.ShowError("No se pudo realizar el pago");
+                NavigationManager.NavigateTo("/");
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError(ex.Message);
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+}

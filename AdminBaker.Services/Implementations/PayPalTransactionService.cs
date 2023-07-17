@@ -1,8 +1,6 @@
-﻿using System.Globalization;
-using AdminBaker.Entities.Configuration;
+﻿using AdminBaker.Entities.Configuration;
 using AdminBaker.Repositories.Interfaces;
 using AdminBaker.Services.Interfaces;
-using AdminBaker.Shared;
 using AdminBaker.Shared.Request;
 using AdminBaker.Shared.Response;
 using Microsoft.AspNetCore.Http;
@@ -10,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using PayPalCheckoutSdk.Core;
 using PayPalCheckoutSdk.Orders;
+using System.Text.Json;
 
 namespace AdminBaker.Services.Implementations;
 
@@ -54,10 +53,10 @@ public class PayPalTransactionService : IPayPalTransactionService
                 return response;
             }
 
-            // var host =
-            //     $"{_httpContextAccessor.HttpContext!.Request.Scheme}://{_httpContextAccessor.HttpContext!.Request.Host}";
+            var host =
+                $"{_httpContextAccessor.HttpContext!.Request.Scheme}://{_httpContextAccessor.HttpContext!.Request.Host}";
 
-            var host = "https://adminbaker.azurwebsites.net/";
+            var amountUsd = pedido.TotalVenta / 815;
 
             var order = new OrderRequest
             {
@@ -69,13 +68,13 @@ public class PayPalTransactionService : IPayPalTransactionService
                         AmountWithBreakdown = new AmountWithBreakdown
                         {
                             CurrencyCode = "USD",
-                            Value = pedido.TotalVenta.ToString("#.00"),
+                            Value = amountUsd.ToString("#.00"),
                             AmountBreakdown = new AmountBreakdown
                             {
                                 ItemTotal = new Money
                                 {
                                     CurrencyCode = "USD",
-                                    Value = pedido.TotalVenta.ToString("#.00")
+                                    Value = amountUsd.ToString("#.00")
                                 }
                             }
                         },
@@ -97,8 +96,13 @@ public class PayPalTransactionService : IPayPalTransactionService
             response.Data = new PaymentOrderDtoResponse()
             {
                 ApproveUrl = resultOrder.Links?.FirstOrDefault(p => p.Rel == "approve")?.Href ?? string.Empty,
-                OrderId = resultOrder.Id ?? string.Empty
+                OrderId = resultOrder.Id ?? string.Empty,
+                PedidoId = pedido.Id
             };
+
+            pedido.JsonPayPalResponse = JsonSerializer.Serialize(response.Data);
+
+            await _pedidoRepository.UpdateAsync();
             
             response.Success = resultOrder.Status == "CREATED";
         }
@@ -111,8 +115,35 @@ public class PayPalTransactionService : IPayPalTransactionService
         return response;
     }
 
-    public Task<BaseResponse> CapturePaymentAsync(string orderId)
+    public async Task<BaseResponse> CapturePaymentAsync(int pedidoId, string orderId)
     {
-        throw new NotImplementedException();
+        var response = new BaseResponse();
+
+        try
+        {
+            var pedido = await _pedidoRepository.FindByIdAsync(pedidoId);
+            if (pedido is null)
+            {
+                response.ErrorMessage = "No se encontró el pedido";
+                return response;
+            }
+
+            var request = new OrdersCaptureRequest(orderId);
+            request.RequestBody(new OrderActionRequest());
+            var result = await Client().Execute(request);
+            var resultOrder = result.Result<Order>(); 
+
+            pedido.PayPalUrlOrder = resultOrder.Links?.FirstOrDefault(p => p.Rel == "self")?.Href ?? string.Empty;
+
+            response.Success = resultOrder.Status == "COMPLETED";
+            await _pedidoRepository.UpdateAsync();
+        }
+        catch (Exception ex)
+        {
+            response.ErrorMessage = "Error al intentar capturar el pago de la Orden de PayPal";
+            _logger.LogError(ex, "{ErrorMessage} {Message}", response.ErrorMessage, ex.Message);
+        }
+
+        return response;
     }
 }

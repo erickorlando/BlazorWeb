@@ -5,7 +5,7 @@
 @inject NavigationManager NavigationManager
 
 <div class="row mt-4">
-    <div class="col-sm-8">
+    <div class="col-sm-9">
         <div class="card mb-3">
             <div class="card-body">
                 <div class="table-responsive">
@@ -74,63 +74,32 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-3">
         <div class="card mb-3">
+            <div class="card-header">
+                <p class="alert alert-info text-center"><i class="fa fa-window-restore me-1"></i>Recuerde permitir los pop-ups para esta aplicacion</p>
+            </div>
             <div class="card-body">
                 <EditForm Model="Tarjeta" OnValidSubmit="ProcesarPago">
                     <DataAnnotationsValidator/>
 
+
                     <div class="mb-2">
-                        <label class="form-label">Nombre Titular</label>
-                        <input type="text" class="form-control form-control-sm"
-                               placeholder="Usuario Apellido" @bind-value="Tarjeta.Titular"
-                               maxlength="100"
-                               disabled="@_disabled"/>
-                        <ValidationMessage For="@(() => Tarjeta.Titular)"/>
-                    </div>
-                    <div class="mb-2">
-                        <label class="form-label">Numero Tarjeta</label>
-                        <input type="text" class="form-control form-control-sm"
-                               placeholder="################" @bind-value="Tarjeta.Numero" maxlength="16"
-                               disabled="@_disabled"/>
-                        <ValidationMessage For="@(() => Tarjeta.Numero)"/>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="mb-2">
-                                <label class="form-label">Vigencia</label>
-                                <input type="text" class="form-control form-control-sm"
-                                       placeholder="MM/YY" @bind-value="Tarjeta.Vigencia" maxlength="5"
-                                       disabled="@_disabled"/>
-                                <ValidationMessage For="@(() => Tarjeta.Vigencia)"/>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="mb-2">
-                                <label class="form-label">CVV</label>
-                                <input type="text" class="form-control form-control-sm"
-                                       placeholder="###" @bind-value="Tarjeta.Cvv" maxlength="3"
-                                       disabled="@_disabled"/>
-                                <ValidationMessage For="@(() => Tarjeta.Cvv)"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mb-2">
-                        <label class="form-label">Fecha de Retiro(Delivery)</label>
+                        <label class="form-label">Fecha de Retiro (Delivery)</label>
                         <input type="date" class="form-control form-control-sm"
-                               @bind-value="Tarjeta.FechaRetiro" 
+                               @bind-value="Tarjeta.FechaRetiro"
                                disabled="@_disabled"/>
                         <ValidationMessage For="@(() => Tarjeta.FechaRetiro)"/>
                     </div>
                     <hr/>
                     <div class="d-flex justify-content-between">
-                        <div>Total a pagar:</div>
-                        <div>$ @(Lista.Sum(i => i.Total))</div>
+                        <div class="fw-bolder">Total a pagar:</div>
+                        <div class="fw-bolder">$ @(Lista.Sum(i => i.Total))</div>
                     </div>
                     <div class="mt-2">
-                        <div class="d-grid gap-1">
-                            <button class="btn btn-primary float-end" type="submit" disabled="@_disabled">
-                                Procesar pago
+                        <div class="d-grid gap-2">
+                            <label class="text-center text-primary fw-bolder">Procesar Pago con PayPal</label>
+                            <button class="btn btn-warning boton-paypal" type="submit" disabled="@_disabled">
                             </button>
                         </div>
                     </div>
@@ -146,3 +115,4 @@
         </div>
     </div>
 </div>
+<LoadingComponent IsLoading="IsLoading" />

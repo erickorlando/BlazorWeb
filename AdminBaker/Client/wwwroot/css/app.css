@@ -29,6 +29,18 @@ a, .btn-link {
     text-transform: capitalize;
 }
 
+.boton-paypal {
+    background-image: url('../assets/images/paypal.png') !important;
+    background-repeat: no-repeat;
+    background-position: center;
+    /*background-size: 100% 100% !important;*/
+    color: white;
+    font-weight: bolder;
+    height: 4rem;
+    text-align: center;
+    align-content: start;
+}
+
 .btn-primary {
     color: #fff;
     /*background-color: #1b6ec2;

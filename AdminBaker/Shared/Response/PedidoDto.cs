@@ -36,4 +36,11 @@ public class PedidoDto : CommonDtoResponse
 
     #endregion
 
+    #region PayPal
+
+    public string? JsonPayPalResponse { get; set; } 
+    public string? PayPalUrlOrder { get; set; }
+
+    #endregion
+
 }

@@ -38,6 +38,7 @@
     <_ContentIncludedByDefault Remove="Pages\Auditorias\AuditoriaPage.razor" />
     <_ContentIncludedByDefault Remove="Pages\Auth\Login.razor" />
     <_ContentIncludedByDefault Remove="Pages\MateriasPrima\MateriasPrimaListPage.razor" />
+    <_ContentIncludedByDefault Remove="Pages\PayPalTransaction\PayPalCancel.razor" />
     <_ContentIncludedByDefault Remove="Pages\PedidoEspecial.razor" />
     <_ContentIncludedByDefault Remove="Pages\Pedidos\PedidosListPage.razor" />
     <_ContentIncludedByDefault Remove="Pages\Productos\ProductosEditPage.razor" />
@@ -152,6 +153,10 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Pages\Auditorias\AuditoriaPage.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\PayPalTransaction\PayPalCancel.razor" />
   </ItemGroup>
 
 </Project>

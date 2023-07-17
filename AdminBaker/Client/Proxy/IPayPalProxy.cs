@@ -6,4 +6,6 @@ namespace AdminBaker.Client.Proxy;
 public interface IPayPalProxy
 {
     Task<PaymentOrderDtoResponse> CreateOrderAsync(PaymentOrderDtoRequest request);
+
+    Task<BaseResponse> CapturePaymentAsync(int pedidoId, string orderId);
 }

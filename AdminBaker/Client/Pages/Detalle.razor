@@ -1,8 +1,7 @@
 ﻿@page "/detalle/{Id:int}"
-@using AdminBaker.Shared
 @using System.Globalization
 @inject IProductoProxy ProductoProxy
-@inject ICarritoServicio CarritoServicio
+@inject ICarritoProxy CarritoProxy
 
 <div class="container px-4 px-lg-5 my-5">
     @if (Modelo is not null)
@@ -78,7 +77,7 @@
                 Total = Cantidad * model.Precio
             };
 
-        await CarritoServicio.AgregarCarrito(carrito);
+        await CarritoProxy.AgregarCarrito(carrito);
     }
 
 }

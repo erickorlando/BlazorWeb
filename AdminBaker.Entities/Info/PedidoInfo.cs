@@ -22,4 +22,6 @@ public class PedidoInfo
     public EstadoPedido EstadoPedido { get; set; }
     public string? MensajePersonalizado { get; set; }
     public string Origen { get; set; } = default!;
+    public string? JsonPayPalResponse { get; set; }
+    public string? PayPalUrlOrder { get; set; }
 }

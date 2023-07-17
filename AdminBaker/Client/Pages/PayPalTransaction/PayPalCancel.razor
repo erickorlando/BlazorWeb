@@ -1,0 +1,21 @@
+﻿@page "/paypaltransaction/cancel"
+@inject NavigationManager NavigationManager
+@inject ISessionStorageService SessionStorageService
+<h1 class="titulo">Lo sentimos, su pago de PayPal ha sido cancelado</h1>
+
+<button class="btn btn-primary" @onclick="Back"><i class="fa fa-shopping-cart me-1"></i>Seguir comprando</button>
+
+@code
+{
+    protected override async Task OnInitializedAsync()
+    {
+        await SessionStorageService.RemoveItemAsync("paypalResponse");
+
+        await base.OnInitializedAsync();
+    }
+
+    private void Back()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}

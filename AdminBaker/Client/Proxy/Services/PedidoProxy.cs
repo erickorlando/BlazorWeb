@@ -70,4 +70,19 @@ public class PedidoProxy : CrudRestHelperBase<PedidoDtoRequest, PedidoDto>, IPed
             throw new InvalidOperationException(data!.ErrorMessage);
         }
     }
+
+    public async Task<int> CreatePedidoAsync(PedidoDtoRequest request)
+    {
+        var response = await HttpClient.PostAsJsonAsync(BaseUrl, request);
+        if (response.IsSuccessStatusCode)
+        {
+            var resultado = await response.Content.ReadFromJsonAsync<BaseResponseGeneric<int>>();
+            if (resultado!.Success == false)
+                throw new InvalidOperationException(resultado.ErrorMessage);
+            
+            return resultado.Data;
+        }
+
+        throw new InvalidOperationException(response.ReasonPhrase);
+    }
 }

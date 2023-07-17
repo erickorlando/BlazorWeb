@@ -1,16 +1,27 @@
-﻿using AdminBaker.Client.Proxy.Services;
-using AdminBaker.Shared.Request;
-using AdminBaker.Shared;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components;
+﻿using AdminBaker.Client.Auth;
 using AdminBaker.Client.Proxy;
+using AdminBaker.Shared;
+using AdminBaker.Shared.Request;
+using Blazored.SessionStorage;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.JSInterop;
 
 namespace AdminBaker.Client.Pages;
 
 public partial class Cart
 {
     [Inject] 
-    public ICarritoServicio CarritoProxy { get; set; } = default!;
+    public ICarritoProxy CarritoProxy { get; set; } = default!;
+
+    [Inject] 
+    public IPayPalProxy PayPalProxy { get; set; } = default!;
+
+    [Inject] 
+    public IJSRuntime JsRuntime { get; set; } = default!;
+
+    [Inject] 
+    public ISessionStorageService SessionStorageService { get; set; } = default!;
 
     [CascadingParameter]
     private Task<AuthenticationState> AuthenticationState { get; set; } = default!;
@@ -79,7 +90,18 @@ public partial class Cart
 
             var request = new PedidoDtoRequest() { Items = listProductos, FechaRetiro = Tarjeta.FechaRetiro };
 
-            await PedidoProxy.CreateAsync(request);
+            var id = await PedidoProxy.CreatePedidoAsync(request);
+
+            var respuesta = await PayPalProxy.CreateOrderAsync(new PaymentOrderDtoRequest
+            {
+                PedidoId = id
+            });
+
+            // despues de abierta la ventana de aprobación, guardamos en la sesion el resultado del Pago
+            await SessionStorageService.SaveStorage("paypalResponse", respuesta);
+
+            // abrir en otra ventana la URL de aprobacion de PayPal
+            await JsRuntime.InvokeVoidAsync("open", respuesta.ApproveUrl);
 
             await CarritoProxy.LimpiarCarrito();
             ToastService.ShowSuccess("Pedido registrado");
