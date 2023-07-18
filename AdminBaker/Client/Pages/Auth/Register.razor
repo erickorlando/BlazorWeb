@@ -1,7 +1,10 @@
 ﻿@page "/register"
+@using System.Globalization
 @inject IProxyUser ProxyUser
 @inject NavigationManager NavigationManager
 @inject IToastService ToastService
+@inject IJSRuntime JsRuntime
+
 <div class="espaciado">
     <div class="container">
         <div class="row justify-content-center">
@@ -13,6 +16,11 @@
                     <div class="card-body">
                         <EditForm Model="Request" OnValidSubmit="ValidRegister">
                             <DataAnnotationsValidator />
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" id="inputVendedor" type="checkbox"
+                                @bind-value="Request.Vendedor" />
+                                <label for="inputVendedor" class="form-check-label">Registrar como Vendedor</label>
+                            </div>
                             <div class="form-floating mb-3">
                                 <input class="form-control" id="inputRut" type="text" placeholder="1-3" @bind-value="Request.Rut" autocomplete="off" />
                                 <label for="inputRut">RUT</label>
@@ -38,13 +46,7 @@
                                 <label for="inputDireccion">Direccion</label>
                                 <ValidationMessage For="@(() => Request.Direccion)" />
                             </div>
-                            <div class="form-floating mb-3">
-                                <input class="form-control" id="inputFecha" 
-                                       max="@DateTime.Today.ToString("yyyy-MM-dd")"
-                                       type="date" @bind-value="Request.FechaNacimiento" autocomplete="off" />
-                                <label for="inputFecha">Fecha Nacimiento</label>
-                                <ValidationMessage For="@(() => Request.FechaNacimiento)" />
-                            </div>
+
                             <div class="form-floating mb-3">
                                 <input class="form-control" id="inputPassword" type="password" @bind-value="Request.Clave" autocomplete="off" />
                                 <label for="inputPassword">Clave</label>
@@ -55,11 +57,41 @@
                                 <label for="inputConfirmPassword">Confirmar Clave</label>
                                 <ValidationMessage For="@(() => Request.ConfirmarClave)" />
                             </div>
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" id="inputVendedor" type="checkbox" 
-                                       @bind-value="Request.Vendedor" />
-                                <label for="inputVendedor" class="form-check-label">Registrar como Vendedor</label>
-                            </div>
+
+                            @if (!Request.Vendedor)
+                            {
+                                <div class="form-floating mb-3">
+                                    <input class="form-control" id="inputFecha"
+                                           max="@DateTime.Today.ToString("yyyy-MM-dd")"
+                                           type="date" @bind-value="Request.FechaNacimiento" autocomplete="off" />
+                                    <label for="inputFecha">Fecha Nacimiento</label>
+                                    <ValidationMessage For="@(() => Request.FechaNacimiento)" />
+                                </div>
+                                <label>Ubicación geográfica</label>
+                                <hr />
+                                <div class="row align-items-lg-stretch">
+                                    <div class="col">
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control" id="inputLatitud" type="text" @bind-value="Request.Latitud" autocomplete="off" />
+                                            <label for="inputLatitud">Latitud</label>
+                                            <ValidationMessage For="@(() => Request.Latitud)" />
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control" id="inputLongitud" type="text" @bind-value="Request.Longitud" autocomplete="off" />
+                                            <label for="inputLongitud">Longitud</label>
+                                            <ValidationMessage For="@(() => Request.Longitud)" />
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <button type="button" class="btn btn-outline-primary"
+                                        @onclick="LocalizarAutomaticamente">
+                                            <i class="fa fa-street-view me-1"></i>Localizar automáticamente
+                                        </button>
+                                    </div>
+                                </div>
+                            }
                             <div class="d-grid gap-1 mt-4 mb-0">
                                 <button class="btn btn-primary" type="submit">Crear cuenta</button>
                             </div>
@@ -67,7 +99,7 @@
                     </div>
                     <div class="card-footer text-center py-3">
                         <div class="small">
-                            <NavLink href="/login">¿Ya tienes una cuenta? Inicia sesión</NavLink>
+                            <NavLink class="nav-link" href="/login">¿Ya tienes una cuenta? Inicia sesión</NavLink>
                         </div>
                     </div>
                 </div>
@@ -94,6 +126,25 @@
             ToastService.ShowSuccess("Su cuenta ha sido creada");
 
             NavigationManager.NavigateTo("/login");
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError(ex.Message);
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    private async Task LocalizarAutomaticamente()
+    {
+        try
+        {
+            IsLoading = true;
+            var ubicacion = await JsRuntime.InvokeAsync<GeolocationResult>("blazorGetGeolocation");
+            Request.Latitud = ubicacion.Latitude.ToString(CultureInfo.InvariantCulture);
+            Request.Longitud = ubicacion.Longitude.ToString(CultureInfo.InvariantCulture);
         }
         catch (Exception ex)
         {

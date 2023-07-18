@@ -203,6 +203,8 @@ public class UserService : IUserService
                             Rut = userIdentity.Rut,
                             Direccion = userIdentity.Direccion,
                             FechaNacimiento = userIdentity.FechaNacimiento,
+                            Latitud = userIdentity.Latitud,
+                            Longitud = userIdentity.Longitud,
                             Estado = true
                         };
 

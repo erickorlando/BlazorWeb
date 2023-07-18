@@ -15,4 +15,8 @@ public class IdentityUserECommerce : IdentityUser
 
     [StringLength(500)]
     public string? Direccion { get; set; }
+
+    public string? Latitud { get; set; }
+
+    public string? Longitud { get; set; }
 }
