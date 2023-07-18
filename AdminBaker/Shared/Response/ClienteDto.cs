@@ -11,4 +11,6 @@ public class ClienteDto : CommonDtoResponse
     public string? Direccion { get; set; }
     public DateTime FechaNacimiento { get; set; }
     public string Estado { get; set; } = default!;
+    public string? Latitud { get; set; }
+    public string? Longitud { get; set; }
 }

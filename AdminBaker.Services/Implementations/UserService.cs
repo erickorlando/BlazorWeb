@@ -160,7 +160,9 @@ public class UserService : IUserService
                 FechaNacimiento = request.FechaNacimiento,
                 PhoneNumber = request.Telefono,
                 EmailConfirmed = true,
-                UserName = request.Email
+                UserName = request.Email,
+                Latitud = request.Latitud,
+                Longitud = request.Longitud,
             };
 
             var result = await _userManager.CreateAsync(user, request.Clave);
@@ -380,6 +382,8 @@ public class UserService : IUserService
             user.NombreCompleto = request.NombreCompleto;
             user.Direccion = request.Direccion;
             user.FechaNacimiento = request.FechaNacimiento;
+            user.Latitud = request.Latitud;
+            user.Longitud = request.Longitud;
 
             // Si el usuario tiene Rol de Vendedor, tambien se actualiza la tabla de Vendedores
             if (await _userManager.IsInRoleAsync(user, Constantes.RolVendedor))
@@ -405,6 +409,8 @@ public class UserService : IUserService
                 cliente.Rut = request.Rut;
                 cliente.Direccion = request.Direccion;
                 cliente.FechaNacimiento = request.FechaNacimiento;
+                cliente.Latitud = request.Latitud;
+                cliente.Longitud = request.Longitud;
 
                 await _clienteRepository.UpdateAsync();
             }
@@ -457,6 +463,8 @@ public class UserService : IUserService
                 Email = userIdentity.Email!,
                 FechaNacimiento = userIdentity.FechaNacimiento,
                 Rut = userIdentity.Rut,
+                Latitud = userIdentity.Latitud,
+                Longitud = userIdentity.Longitud,
                 Estado = "Activo"
             };
             response.Success = true;

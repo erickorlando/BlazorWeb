@@ -37,6 +37,6 @@ public class RegistrarUsuarioDto
 
     public RegistrarUsuarioDto()
     {
-        FechaNacimiento = DateTime.Today.AddDays(-18);
+        FechaNacimiento = DateTime.Today.AddYears(-18);
     }
 }

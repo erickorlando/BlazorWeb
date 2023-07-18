@@ -1,4 +1,7 @@
-﻿@inject SweetAlertService Swal
+﻿@using System.Globalization
+@inject SweetAlertService Swal
+@inject IJSRuntime JsRuntime
+@inject IToastService ToastService
 
 @if (Model is null)
 {
@@ -8,7 +11,7 @@ else
 {
     <div class="row">
         <div class="col-md-6">
-            <EditForm Model="Model" OnValidSubmit="OnGrabar">
+            <EditForm Model="Model" OnValidSubmit="OnSave">
                 <DataAnnotationsValidator />
                 <div class="form-floating mb-3">
                     <input @bind-value="Model.NombreCompleto" class="form-control" placeholder="Ingrese su nombre completo." id="nombres" />
@@ -30,12 +33,27 @@ else
                     <label for="fechaNacimiento" class="form-label">Fecha Nacimiento</label>
                     <ValidationMessage For="@(() => Model.FechaNacimiento)" />
                 </div>
+                <div class="form-floating mb-3">
+                    <input class="form-control" id="inputLatitud" type="text" @bind-value="Model.Latitud" autocomplete="off" />
+                    <label for="inputLatitud">Latitud</label>
+                    <ValidationMessage For="@(() => Model.Latitud)" />
+                </div>
+                <div class="form-floating mb-3">
+                    <input class="form-control" id="inputLongitud" type="text" @bind-value="Model.Longitud" autocomplete="off" />
+                    <label for="inputLongitud">Longitud</label>
+                    <ValidationMessage For="@(() => Model.Longitud)" />
+                </div>
+                <button type="button" class="btn btn-outline-primary mb-3"
+                        @onclick="LocalizarAutomaticamente">
+                    <i class="fa fa-street-view me-1"></i>Localizar automáticamente
+                </button>
                 <ValidationSummary />
                 <button type="submit" class="w-100 btn btn-lg btn-primary">Guardar cambios</button>
             </EditForm>
         </div>
     </div>
 
+    <LoadingComponent IsLoading="IsLoading" />
 }
 
 
@@ -47,8 +65,24 @@ else
     [Parameter]
     public EventCallback OnGrabar { get; set; }
 
+    public bool IsLoading { get; set; }
+
     private async Task OnSave()
     {
+        if (Model is null) return;
+
+        var isValid = await JsRuntime.InvokeAsync<bool>("validacionRut", Model.Rut);
+        if (!isValid)
+        {
+            await Swal.FireAsync(new SweetAlertOptions
+            {
+                Icon = SweetAlertIcon.Error,
+                Text = "El numero de RUT no es válido",
+                AllowEnterKey = true
+            });
+            return;
+        }
+
         var result = await Swal.FireAsync(new SweetAlertOptions("Actualizar cuenta")
             {
                 Icon = SweetAlertIcon.Question,
@@ -62,6 +96,29 @@ else
         if (result.IsConfirmed)
         {
             await OnGrabar.InvokeAsync();
+        }
+    }
+
+    private async Task LocalizarAutomaticamente()
+    {
+        try
+        {
+            IsLoading = true;
+            var ubicacion = await JsRuntime.InvokeAsync<GeolocationResult>("blazorGetGeolocation");
+
+            if (Model is not null)
+            {
+                Model.Latitud = ubicacion.Latitude.ToString(CultureInfo.InvariantCulture);
+                Model.Longitud = ubicacion.Longitude.ToString(CultureInfo.InvariantCulture);
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError(ex.Message);
+        }
+        finally
+        {
+            IsLoading = false;
         }
     }
 }

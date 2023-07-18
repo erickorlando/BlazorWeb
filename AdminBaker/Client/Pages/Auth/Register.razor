@@ -8,7 +8,7 @@
 <div class="espaciado">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-lg-5">
+            <div class="col-lg-6">
                 <div class="card shadow-lg mt-5 mb-5">
                     <div class="card-header">
                         <h3 class="text-center">Crear cuenta</h3>
@@ -121,6 +121,14 @@
         try
         {
             IsLoading = true;
+
+            var isValid = await JsRuntime.InvokeAsync<bool>("validacionRut", Request.Rut);
+            if (!isValid)
+            {
+                ToastService.ShowError("El numero de RUT no es válido");
+                return;
+            }
+
             await ProxyUser.Register(Request);
 
             ToastService.ShowSuccess("Su cuenta ha sido creada");
