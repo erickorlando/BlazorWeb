@@ -14,16 +14,11 @@ public class PayPalController : ControllerBase
     {
         _service = service;
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> CreateOrder(PaymentOrderDtoRequest request)
     {
         var response = await _service.CreateOrderAsync(request);
-
-        if (!response.Success)
-        {
-            return BadRequest(response);
-        }
 
         return Ok(response);
     }
@@ -32,11 +27,6 @@ public class PayPalController : ControllerBase
     public async Task<IActionResult> CapturePayment(int pedidoId, string orderId)
     {
         var response = await _service.CapturePaymentAsync(pedidoId, orderId);
-
-        if (!response.Success)
-        {
-            return BadRequest(response);
-        }
 
         return Ok(response);
     }

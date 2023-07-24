@@ -7,9 +7,24 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Events;
+using Serilog.Sinks.MSSqlServer;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var logger = new LoggerConfiguration()
+    .WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("AdminBakerDb"),
+        new MSSqlServerSinkOptions
+        {
+            AutoCreateSqlDatabase = true,
+            AutoCreateSqlTable = true,
+            TableName = "ApiLogs"
+        }, restrictedToMinimumLevel: LogEventLevel.Warning)
+    .CreateLogger();
+
+builder.Logging.AddSerilog(logger);
 
 builder.Services.Configure<AppConfig>(builder.Configuration);
 
