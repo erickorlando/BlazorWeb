@@ -24,7 +24,7 @@ public class AzureBlobStorageUploader : IFileUploader
         try
         {
             var client = new BlobServiceClient(_appConfig.StorageConfiguration.Path);
-            var container = client.GetBlobContainerClient("imagenes");
+            var container = client.GetBlobContainerClient("pasteles");
 
             var blob = container.GetBlobClient(fileName);
 

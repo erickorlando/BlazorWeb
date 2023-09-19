@@ -31,8 +31,8 @@ public static class UserDataSeeder
         {
             Rut = "1-1",
             NombreCompleto = "Administrador del Sistema",
-            UserName = "kaoc@adminbaker.cl",
-            Email = "kaoc@adminbaker.cl",
+            UserName = "admin@adminbaker.cl",
+            Email = "admin@adminbaker.cl",
             PhoneNumber = "+56 999 999 999",
             FechaNacimiento = DateTime.Parse("2000-01-01"),
             EmailConfirmed = true
